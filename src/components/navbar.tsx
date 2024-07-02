@@ -28,13 +28,6 @@ export default function Navbar() {
         const data = loadData();
         if (data) {
             setUser(data);
-        } else {
-            const username = prompt("Enter your username");
-            if (username) {
-                const newUser: User = { username, projects: [] };
-                setUser(newUser);
-                saveData(newUser);
-            }
         }
     }, []);
 

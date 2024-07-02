@@ -5,12 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { User } from "../../models";
-import { saveData } from "../../utils/save";
-import { loadData } from "../../utils/load";
-import { importData } from "../../utils/import";
-import { exportData } from "../../utils/export";
-import { setSessionStorageItem, getSessionStorageItem } from "../../utils/sessionStorage";
+import { User } from "../models";
+import { saveData } from "../utils/save";
+import { loadData } from "../utils/load";
+import { importData } from "../utils/import";
+import { exportData } from "../utils/export";
+import { setSessionStorageItem, getSessionStorageItem } from "../utils/sessionStorage";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -48,13 +48,6 @@ export default function Settings() {
         const data = loadData();
         if (data) {
             setUser(data);
-        } else {
-            const username = prompt("Enter your username");
-            if (username) {
-                const newUser: User = { username, projects: [] };
-                setUser(newUser);
-                saveData(newUser);
-            }
         }
 
         // Retrieve active tab from sessionStorage on component mount

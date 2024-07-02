@@ -1,8 +1,6 @@
 import { Project } from "./project";
 
-export interface User {
+export default interface User {
     username: string;
     projects: Project[];
 }
-
-export default User;
