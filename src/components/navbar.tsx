@@ -5,6 +5,7 @@ import { loadData } from "@/utils/load";
 import { saveData } from "@/utils/save";
 
 import Link from "next/link";
+import Image from "next/image";
 import { CircleUser, Menu, Timer, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -141,13 +142,24 @@ export default function Navbar() {
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center gap-4 bg-secondary rounded-full ps-4">
                         <h5>{user.username}</h5>
-                        <Button size="icon" className="rounded-full">
-                            <CircleUser className="h-5 w-5" />
+                        <Button size="icon" className="rounded-full relative">
+                            {user.profilePicture ? (
+                                <Image
+                                    src={user.profilePicture}
+                                    alt="Profile picture"
+                                    className="rounded-full"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    sizes="256px"
+                                />
+                            ) : (
+                                <CircleUser className="h-5 w-5" />
+                            )}
                             <span className="sr-only">Toggle user menu</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
+                        {/* <DropdownMenuLabel>{user.username}</DropdownMenuLabel> */}
                         <DropdownMenuItem>
                             <Link href={"/settings"}>Settings</Link>
                         </DropdownMenuItem>

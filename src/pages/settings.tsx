@@ -51,7 +51,8 @@ const FormSchemaExportReminder = z.object({
 export default function Settings() {
     const { user, setUser } = useUser();
     const [fileData, setFileData] = useState<any>(null);
-    const [activeTab, setActiveTab] = useState("General"); // State to track active tab
+    const [pictureData, setPictureData] = useState<any>(null);
+    const [activeTab, setActiveTab] = useState("General");
 
     useEffect(() => {
         const data = loadData();
@@ -59,14 +60,12 @@ export default function Settings() {
             setUser(data);
         }
 
-        // Retrieve active tab from sessionStorage on component mount
         const storedTab = getSessionStorageItem("activeTab");
         if (storedTab) {
             setActiveTab(storedTab.toString());
         }
     }, []);
 
-    // Function to handle tab click and save active tab in sessionStorage
     const handleTabClick = (tabName: string) => {
         setActiveTab(tabName);
         setSessionStorageItem("activeTab", tabName);
@@ -134,6 +133,47 @@ export default function Settings() {
             }
         } else {
             console.error("No file data to import");
+        }
+    };
+
+    const savePictureTemp = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files?.[0]) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                const base64String = reader.result?.toString(); // Convert to Base64 string
+                setPictureData(base64String); // Set in state or save to 'pictureData'
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const setPictureNow = () => {
+        if (pictureData && user) {
+            const updatedUser = { ...user, profilePicture: pictureData };
+            setUser(updatedUser);
+            saveData(updatedUser);
+            toast({
+                title: "Profile picture updated successfully.",
+            });
+        } else {
+            console.error("No picture data to set");
+            toast({
+                title: "No picture selected. Please choose a picture.",
+            });
+        }
+    };
+
+    const removeProfilePicture = () => {
+        if (user) {
+            const updatedUser = { ...user, profilePicture: null };
+            setUser(updatedUser);
+            saveData(updatedUser);
+            toast({
+                title: "Profile picture removed successfully.",
+            });
         }
     };
 
@@ -243,6 +283,27 @@ export default function Settings() {
                                     </Card>
                                 </form>
                             </Form>
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Profile Picture</CardTitle>
+                                    <CardDescription>
+                                        Upload, update or remove your profile picture here.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={savePictureTemp}
+                                    />
+                                </CardContent>
+                                <CardFooter className="border-t px-6 py-4 flex gap-4">
+                                    <Button onClick={setPictureNow}>Set Profile Picture</Button>
+                                    <Button onClick={removeProfilePicture} variant="destructive">
+                                        Remove Profile Picture
+                                    </Button>
+                                </CardFooter>
+                            </Card>
                             <Form {...formExportReminder}>
                                 <form
                                     onSubmit={formExportReminder.handleSubmit(

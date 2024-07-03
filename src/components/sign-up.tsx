@@ -29,6 +29,7 @@ import { User } from "@/models";
 import { useUser } from "./UserContext";
 import { saveData } from "@/utils/save";
 import { useState } from "react";
+import { importData } from "@/utils/import";
 
 const FormSchema = z.object({
     username: z.string().min(2, {
@@ -38,6 +39,7 @@ const FormSchema = z.object({
 
 export function SignUp() {
     const { setUser } = useUser();
+    const [fileData, setFileData] = useState<any>(null);
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -45,6 +47,35 @@ export function SignUp() {
             username: "",
         },
     });
+
+    const saveFileTemp = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files?.[0]) {
+            const file = event.target.files[0];
+            setFileData(file);
+        }
+    };
+
+    const importNow = () => {
+        if (fileData) {
+            try {
+                importData(fileData)
+                    .then((importedUser: User) => {
+                        setUser(importedUser);
+                        toast({
+                            title: "Data imported successfully.",
+                        });
+                    })
+                    .catch((error) => console.error("Error importing data", error));
+            } catch (error) {
+                console.error("Error parsing JSON file", error);
+                toast({
+                    title: "Error importing data. Please try again.",
+                });
+            }
+        } else {
+            console.error("No file data to import");
+        }
+    };
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const newUser: User = {
@@ -75,9 +106,13 @@ export function SignUp() {
                             <div className="grid gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="password">User data (JSON)</Label>
-                                    <Input id="userdata" type="file" />
+                                    <Input
+                                        type="file"
+                                        accept="application/json"
+                                        onChange={saveFileTemp}
+                                    />
                                 </div>
-                                <Button type="submit" className="w-full">
+                                <Button onClick={importNow} className="w-full">
                                     Import user data
                                 </Button>
                             </div>
