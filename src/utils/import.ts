@@ -8,6 +8,12 @@ export const importData = (file: File) => {
         reader.onload = (event) => {
             try {
                 const result = JSON.parse(event.target?.result as string);
+                if (!result.lastExported) {
+                    result.lastExported = new Date();
+                }
+                if (!result.exportReminder) {
+                    result.exportReminder = "weekly";
+                }
                 saveData(result);
                 toast({
                     title: 'Data imported successfully for username "' + result.username + '".',

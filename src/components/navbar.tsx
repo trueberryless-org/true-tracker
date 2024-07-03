@@ -84,23 +84,41 @@ export default function Navbar() {
                 </SheetTrigger>
                 <SheetContent side="left">
                     <nav className="grid gap-6 text-lg font-medium">
-                        <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
+                        <Link
+                            href="/"
+                            className="flex items-center gap-2 text-lg font-semibold md:text-base"
+                        >
                             <Timer className="h-6 w-6" />
-                            <span className="sr-only">Acme Inc</span>
+                            <span className="sr-only">True Tracker</span>
                         </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
+                        <Link
+                            href="/"
+                            className={`${
+                                router.pathname === "/"
+                                    ? "text-foreground"
+                                    : "text-muted-foreground"
+                            } transition-colors hover:text-foreground`}
+                        >
                             Dashboard
                         </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
-                            Orders
+                        <Link
+                            href="/projects"
+                            className={`${
+                                router.pathname.includes("projects")
+                                    ? "text-foreground"
+                                    : "text-muted-foreground"
+                            } transition-colors hover:text-foreground`}
+                        >
+                            Projects
                         </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
-                            Products
-                        </Link>
-                        <Link href="#" className="text-muted-foreground hover:text-foreground">
-                            Customers
-                        </Link>
-                        <Link href="#" className="hover:text-foreground">
+                        <Link
+                            href="/settings"
+                            className={`${
+                                router.pathname.includes("settings")
+                                    ? "text-foreground"
+                                    : "text-muted-foreground"
+                            } transition-colors hover:text-foreground`}
+                        >
                             Settings
                         </Link>
                     </nav>

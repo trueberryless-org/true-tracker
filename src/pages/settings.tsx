@@ -34,10 +34,17 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@/components/UserContext";
 import { clearLocalStorage } from "@/utils/localStorage";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-const FormSchema = z.object({
+const FormSchemaUsername = z.object({
     username: z.string().min(2, {
         message: "Username must be at least 2 characters.",
+    }),
+});
+
+const FormSchemaExportReminder = z.object({
+    type: z.enum(["daily", "weekly", "monthly"], {
+        required_error: "You need to select a notification frequency.",
     }),
 });
 
@@ -65,20 +72,38 @@ export default function Settings() {
         setSessionStorageItem("activeTab", tabName);
     };
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+    const formUsername = useForm<z.infer<typeof FormSchemaUsername>>({
+        resolver: zodResolver(FormSchemaUsername),
         defaultValues: {
             username: user?.username || "",
         },
     });
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
+    function onSubmitUsername(data: z.infer<typeof FormSchemaUsername>) {
         if (data && user) {
             const updatedUser = { ...user, username: data.username };
             setUser(updatedUser);
             saveData(updatedUser);
             toast({
                 title: 'You changed your username to "' + data.username + '".',
+            });
+        }
+    }
+
+    const formExportReminder = useForm<z.infer<typeof FormSchemaExportReminder>>({
+        resolver: zodResolver(FormSchemaExportReminder),
+        defaultValues: {
+            type: user?.exportReminder || "weekly",
+        },
+    });
+
+    function onSubmitExportReminder(data: z.infer<typeof FormSchemaExportReminder>) {
+        if (data && user) {
+            const updatedUser = { ...user, exportReminder: data.type };
+            setUser(updatedUser);
+            saveData(updatedUser);
+            toast({
+                title: 'You changed your notification frequency to "' + data.type + '".',
             });
         }
     }
@@ -137,6 +162,13 @@ export default function Settings() {
         return <div>Loading...</div>;
     }
 
+    const exportNow = () => {
+        user.lastExported = new Date();
+        setUser(user);
+        saveData(user);
+        exportData();
+    };
+
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -176,8 +208,11 @@ export default function Settings() {
                     {/* Render content based on activeTab */}
                     {activeTab === "General" && (
                         <div className="grid gap-6">
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                            <Form {...formUsername}>
+                                <form
+                                    onSubmit={formUsername.handleSubmit(onSubmitUsername)}
+                                    className="space-y-6"
+                                >
                                     <Card x-chunk="dashboard-04-chunk-1">
                                         <CardHeader>
                                             <CardTitle>Username</CardTitle>
@@ -187,7 +222,7 @@ export default function Settings() {
                                         </CardHeader>
                                         <CardContent>
                                             <FormField
-                                                control={form.control}
+                                                control={formUsername.control}
                                                 name="username"
                                                 render={({ field }) => (
                                                     <FormItem>
@@ -208,25 +243,89 @@ export default function Settings() {
                                     </Card>
                                 </form>
                             </Form>
+                            <Form {...formExportReminder}>
+                                <form
+                                    onSubmit={formExportReminder.handleSubmit(
+                                        onSubmitExportReminder
+                                    )}
+                                    className="space-y-6"
+                                >
+                                    <Card x-chunk="dashboard-04-chunk-1">
+                                        <CardHeader>
+                                            <CardTitle>Export Notification Frequency</CardTitle>
+                                            <CardDescription>
+                                                How often do you want to be reminded to export data?
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <FormField
+                                                control={formExportReminder.control}
+                                                name="type"
+                                                render={({ field }) => (
+                                                    <FormItem className="space-y-3">
+                                                        <FormLabel>Notify me...</FormLabel>
+                                                        <FormControl>
+                                                            <RadioGroup
+                                                                onValueChange={field.onChange}
+                                                                defaultValue={field.value}
+                                                                className="flex flex-col space-y-1"
+                                                            >
+                                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value="daily" />
+                                                                    </FormControl>
+                                                                    <FormLabel className="font-normal">
+                                                                        Daily
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value="weekly" />
+                                                                    </FormControl>
+                                                                    <FormLabel className="font-normal">
+                                                                        Weekly
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value="monthly" />
+                                                                    </FormControl>
+                                                                    <FormLabel className="font-normal">
+                                                                        Monthly
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                            </RadioGroup>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </CardContent>
+                                        <CardFooter className="border-t px-6 py-4">
+                                            <Button type="submit">Save</Button>
+                                        </CardFooter>
+                                    </Card>
+                                </form>
+                            </Form>
                         </div>
                     )}
                     {activeTab === "Data Management" && (
                         <div className="grid gap-6">
                             <Card x-chunk="dashboard-04-chunk-1">
                                 <CardHeader>
-                                    <CardTitle>Export data</CardTitle>
+                                    <CardTitle>Export Data</CardTitle>
                                     <CardDescription>
                                         This will generate a JSON with your data, so you can import
                                         it again later.
                                     </CardDescription>
                                 </CardHeader>
                                 <CardFooter className="border-t px-6 py-4">
-                                    <Button onClick={exportData}>Export</Button>
+                                    <Button onClick={exportNow}>Export</Button>
                                 </CardFooter>
                             </Card>
                             <Card x-chunk="dashboard-04-chunk-1">
                                 <CardHeader>
-                                    <CardTitle>Import data</CardTitle>
+                                    <CardTitle>Import Data</CardTitle>
                                     <CardDescription>
                                         Import you recently exported data here.
                                     </CardDescription>
@@ -248,7 +347,7 @@ export default function Settings() {
                         <div className="grid gap-6">
                             <Card x-chunk="dashboard-04-chunk-1">
                                 <CardHeader>
-                                    <CardTitle>Delete all projects</CardTitle>
+                                    <CardTitle>Delete All Projects</CardTitle>
                                     <CardDescription>
                                         This will delete all projects with their time entries.{" "}
                                         <br />
@@ -263,7 +362,7 @@ export default function Settings() {
                             </Card>
                             <Card x-chunk="dashboard-04-chunk-1">
                                 <CardHeader>
-                                    <CardTitle>Delete all data</CardTitle>
+                                    <CardTitle>Delete All Data</CardTitle>
                                     <CardDescription>
                                         All your projects, time entries and everything else will be
                                         completely erased from existence. <br />

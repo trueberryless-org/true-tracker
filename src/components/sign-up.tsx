@@ -47,7 +47,12 @@ export function SignUp() {
     });
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        const newUser: User = { username: data.username, projects: [] };
+        const newUser: User = {
+            username: data.username,
+            projects: [],
+            lastExported: new Date(),
+            exportReminder: "weekly",
+        };
         setUser(newUser);
         saveData(newUser);
         toast({

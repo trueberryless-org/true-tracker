@@ -4,9 +4,11 @@ import { saveData } from "../utils/save";
 import { loadData } from "@/utils/load";
 import { importData } from "@/utils/import";
 import { exportData } from "@/utils/export";
+import Dashboard from "../components/dashboard";
+import { useUser } from "@/components/UserContext";
 
 const Home = () => {
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser } = useUser();
 
     useEffect(() => {
         const data = loadData();
@@ -21,8 +23,9 @@ const Home = () => {
 
     return (
         <div>
-            <h1>User Data</h1>
-            <pre>{JSON.stringify(user, null, 2)}</pre>
+            {/* <h1>User Data</h1>
+            <pre>{JSON.stringify(user, null, 2)}</pre> */}
+            <Dashboard />
         </div>
     );
 };
