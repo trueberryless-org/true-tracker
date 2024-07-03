@@ -19,7 +19,12 @@ const Home = () => {
         return <div>Loading...</div>;
     }
 
-    return <div></div>;
+    return (
+        <div>
+            <h1>User Data</h1>
+            <pre>{JSON.stringify(user, null, 2)}</pre>
+        </div>
+    );
 };
 
 export default Home;

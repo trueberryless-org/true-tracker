@@ -32,6 +32,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { useUser } from "@/components/UserContext";
+import { clearLocalStorage } from "@/utils/localStorage";
 
 const FormSchema = z.object({
     username: z.string().min(2, {
@@ -40,7 +42,7 @@ const FormSchema = z.object({
 });
 
 export default function Settings() {
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser } = useUser();
     const [fileData, setFileData] = useState<any>(null);
     const [activeTab, setActiveTab] = useState("General"); // State to track active tab
 
@@ -56,6 +58,12 @@ export default function Settings() {
             setActiveTab(storedTab.toString());
         }
     }, []);
+
+    // Function to handle tab click and save active tab in sessionStorage
+    const handleTabClick = (tabName: string) => {
+        setActiveTab(tabName);
+        setSessionStorageItem("activeTab", tabName);
+    };
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -75,43 +83,54 @@ export default function Settings() {
         }
     }
 
-    // Function to handle file input change
     const saveFileTemp = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files?.[0]) {
             const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const content = e.target?.result as string;
-                    const jsonData = JSON.parse(content);
-                    setFileData(jsonData); // Store file data in state
-                } catch (error) {
-                    console.error("Error parsing JSON file", error);
-                }
-            };
-            reader.readAsText(file);
+            setFileData(file);
         }
     };
 
-    // Function to handle import button click
     const importNow = () => {
         if (fileData) {
-            importData(fileData) // Assuming importData handles the import operation
-                .then((importedUser: User) => {
-                    setUser(importedUser);
-                    // Optionally save imported data to local storage or perform other actions
-                    // saveData(importedUser);
-                })
-                .catch((error) => console.error("Error importing data", error));
+            try {
+                importData(fileData)
+                    .then((importedUser: User) => {
+                        setUser(importedUser);
+                        toast({
+                            title: "Data imported successfully.",
+                        });
+                    })
+                    .catch((error) => console.error("Error importing data", error));
+            } catch (error) {
+                console.error("Error parsing JSON file", error);
+                toast({
+                    title: "Error importing data. Please try again.",
+                });
+            }
         } else {
             console.error("No file data to import");
         }
     };
 
-    // Function to handle tab click and save active tab in sessionStorage
-    const handleTabClick = (tabName: string) => {
-        setActiveTab(tabName);
-        setSessionStorageItem("activeTab", tabName);
+    const deleteAllProjects = () => {
+        if (
+            confirm("Are you sure you want to delete all projects? This action cannot be undone.")
+        ) {
+            if (user) {
+                const updatedUser = { ...user, projects: [] };
+                setUser(updatedUser);
+                saveData(updatedUser);
+            }
+        }
+    };
+
+    const clearAllUserData = () => {
+        if (
+            confirm("Are you sure you want to delete all your data? This action cannot be undone.")
+        ) {
+            clearLocalStorage();
+            setUser(null);
+        }
     };
 
     if (!user) {
@@ -144,6 +163,14 @@ export default function Settings() {
                             onClick={() => handleTabClick("Data Management")}
                         >
                             Data Management
+                        </a>
+                        <a
+                            className={` ${
+                                activeTab === "Danger Zone" ? "font-semibold text-primary" : ""
+                            }`}
+                            onClick={() => handleTabClick("Danger Zone")}
+                        >
+                            Danger Zone
                         </a>
                     </nav>
                     {/* Render content based on activeTab */}
@@ -213,6 +240,40 @@ export default function Settings() {
                                 </CardContent>
                                 <CardFooter className="border-t px-6 py-4">
                                     <Button onClick={importNow}>Import</Button>
+                                </CardFooter>
+                            </Card>
+                        </div>
+                    )}
+                    {activeTab === "Danger Zone" && (
+                        <div className="grid gap-6">
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Delete all projects</CardTitle>
+                                    <CardDescription>
+                                        This will delete all projects with their time entries.{" "}
+                                        <br />
+                                        Please consider exporting before proceeding.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardFooter className="border-t px-6 py-4">
+                                    <Button onClick={deleteAllProjects} variant={"destructive"}>
+                                        Delete
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Delete all data</CardTitle>
+                                    <CardDescription>
+                                        All your projects, time entries and everything else will be
+                                        completely erased from existence. <br />
+                                        Please consider exporting before proceeding.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardFooter className="border-t px-6 py-4">
+                                    <Button onClick={clearAllUserData} variant={"destructive"}>
+                                        Delete
+                                    </Button>
                                 </CardFooter>
                             </Card>
                         </div>

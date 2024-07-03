@@ -1,9 +1,72 @@
 import { Task } from "./task";
 
-export interface Project {
+import {
+    ArrowDown,
+    ArrowRight,
+    ArrowUp,
+    CircleCheck,
+    Circle,
+    CircleX,
+    CircleHelp,
+    Timer,
+} from "lucide-react";
+
+export default interface Project {
     id: string;
     name: string;
+    description?: string;
+    createdAt?: Date;
+    lastUpdatedAt?: Date;
+    deletedAt?: Date | null;
+
+    status: "backlog" | "todo" | "in progress" | "done" | "canceled";
+    priority: "low" | "medium" | "high";
+
     tasks: Task[];
 }
 
-export default Project;
+export const statuses = [
+    {
+        value: "backlog",
+        label: "Backlog",
+        icon: CircleHelp,
+    },
+    {
+        value: "todo",
+        label: "Todo",
+        icon: Circle,
+    },
+    {
+        value: "in progress",
+        label: "In Progress",
+        icon: Timer,
+    },
+    {
+        value: "done",
+        label: "Done",
+        icon: CircleCheck,
+    },
+    {
+        value: "canceled",
+        label: "Canceled",
+        icon: CircleX,
+    },
+];
+
+export const priorities = [
+    {
+        value: "low",
+        label: "Low",
+        icon: ArrowDown,
+    },
+    {
+        value: "medium",
+        label: "Medium",
+        icon: ArrowRight,
+    },
+    {
+        value: "high",
+        label: "High",
+        icon: ArrowUp,
+    },
+];

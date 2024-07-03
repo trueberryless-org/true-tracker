@@ -19,9 +19,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import ModeToggle from "./mode-switch";
+import { useUser } from "./UserContext";
 
 export default function Navbar() {
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser } = useUser();
     const router = useRouter();
 
     useEffect(() => {
@@ -120,8 +121,9 @@ export default function Navbar() {
                     <ModeToggle />
                 </div>
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon" className="rounded-full">
+                    <DropdownMenuTrigger className="flex items-center gap-4 bg-secondary rounded-full ps-4">
+                        <h5>{user.username}</h5>
+                        <Button size="icon" className="rounded-full">
                             <CircleUser className="h-5 w-5" />
                             <span className="sr-only">Toggle user menu</span>
                         </Button>

@@ -1,0 +1,83 @@
+{
+    "username": "Felix Schneider",
+    "projects": [
+        {
+            "id": "1719933344573530",
+            "name": "Project Alpha",
+            "description": "This is the first project.",
+            "createdAt": "2023-05-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-06-30T12:00:00.000Z",
+            "deletedAt": null,
+            "status": "todo",
+            "priority": "high",
+            "tasks": [
+                {
+                    "id": "1720012345678",
+                    "name": "Task 1",
+                    "startTime": "2024-07-02T09:00:00.000Z",
+                    "endTime": "2024-07-02T10:00:00.000Z",
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345679",
+                    "name": "Task 2",
+                    "startTime": "2024-07-02T10:30:00.000Z",
+                    "endTime": "2024-07-02T11:30:00.000Z",
+                    "description": "Complete the second task."
+                }
+            ]
+        },
+        {
+            "id": "1719933344573531",
+            "name": "Project Beta",
+            "description": "This is the second project.",
+            "createdAt": "2023-06-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-06-30T12:00:00.000Z",
+            "deletedAt": "2024-06-30T12:00:00.000Z",
+            "status": "in progress",
+            "priority": "medium",
+            "tasks": [
+                {
+                    "id": "1720012345680",
+                    "name": "Task 1",
+                    "startTime": "2024-07-01T09:00:00.000Z",
+                    "endTime": "2024-07-01T10:00:00.000Z",
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345681",
+                    "name": "Task 2",
+                    "startTime": "2024-07-01T10:30:00.000Z",
+                    "endTime": "2024-07-01T11:30:00.000Z",
+                    "description": "Complete the second task."
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "deletedAt": null,
+            "status": "backlog",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "startTime": "2024-07-03T09:00:00.000Z",
+                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "startTime": "2024-07-03T10:30:00.000Z",
+                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "description": "Complete the second task."
+                }
+            ]
+        }
+    ]
+}
