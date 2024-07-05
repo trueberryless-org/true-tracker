@@ -68,7 +68,7 @@ export default function Settings() {
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                <div className="hidden h-full flex-1 flex-col space-y-8 p-8 xl:flex">
+                <div className="hidden h-full flex-1 flex-col xl:flex">
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
@@ -76,12 +76,12 @@ export default function Settings() {
                                 data={data}
                                 columns={columnsXl}
                                 pagination={true}
-                                clickableRows={false}
+                                clickableRows={true}
                             />
                         </CardContent>
                     </Card>
                 </div>
-                <div className="hidden h-full flex-1 flex-col space-y-8 p-8 lg:flex xl:hidden">
+                <div className="hidden h-full flex-1 flex-col lg:flex xl:hidden">
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
@@ -89,12 +89,12 @@ export default function Settings() {
                                 data={data}
                                 columns={columnsLg}
                                 pagination={true}
-                                clickableRows={false}
+                                clickableRows={true}
                             />
                         </CardContent>
                     </Card>
                 </div>
-                <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex lg:hidden">
+                <div className="hidden h-full flex-1 flex-col md:flex lg:hidden">
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
@@ -102,12 +102,12 @@ export default function Settings() {
                                 data={data}
                                 columns={columnsMd}
                                 pagination={true}
-                                clickableRows={false}
+                                clickableRows={true}
                             />
                         </CardContent>
                     </Card>
                 </div>
-                <div className="hidden h-full flex-1 flex-col space-y-8 p-8 sm:flex md:hidden">
+                <div className="hidden h-full flex-1 flex-col sm:flex md:hidden">
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
@@ -115,12 +115,12 @@ export default function Settings() {
                                 data={data}
                                 columns={columnsSm}
                                 pagination={true}
-                                clickableRows={false}
+                                clickableRows={true}
                             />
                         </CardContent>
                     </Card>
                 </div>
-                <div className="flex h-full flex-1 flex-col space-y-8 p-8 sm:hidden">
+                <div className="flex h-full flex-1 flex-col sm:hidden">
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>

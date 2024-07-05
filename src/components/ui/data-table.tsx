@@ -112,6 +112,7 @@ export function DataTable<TData extends TEntity, TValue>({
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={() => handleRowClick(row.original.id)}
+                                    className={clickableRows ? "cursor-pointer" : ""}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

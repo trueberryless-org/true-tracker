@@ -95,34 +95,6 @@ export function SignUp() {
         <div className="flex min-h-screen w-full flex-col bg-muted/40 justify-center">
             <main className="grid gap-4 mx-auto lg:grid-cols-9">
                 <div className="flex justify-center items-center col-span-4">
-                    <Card className="mx-auto w-full">
-                        <CardHeader>
-                            <CardTitle className="text-xl">Log In</CardTitle>
-                            <CardDescription>
-                                You can log in by uploading previously exported user data.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid gap-4">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password">User data (JSON)</Label>
-                                    <Input
-                                        type="file"
-                                        accept="application/json"
-                                        onChange={saveFileTemp}
-                                    />
-                                </div>
-                                <Button onClick={importNow} className="w-full">
-                                    Import user data
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-                <div className="flex justify-center items-center auto-cols-min">
-                    <div className="h-40 w-1 bg-primary rounded-lg"></div>
-                </div>
-                <div className="flex justify-center items-center col-span-4">
                     <div className="w-full">
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -162,6 +134,34 @@ export function SignUp() {
                             </form>
                         </Form>
                     </div>
+                </div>
+                <div className="hidden justify-center items-center auto-cols-min lg:flex">
+                    <div className="h-40 w-1 bg-primary rounded-lg"></div>
+                </div>
+                <div className="flex justify-center items-center col-span-4">
+                    <Card className="mx-auto w-full">
+                        <CardHeader>
+                            <CardTitle className="text-xl">Log In</CardTitle>
+                            <CardDescription>
+                                You can log in by uploading previously exported user data.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid gap-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="password">User data (JSON)</Label>
+                                    <Input
+                                        type="file"
+                                        accept="application/json"
+                                        onChange={saveFileTemp}
+                                    />
+                                </div>
+                                <Button onClick={importNow} className="w-full">
+                                    Import user data
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </main>
         </div>

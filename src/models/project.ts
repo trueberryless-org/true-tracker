@@ -11,6 +11,9 @@ import {
     Timer,
 } from "lucide-react";
 
+export type Status = (typeof statuses)[number]["value"];
+export type Priority = (typeof priorities)[number]["value"];
+
 export default interface Project {
     id: string;
     name: string;
@@ -19,8 +22,8 @@ export default interface Project {
     lastUpdatedAt?: Date;
     deletedAt?: Date | null;
 
-    status: "backlog" | "todo" | "in progress" | "done" | "canceled";
-    priority: "low" | "medium" | "high";
+    status: Status;
+    priority: Priority;
 
     tasks: Task[];
 }
