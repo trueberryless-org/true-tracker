@@ -41,7 +41,13 @@ import {
 
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
-import { columnsXl, columnsLg, columnsMd, columnsSm } from "@/components/projects/columns";
+import {
+    columnsXl,
+    columnsLg,
+    columnsMd,
+    columnsSm,
+    columnsMobile,
+} from "@/components/projects/columns";
 
 export default function Settings() {
     const { user, setUser } = useUser();
@@ -66,7 +72,12 @@ export default function Settings() {
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
-                            <DataTable data={data} columns={columnsXl} />
+                            <DataTable
+                                data={data}
+                                columns={columnsXl}
+                                pagination={true}
+                                clickableRows={false}
+                            />
                         </CardContent>
                     </Card>
                 </div>
@@ -74,7 +85,12 @@ export default function Settings() {
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
-                            <DataTable data={data} columns={columnsLg} />
+                            <DataTable
+                                data={data}
+                                columns={columnsLg}
+                                pagination={true}
+                                clickableRows={false}
+                            />
                         </CardContent>
                     </Card>
                 </div>
@@ -82,7 +98,12 @@ export default function Settings() {
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
-                            <DataTable data={data} columns={columnsMd} />
+                            <DataTable
+                                data={data}
+                                columns={columnsMd}
+                                pagination={true}
+                                clickableRows={false}
+                            />
                         </CardContent>
                     </Card>
                 </div>
@@ -90,14 +111,26 @@ export default function Settings() {
                     <Card>
                         <CardHeader>Projects</CardHeader>
                         <CardContent>
-                            <DataTable data={data} columns={columnsSm} />
+                            <DataTable
+                                data={data}
+                                columns={columnsSm}
+                                pagination={true}
+                                clickableRows={false}
+                            />
                         </CardContent>
                     </Card>
                 </div>
                 <div className="flex h-full flex-1 flex-col space-y-8 p-8 sm:hidden">
                     <Card>
                         <CardHeader>Projects</CardHeader>
-                        <CardContent></CardContent>
+                        <CardContent>
+                            <DataTable
+                                data={data}
+                                columns={columnsMobile}
+                                pagination={false}
+                                clickableRows={true}
+                            />
+                        </CardContent>
                     </Card>
                 </div>
             </main>

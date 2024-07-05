@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
+
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -28,12 +30,25 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
-interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
-    data: TData[];
+interface TEntity {
+    id: number;
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+interface DataTableProps<TData extends TEntity, TValue> {
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+    pagination?: boolean;
+    clickableRows?: boolean;
+}
+
+export function DataTable<TData extends TEntity, TValue>({
+    columns,
+    data,
+    pagination,
+    clickableRows,
+}: DataTableProps<TData, TValue>) {
+    const router = useRouter();
+
     const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -55,11 +70,17 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         onColumnVisibilityChange: setColumnVisibility,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
+        getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
     });
+
+    function handleRowClick(id: number): void {
+        if (clickableRows) {
+            router.push(`/project/${id}`);
+        }
+    }
 
     return (
         <div className="space-y-4">
@@ -90,6 +111,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
+                                    onClick={() => handleRowClick(row.original.id)}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
@@ -111,7 +133,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                     </TableBody>
                 </Table>
             </div>
-            <DataTablePagination table={table} />
+            {pagination && <DataTablePagination table={table} />}
         </div>
     );
 }
