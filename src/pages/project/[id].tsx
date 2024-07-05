@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/table";
 import StatusIconLabel from "@/components/projects/status";
 import PriorityIconLabel from "@/components/projects/priority";
+import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUtils";
 
 export default function Project() {
     const { user, setUser } = useUser();
@@ -46,6 +47,10 @@ export default function Project() {
     const router = useRouter();
 
     const project = user?.projects.find((project) => project.id === router.query.id);
+
+    if (!project) {
+        return <div>Project not found</div>;
+    }
 
     return (
         <div className="flex w-full flex-col">
@@ -62,6 +67,9 @@ export default function Project() {
                     </h1>
                     <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
                         <PriorityIconLabel priorityValue={project.priority} />
+                    </Badge>
+                    <Badge variant="outline" className="hidden ml-auto sm:ml-0 py-2 sm:block">
+                        <StatusIconLabel statusValue={project.status} />
                     </Badge>
                     <div className="flex items-center gap-2 ml-auto">
                         <Link href={`/project/${project.id}/edit`}>
@@ -92,22 +100,30 @@ export default function Project() {
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-2">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                            <CardTitle className="text-sm font-medium">Status</CardTitle>
                             <CreditCard className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+12,234</div>
-                            <p className="text-xs text-muted-foreground">+19% from last month</p>
+                            <div className="text-2xl font-bold">
+                                <StatusIconLabel statusValue={project.status} />
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {calcStatusComparison(user, project.status)}
+                            </p>
                         </CardContent>
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-3">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Active Now</CardTitle>
+                            <CardTitle className="text-sm font-medium">Priority</CardTitle>
                             <Activity className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+573</div>
-                            <p className="text-xs text-muted-foreground">+201 since last hour</p>
+                            <div className="text-2xl font-bold">
+                                <PriorityIconLabel priorityValue={project.priority} />
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {calcPriorityComparison(user, project.priority)}
+                            </p>
                         </CardContent>
                     </Card>
                 </div>

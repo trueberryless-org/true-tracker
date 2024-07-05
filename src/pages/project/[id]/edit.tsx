@@ -76,6 +76,9 @@ export default function EditProduct() {
                         <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
                             <PriorityIconLabel priorityValue={project.priority} />
                         </Badge>
+                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
+                            <StatusIconLabel statusValue={project.status} />
+                        </Badge>
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
                             <Link href={`/project/${project.id}`} className="text-muted-foreground">
                                 <Button variant="outline" size="sm">
@@ -204,7 +207,7 @@ export default function EditProduct() {
                             </Card>
                         </div>
                     </div>
-                    <div className="flex items-center justify-center gap-2 md:hidden">
+                    <div className="flex items-center justify-end gap-2 md:hidden">
                         <Button variant="outline" size="sm">
                             Discard
                         </Button>
