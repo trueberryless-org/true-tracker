@@ -9,6 +9,9 @@ import {
     CircleX,
     CircleHelp,
     Timer,
+    CircleDashed,
+    CirclePause,
+    CircleDotDashed,
 } from "lucide-react";
 
 export type Status = (typeof statuses)[number]["value"];
@@ -30,13 +33,8 @@ export default interface Project {
 
 export const statuses = [
     {
-        value: "backlog",
-        label: "Backlog",
-        icon: CircleHelp,
-    },
-    {
-        value: "todo",
-        label: "Todo",
+        value: "planned",
+        label: "Planned",
         icon: Circle,
     },
     {
@@ -45,9 +43,19 @@ export const statuses = [
         icon: Timer,
     },
     {
-        value: "done",
-        label: "Done",
+        value: "in review",
+        label: "In Review",
+        icon: CircleDotDashed,
+    },
+    {
+        value: "completed",
+        label: "Completed",
         icon: CircleCheck,
+    },
+    {
+        value: "on hold",
+        label: "On Hold",
+        icon: CirclePause,
     },
     {
         value: "canceled",

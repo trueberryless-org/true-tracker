@@ -11,6 +11,7 @@ import {
     CircleHelp,
     Timer,
 } from "lucide-react";
+import Project from "./project";
 
 export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];
@@ -77,11 +78,17 @@ export const getMostRecentTimeSpanDate = (task: Task) => {
     return new Date(Math.max(...dates));
 };
 
-export const getProjectValue = (task: Task) => {
+export const getProjectValue = (task: Task): string => {
     const user = loadData();
     const projects = user?.projects || [];
     const project = projects.find((project) => project.tasks.some((t: Task) => t.id === task.id));
     return project ? project.name : "Unknown";
+};
+
+export const getProject = (task: Task): Project | undefined => {
+    const user = loadData();
+    const projects = user?.projects || [];
+    return projects.find((project) => project.tasks.some((t: Task) => t.id === task.id));
 };
 
 export const calculateTotalTime = (task: Task): number => {

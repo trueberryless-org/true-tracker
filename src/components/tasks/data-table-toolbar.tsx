@@ -6,7 +6,9 @@ import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import Project, { priorities, statuses } from "@/models/project";
+import Project from "@/models/project";
+import { priorities, statuses } from "@/models/task";
+
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { DataTableViewOptions } from "./data-table-view-options";
 import { loadData } from "@/utils/load";
@@ -48,6 +50,13 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
                         column={table.getColumn("projectName")}
                         title="Project"
                         options={projects}
+                    />
+                )}
+                {table.getColumn("status") && (
+                    <DataTableFacetedFilter
+                        column={table.getColumn("status")}
+                        title="Status"
+                        options={statuses}
                     />
                 )}
                 {table.getColumn("priority") && (

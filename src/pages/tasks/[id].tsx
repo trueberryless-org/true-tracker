@@ -77,61 +77,37 @@ export default function Project() {
         );
     }
 
-    const recentTasks: Task[] = project.tasks
-        .map((task: any) => ({ ...task, mostRecentDate: getMostRecentTimeSpanDate(task) }))
-        .sort(
-            (task1: { mostRecentDate: number }, task2: { mostRecentDate: number }) =>
-                task2.mostRecentDate - task1.mostRecentDate
-        )
-        .slice(0, 5);
-
-    const gridColsClass = project.archivedAt ? "xl:grid-cols-5" : "xl:grid-cols-4";
-
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="flex items-center gap-4">
-                    <Link href="/projects" className="text-muted-foreground">
+                    <Link href="/tasks" className="text-muted-foreground">
                         <Button variant="outline" size="icon" className="h-7 w-7">
                             <ChevronLeft className="h-4 w-4" />
                             <span className="sr-only">Back</span>
                         </Button>
                     </Link>
                     <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                        {project.name}
+                        {task.name}
                     </h1>
-                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
-                        <PriorityIconLabel priorityValue={project.priority} />
-                    </Badge>
-                    <Badge variant="outline" className="hidden ml-auto sm:ml-0 py-2 sm:block">
-                        <StatusIconLabel statusValue={project.status} />
-                    </Badge>
-                    {project.archivedAt && (
-                        <Badge
-                            variant="destructive"
-                            className="hidden ml-auto sm:ml-0 py-2 md:block"
-                        >
-                            <div className="flex items-center">
-                                <Archive className="mr-2 h-4 w-4 text-muted-foreground" />
-                                Archived
-                            </div>
+                    {task.priority && (
+                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
+                            <PriorityIconLabel priorityValue={task.priority} />
+                        </Badge>
+                    )}
+                    {task.status && (
+                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
+                            <StatusIconLabel statusValue={task.status} />
                         </Badge>
                     )}
                     <div className="flex items-center gap-2 ml-auto">
-                        {!project.archivedAt && (
-                            <Link href={`/projects/${project.id}/edit`}>
-                                <Button size="sm">Edit Project</Button>
-                            </Link>
-                        )}
-                        {project.archivedAt && (
-                            <Button onClick={unarchiveProject} size="sm" variant="outline">
-                                Unarchive
-                            </Button>
-                        )}
+                        <Link href={`/tasks/${task.id}/edit`}>
+                            <Button size="sm">Edit Task</Button>
+                        </Link>
                     </div>
                 </div>
-                <div
-                    className={`grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 ${gridColsClass}`}
+                {/* <div
+                    className={`grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4`}
                 >
                     <Card x-chunk="dashboard-01-chunk-0">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -295,7 +271,7 @@ export default function Project() {
                             </Table>
                         </CardContent>
                     </Card>
-                    {/* <Card x-chunk="dashboard-01-chunk-5">
+                    <Card x-chunk="dashboard-01-chunk-5">
                         <CardHeader>
                             <CardTitle>Recent Sales</CardTitle>
                         </CardHeader>
@@ -368,8 +344,8 @@ export default function Project() {
                                 <div className="ml-auto font-medium">+$39.00</div>
                             </div>
                         </CardContent>
-                    </Card> */}
-                </div>
+                    </Card>
+                </div> */}
             </main>
         </div>
     );
