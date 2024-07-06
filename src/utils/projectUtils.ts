@@ -6,11 +6,6 @@ export function calcPriorityComparison(user: User | null | undefined, priority: 
     }
 
     const projects = user.projects || [];
-    const currentProject = projects.find((proj) => proj.priority === priority);
-
-    if (!currentProject) {
-        return "";
-    }
 
     const higherPriorityCount = projects.filter((proj) => {
         return proj.priority === "high";
@@ -23,6 +18,8 @@ export function calcPriorityComparison(user: User | null | undefined, priority: 
     const lowerPriorityCount = projects.filter((proj) => {
         return proj.priority === "low";
     }).length;
+
+    console.log(higherPriorityCount, mediumPriorityCount, lowerPriorityCount);
 
     if (priority === "high") {
         return `Higher priority than ${lowerPriorityCount + mediumPriorityCount} other projects`;

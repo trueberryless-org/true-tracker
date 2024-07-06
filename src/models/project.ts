@@ -20,7 +20,7 @@ export default interface Project {
     description?: string;
     createdAt?: Date;
     lastUpdatedAt?: Date;
-    deletedAt?: Date | null;
+    archivedAt?: Date | null;
 
     status: Status;
     priority: Priority;

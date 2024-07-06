@@ -11,13 +11,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@/components/UserContext";
 import Project, { priorities, statuses } from "@/models/project";
 import { useEffect, useState } from "react";
 import { saveData } from "@/utils/save";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { AlertCircle, ChevronLeft } from "lucide-react";
 import StatusIconLabel from "@/components/projects/status";
 import PriorityIconLabel from "@/components/projects/priority";
 
@@ -45,13 +46,14 @@ export default function EditProduct() {
 
     const handleSaveProject = () => {
         if (project && user) {
+            project.lastUpdatedAt = new Date();
             const updatedProjects = user.projects.map((proj) =>
                 proj.id === project.id ? project : proj
             );
             const updatedUser = { ...user, projects: updatedProjects };
             setUser(updatedUser);
             saveData(updatedUser);
-            router.push(`/project/${project.id}`);
+            router.push(`/projects/${project.id}`);
         }
     };
 
@@ -59,12 +61,29 @@ export default function EditProduct() {
         return <div>Project not found</div>;
     }
 
+    if (project.archivedAt) {
+        return (
+            <div className="flex w-full flex-col">
+                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+                    <Alert variant="destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>
+                            This project has been archived. Please unarchive the project again, by
+                            clicking the button in the top right of the project view!
+                        </AlertDescription>
+                    </Alert>
+                </main>
+            </div>
+        );
+    }
+
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="grid flex-1 auto-rows-max gap-4">
                     <div className="flex items-center gap-4">
-                        <Link href={`/project/${project.id}`} className="text-muted-foreground">
+                        <Link href={`/projects/${project.id}`} className="text-muted-foreground">
                             <Button variant="outline" size="icon" className="h-7 w-7">
                                 <ChevronLeft className="h-4 w-4" />
                                 <span className="sr-only">Back</span>
@@ -80,7 +99,10 @@ export default function EditProduct() {
                             <StatusIconLabel statusValue={project.status} />
                         </Badge>
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                            <Link href={`/project/${project.id}`} className="text-muted-foreground">
+                            <Link
+                                href={`/projects/${project.id}`}
+                                className="text-muted-foreground"
+                            >
                                 <Button variant="outline" size="sm">
                                     Discard
                                 </Button>
@@ -201,6 +223,33 @@ export default function EditProduct() {
                                                     ))}
                                                 </SelectContent>
                                             </Select>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card x-chunk="dashboard-07-chunk-3">
+                                <CardHeader>
+                                    <CardTitle>Archive Project</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="grid gap-6">
+                                        <div className="grid gap-3">
+                                            <p>
+                                                The archive is a place where no properties can be
+                                                edited any more. You can still view the project and
+                                                unarchive it again, but it will be locked. Archived
+                                                projects will not be visible in the projects list.
+                                            </p>
+                                            <Button
+                                                onClick={() => {
+                                                    project.archivedAt = new Date();
+                                                    router.push(`/projects/${project.id}`);
+                                                }}
+                                                variant="outline"
+                                                size="sm"
+                                            >
+                                                Archive
+                                            </Button>
                                         </div>
                                     </div>
                                 </CardContent>

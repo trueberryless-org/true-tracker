@@ -78,10 +78,10 @@ export const columnsXl: ColumnDef<Project>[] = [
         },
     },
     {
-        accessorKey: "deletedAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Deleted At" />,
+        accessorKey: "archivedAt",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Archived At" />,
         cell: ({ row }) => {
-            const dateValue = row.getValue("deletedAt");
+            const dateValue = row.getValue("archivedAt");
             const dateString = String(dateValue);
             const parsedDate = Date.parse(dateString);
             let formattedDate = "";

@@ -13,6 +13,7 @@ import {
     Search,
     Users,
     ChevronLeft,
+    Archive,
 } from "lucide-react";
 
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,6 +41,8 @@ import {
 import StatusIconLabel from "@/components/projects/status";
 import PriorityIconLabel from "@/components/projects/priority";
 import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUtils";
+import { format } from "date-fns";
+import { saveData } from "@/utils/save";
 
 export default function Project() {
     const { user, setUser } = useUser();
@@ -48,9 +51,24 @@ export default function Project() {
 
     const project = user?.projects.find((project) => project.id === router.query.id);
 
+    // unarchive project function
+    const unarchiveProject = () => {
+        if (user && project) {
+            project.archivedAt = null;
+            const updatedProjects = user.projects.map((proj) =>
+                proj.id === project.id ? project : proj
+            );
+            const updatedUser = { ...user, projects: updatedProjects };
+            setUser(updatedUser);
+            saveData(updatedUser);
+        }
+    };
+
     if (!project) {
         return <div>Project not found</div>;
     }
+
+    const gridColsClass = project.archivedAt ? "xl:grid-cols-5" : "xl:grid-cols-4";
 
     return (
         <div className="flex w-full flex-col">
@@ -71,33 +89,118 @@ export default function Project() {
                     <Badge variant="outline" className="hidden ml-auto sm:ml-0 py-2 sm:block">
                         <StatusIconLabel statusValue={project.status} />
                     </Badge>
+                    {project.archivedAt && (
+                        <Badge
+                            variant="destructive"
+                            className="hidden ml-auto sm:ml-0 py-2 md:block"
+                        >
+                            <div className="flex items-center">
+                                <Archive className="mr-2 h-4 w-4 text-muted-foreground" />
+                                Archived
+                            </div>
+                        </Badge>
+                    )}
                     <div className="flex items-center gap-2 ml-auto">
-                        <Link href={`/project/${project.id}/edit`}>
-                            <Button size="sm">Edit Project</Button>
-                        </Link>
+                        {!project.archivedAt && (
+                            <Link href={`/projects/${project.id}/edit`}>
+                                <Button size="sm">Edit Project</Button>
+                            </Link>
+                        )}
+                        {project.archivedAt && (
+                            <Button onClick={unarchiveProject} size="sm" variant="secondary">
+                                Unarchive
+                            </Button>
+                        )}
                     </div>
                 </div>
-                <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+                <div
+                    className={`grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 ${gridColsClass}`}
+                >
                     <Card x-chunk="dashboard-01-chunk-0">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                            <CardTitle className="text-sm font-medium">Creation</CardTitle>
                             <DollarSign className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">$45,231.89</div>
-                            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                            <div className="text-2xl font-bold">
+                                {!isNaN(Date.parse(String(project.createdAt)))
+                                    ? format(Date.parse(String(project.createdAt)), "MMMM dd, yyyy")
+                                    : "N/A"}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {user &&
+                                    user?.projects.filter(
+                                        (proj) =>
+                                            proj.createdAt &&
+                                            Date.parse(String(proj.createdAt)) <
+                                                Date.parse(String(project.createdAt))
+                                    ).length +
+                                        " project" +
+                                        (user?.projects.filter(
+                                            (proj) =>
+                                                proj.createdAt &&
+                                                Date.parse(String(proj.createdAt)) <
+                                                    Date.parse(String(project.createdAt))
+                                        ).length > 1
+                                            ? "s"
+                                            : "") +
+                                        " created before this one."}
+                            </p>
                         </CardContent>
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-1">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
+                            <CardTitle className="text-sm font-medium">Last Update</CardTitle>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">+2350</div>
-                            <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                            <div className="text-2xl font-bold">
+                                {!isNaN(Date.parse(String(project.lastUpdatedAt)))
+                                    ? format(
+                                          Date.parse(String(project.lastUpdatedAt)),
+                                          "MMMM dd, yyyy"
+                                      )
+                                    : "N/A"}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {(
+                                    (new Date(project.lastUpdatedAt).getTime() -
+                                        new Date(project.createdAt).getTime()) /
+                                    (1000 * 60 * 60 * 24)
+                                ).toFixed(0) + " days after creation"}
+                            </p>
                         </CardContent>
                     </Card>
+                    {project.archivedAt && (
+                        <Card className="hidden xl:block" x-chunk="dashboard-01-chunk-1">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Deletion</CardTitle>
+                                <Users className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">
+                                    {!isNaN(Date.parse(String(project.archivedAt)))
+                                        ? format(
+                                              Date.parse(String(project.archivedAt)),
+                                              "MMMM dd, yyyy"
+                                          )
+                                        : "N/A"}
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                    {user &&
+                                        "One of " +
+                                            user?.projects.filter((proj) => proj.archivedAt)
+                                                .length +
+                                            " archived project" +
+                                            (user?.projects.filter((proj) => proj.archivedAt)
+                                                .length > 1
+                                                ? "s"
+                                                : "") +
+                                            "."}
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )}
                     <Card x-chunk="dashboard-01-chunk-2">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Status</CardTitle>
@@ -131,13 +234,11 @@ export default function Project() {
                     <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
                         <CardHeader className="flex flex-row items-center">
                             <div className="grid gap-2">
-                                <CardTitle>Transactions</CardTitle>
-                                <CardDescription>
-                                    Recent transactions from your store.
-                                </CardDescription>
+                                <CardTitle>Tasks</CardTitle>
+                                <CardDescription>Recent tasks for this project.</CardDescription>
                             </div>
                             <Button asChild size="sm" className="ml-auto gap-1">
-                                <Link href="#">
+                                <Link href="/tasks">
                                     View All
                                     <ArrowUpRight className="h-4 w-4" />
                                 </Link>

@@ -78,7 +78,7 @@ export function DataTable<TData extends TEntity, TValue>({
 
     function handleRowClick(id: number): void {
         if (clickableRows) {
-            router.push(`/project/${id}`);
+            router.push(`/projects/${id}`);
         }
     }
 

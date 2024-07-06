@@ -9,7 +9,7 @@
             "description": "This is the first project.",
             "createdAt": "2023-05-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-06-30T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "todo",
             "priority": "high",
             "tasks": [
@@ -53,7 +53,7 @@
             "description": "This is the second project.",
             "createdAt": "2023-06-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-06-30T12:00:00.000Z",
-            "deletedAt": "2024-06-30T12:00:00.000Z",
+            "archivedAt": "2024-06-30T12:00:00.000Z",
             "status": "in progress",
             "priority": "low",
             "tasks": [
@@ -97,7 +97,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -141,7 +141,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -185,7 +185,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -229,7 +229,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -273,7 +273,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -317,7 +317,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -361,7 +361,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -405,7 +405,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -449,7 +449,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -493,7 +493,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -537,7 +537,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -581,7 +581,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -625,7 +625,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -669,7 +669,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -713,7 +713,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -757,7 +757,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -801,7 +801,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -845,7 +845,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -889,7 +889,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -933,7 +933,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
@@ -977,7 +977,7 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "deletedAt": null,
+            "archivedAt": null,
             "status": "backlog",
             "priority": "low",
             "tasks": [
