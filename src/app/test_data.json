@@ -16,15 +16,33 @@
                 {
                     "id": "1720012345678",
                     "name": "Task 1",
-                    "startTime": "2024-07-02T09:00:00.000Z",
-                    "endTime": "2024-07-02T10:00:00.000Z",
-                    "description": "Complete the first task."
+                    "description": "Complete the first task.",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ]
                 },
                 {
                     "id": "1720012345679",
                     "name": "Task 2",
-                    "startTime": "2024-07-02T10:30:00.000Z",
-                    "endTime": "2024-07-02T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -37,20 +55,38 @@
             "lastUpdatedAt": "2024-06-30T12:00:00.000Z",
             "deletedAt": "2024-06-30T12:00:00.000Z",
             "status": "in progress",
-            "priority": "medium",
+            "priority": "low",
             "tasks": [
                 {
                     "id": "1720012345680",
                     "name": "Task 1",
-                    "startTime": "2024-07-01T09:00:00.000Z",
-                    "endTime": "2024-07-01T10:00:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
                     "id": "1720012345681",
                     "name": "Task 2",
-                    "startTime": "2024-07-01T10:30:00.000Z",
-                    "endTime": "2024-07-01T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -68,15 +104,33 @@
                 {
                     "id": "1720012345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
                     "id": "1720012345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -92,17 +146,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720032345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012365683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -118,17 +190,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012344682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012345283",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -144,17 +234,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1723012345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012355683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -170,17 +278,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012342682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012345183",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -196,17 +322,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1721012345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012345693",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -222,17 +366,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720022345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012385683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -248,17 +410,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012347682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012945683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -274,17 +454,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012341682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012445683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -300,17 +498,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1770012345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012325683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -326,17 +542,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012345782",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012345183",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -352,17 +586,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720017345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720016345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -378,17 +630,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012345782",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720312345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -404,17 +674,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012545682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1790012345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -430,17 +718,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012345672",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012345783",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -456,17 +762,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720014345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720032345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -482,17 +806,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720082345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012355683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -508,17 +850,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012345082",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720013345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -534,17 +894,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720012349682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1724012345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -560,17 +938,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1729012345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720010345683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]
@@ -586,17 +982,35 @@
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345682",
+                    "id": "1720032345682",
                     "name": "Task 1",
-                    "startTime": "2024-07-03T09:00:00.000Z",
-                    "endTime": "2024-07-03T10:00:00.000Z",
+                    "priority": "medium",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345683",
+                    "id": "1720012305683",
                     "name": "Task 2",
-                    "startTime": "2024-07-03T10:30:00.000Z",
-                    "endTime": "2024-07-03T11:30:00.000Z",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
                     "description": "Complete the second task."
                 }
             ]

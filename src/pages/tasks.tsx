@@ -40,14 +40,14 @@ import {
 } from "@/components/ui/table";
 
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { DataTable } from "@/components/projects/data-table";
+import { DataTable } from "@/components/tasks/data-table";
 import {
     columnsXl,
     columnsLg,
     columnsMd,
     columnsSm,
     columnsMobile,
-} from "@/components/projects/columns";
+} from "@/components/tasks/columns";
 
 export default function Settings() {
     const { user, setUser } = useUser();
@@ -63,14 +63,24 @@ export default function Settings() {
         return <div>Loading...</div>;
     }
 
-    const data = user.projects;
+    const data = user.projects
+        .flatMap((project) => project.tasks)
+        .map((task) => {
+            const project = user.projects.find((project) =>
+                project.tasks.some((t: { id: any }) => t.id === task.id)
+            );
+            return {
+                ...task,
+                projectName: project ? project.name : "Project Not Found",
+            };
+        });
 
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="hidden h-full flex-1 flex-col xl:flex">
                     <Card>
-                        <CardHeader>Projects</CardHeader>
+                        <CardHeader>Tasks</CardHeader>
                         <CardContent>
                             <DataTable
                                 data={data}
@@ -83,7 +93,7 @@ export default function Settings() {
                 </div>
                 <div className="hidden h-full flex-1 flex-col lg:flex xl:hidden">
                     <Card>
-                        <CardHeader>Projects</CardHeader>
+                        <CardHeader>Tasks</CardHeader>
                         <CardContent>
                             <DataTable
                                 data={data}
@@ -96,7 +106,7 @@ export default function Settings() {
                 </div>
                 <div className="hidden h-full flex-1 flex-col md:flex lg:hidden">
                     <Card>
-                        <CardHeader>Projects</CardHeader>
+                        <CardHeader>Tasks</CardHeader>
                         <CardContent>
                             <DataTable
                                 data={data}
@@ -109,7 +119,7 @@ export default function Settings() {
                 </div>
                 <div className="hidden h-full flex-1 flex-col sm:flex md:hidden">
                     <Card>
-                        <CardHeader>Projects</CardHeader>
+                        <CardHeader>Tasks</CardHeader>
                         <CardContent>
                             <DataTable
                                 data={data}
@@ -122,7 +132,7 @@ export default function Settings() {
                 </div>
                 <div className="flex h-full flex-1 flex-col sm:hidden">
                     <Card>
-                        <CardHeader>Projects</CardHeader>
+                        <CardHeader>Tasks</CardHeader>
                         <CardContent>
                             <DataTable
                                 data={data}

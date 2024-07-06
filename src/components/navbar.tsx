@@ -25,6 +25,7 @@ import { useUser } from "./UserContext";
 export default function Navbar() {
     const { user, setUser } = useUser();
     const router = useRouter();
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     useEffect(() => {
         const data = loadData();
@@ -58,12 +59,22 @@ export default function Navbar() {
                 <Link
                     href="/projects"
                     className={`${
-                        router.pathname.includes("projects")
+                        router.pathname.includes("project")
                             ? "text-foreground"
                             : "text-muted-foreground"
                     } transition-colors hover:text-foreground`}
                 >
                     Projects
+                </Link>
+                <Link
+                    href="/tasks"
+                    className={`${
+                        router.pathname.includes("task")
+                            ? "text-foreground"
+                            : "text-muted-foreground"
+                    } transition-colors hover:text-foreground`}
+                >
+                    Tasks
                 </Link>
                 <Link
                     href="/settings"
@@ -76,7 +87,7 @@ export default function Navbar() {
                     Settings
                 </Link>
             </nav>
-            <Sheet>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetTrigger asChild>
                     <Button variant="outline" size="icon" className="shrink-0 md:hidden">
                         <Menu className="h-5 w-5" />
@@ -88,6 +99,11 @@ export default function Navbar() {
                         <Link
                             href="/"
                             className="flex items-center gap-2 text-lg font-semibold md:text-base"
+                            onClick={() =>
+                                setTimeout(() => {
+                                    setIsSheetOpen(false);
+                                }, 200)
+                            }
                         >
                             <Timer className="h-6 w-6" />
                             <span className="sr-only">True Tracker</span>
@@ -99,6 +115,11 @@ export default function Navbar() {
                                     ? "text-foreground"
                                     : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
+                            onClick={() =>
+                                setTimeout(() => {
+                                    setIsSheetOpen(false);
+                                }, 200)
+                            }
                         >
                             Dashboard
                         </Link>
@@ -109,8 +130,28 @@ export default function Navbar() {
                                     ? "text-foreground"
                                     : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
+                            onClick={() =>
+                                setTimeout(() => {
+                                    setIsSheetOpen(false);
+                                }, 200)
+                            }
                         >
                             Projects
+                        </Link>
+                        <Link
+                            href="/tasks"
+                            className={`${
+                                router.pathname.includes("task")
+                                    ? "text-foreground"
+                                    : "text-muted-foreground"
+                            } transition-colors hover:text-foreground`}
+                            onClick={() =>
+                                setTimeout(() => {
+                                    setIsSheetOpen(false);
+                                }, 200)
+                            }
+                        >
+                            Tasks
                         </Link>
                         <Link
                             href="/settings"
@@ -119,6 +160,11 @@ export default function Navbar() {
                                     ? "text-foreground"
                                     : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
+                            onClick={() =>
+                                setTimeout(() => {
+                                    setIsSheetOpen(false);
+                                }, 200)
+                            }
                         >
                             Settings
                         </Link>

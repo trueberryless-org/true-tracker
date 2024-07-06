@@ -5,8 +5,8 @@ import {
     ArrowRightToLineIcon,
 } from "lucide-react";
 import { Table } from "@tanstack/react-table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
-import { Button } from "./button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Button } from "../ui/button";
 
 interface DataTablePaginationProps<TData> {
     table: Table<TData>;

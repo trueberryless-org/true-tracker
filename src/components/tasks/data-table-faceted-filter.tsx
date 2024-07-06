@@ -3,10 +3,10 @@ import { CheckIcon, CirclePlusIcon } from "lucide-react";
 import { Column } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
-import { Button } from "./button";
-import { Separator } from "./separator";
-import { Badge } from "./badge";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
     Command,
     CommandEmpty,
@@ -15,7 +15,7 @@ import {
     CommandItem,
     CommandList,
     CommandSeparator,
-} from "./command";
+} from "../ui/command";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
     column?: Column<TData, TValue>;
@@ -34,6 +34,7 @@ export function DataTableFacetedFilter<TData, TValue>({
 }: DataTableFacetedFilterProps<TData, TValue>) {
     const facets = column?.getFacetedUniqueValues();
     const selectedValues = new Set(column?.getFilterValue() as string[]);
+    console.log(facets);
 
     return (
         <Popover>

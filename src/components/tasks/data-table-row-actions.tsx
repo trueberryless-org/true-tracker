@@ -11,14 +11,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Project } from "@/models";
+import { Project, Task } from "@/models";
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps<Project>) {
-    const projectId = row.original.id;
+export function DataTableRowActions({ row }: DataTableRowActionsProps<Task>) {
+    const taskId = row.original.id;
 
     return (
         <DropdownMenu>
@@ -29,10 +29,10 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps<Project>) 
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
-                <Link href={`/project/${projectId}`}>
+                <Link href={`/tasks/${taskId}`}>
                     <DropdownMenuItem>View</DropdownMenuItem>
                 </Link>
-                <Link href={`/project/${projectId}/edit`}>
+                <Link href={`/tasks/${taskId}/edit`}>
                     <DropdownMenuItem>Edit</DropdownMenuItem>
                 </Link>
             </DropdownMenuContent>
