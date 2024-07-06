@@ -115,7 +115,7 @@ export function DataTable<TData extends TEntity, TValue>({
                                     className={clickableRows ? "cursor-pointer" : ""}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell key={cell.id} className="truncate">
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()

@@ -47,7 +47,11 @@ import {
     columnsMd,
     columnsSm,
     columnsMobile,
+    columnsXlWithArchivedAt,
 } from "@/components/projects/columns";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function Settings() {
     const { user, setUser } = useUser();
@@ -60,10 +64,23 @@ export default function Settings() {
     }, []);
 
     if (!user) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex w-full flex-col">
+                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+                    <Alert variant="default">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Loading...</AlertTitle>
+                        <AlertDescription>
+                            We are currently trying to fetch your data from your local storage.
+                        </AlertDescription>
+                    </Alert>
+                </main>
+            </div>
+        );
     }
 
-    const data = user.projects;
+    const data = user.projects.filter((project) => !project.archivedAt);
+    const archivedData = user.projects.filter((project) => project.archivedAt);
 
     return (
         <div className="flex w-full flex-col">
@@ -126,6 +143,72 @@ export default function Settings() {
                         <CardContent>
                             <DataTable
                                 data={data}
+                                columns={columnsMobile}
+                                pagination={false}
+                                clickableRows={true}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div className="hidden h-full flex-1 flex-col xl:flex">
+                    <Card>
+                        <CardHeader>Archived Projects</CardHeader>
+                        <CardContent>
+                            <DataTable
+                                data={archivedData}
+                                columns={columnsXlWithArchivedAt}
+                                pagination={true}
+                                clickableRows={true}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="hidden h-full flex-1 flex-col lg:flex xl:hidden">
+                    <Card>
+                        <CardHeader>Archived Projects</CardHeader>
+                        <CardContent>
+                            <DataTable
+                                data={archivedData}
+                                columns={columnsLg}
+                                pagination={true}
+                                clickableRows={true}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="hidden h-full flex-1 flex-col md:flex lg:hidden">
+                    <Card>
+                        <CardHeader>Archived Projects</CardHeader>
+                        <CardContent>
+                            <DataTable
+                                data={archivedData}
+                                columns={columnsMd}
+                                pagination={true}
+                                clickableRows={true}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="hidden h-full flex-1 flex-col sm:flex md:hidden">
+                    <Card>
+                        <CardHeader>Archived Projects</CardHeader>
+                        <CardContent>
+                            <DataTable
+                                data={archivedData}
+                                columns={columnsSm}
+                                pagination={true}
+                                clickableRows={true}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="flex h-full flex-1 flex-col sm:hidden">
+                    <Card>
+                        <CardHeader>Archived Projects</CardHeader>
+                        <CardContent>
+                            <DataTable
+                                data={archivedData}
                                 columns={columnsMobile}
                                 pagination={false}
                                 clickableRows={true}

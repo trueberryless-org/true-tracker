@@ -187,7 +187,9 @@ export default function Navbar() {
                 </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center gap-4 bg-secondary rounded-full ps-4">
-                        <h5>{user.username}</h5>
+                        <h5 className="truncate max-w-32 sm:max-w-96 md:max-w-56 lg:max-w-96">
+                            {user.username}
+                        </h5>
                         <Button size="icon" className="rounded-full relative">
                             {user.profilePicture ? (
                                 <Image

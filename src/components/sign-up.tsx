@@ -61,9 +61,6 @@ export function SignUp() {
                 importData(fileData)
                     .then((importedUser: User) => {
                         setUser(importedUser);
-                        toast({
-                            title: "Data imported successfully.",
-                        });
                     })
                     .catch((error) => console.error("Error importing data", error));
             } catch (error) {

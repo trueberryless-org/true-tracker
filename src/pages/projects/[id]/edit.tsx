@@ -57,6 +57,19 @@ export default function EditProduct() {
         }
     };
 
+    const archiveProject = () => {
+        if (user && project) {
+            project.archivedAt = new Date();
+            const updatedProjects = user.projects.map((proj) =>
+                proj.id === project.id ? project : proj
+            );
+            const updatedUser = { ...user, projects: updatedProjects };
+            setUser(updatedUser);
+            saveData(updatedUser);
+            router.push(`/projects/${project.id}`);
+        }
+    };
+
     if (!project) {
         return <div>Project not found</div>;
     }
@@ -241,11 +254,8 @@ export default function EditProduct() {
                                                 projects will not be visible in the projects list.
                                             </p>
                                             <Button
-                                                onClick={() => {
-                                                    project.archivedAt = new Date();
-                                                    router.push(`/projects/${project.id}`);
-                                                }}
-                                                variant="outline"
+                                                onClick={archiveProject}
+                                                variant="destructive"
                                                 size="sm"
                                             >
                                                 Archive
@@ -257,9 +267,11 @@ export default function EditProduct() {
                         </div>
                     </div>
                     <div className="flex items-center justify-end gap-2 md:hidden">
-                        <Button variant="outline" size="sm">
-                            Discard
-                        </Button>
+                        <Link href={`/projects/${project.id}`} className="text-muted-foreground">
+                            <Button variant="outline" size="sm">
+                                Discard
+                            </Button>
+                        </Link>
                         <Button size="sm" onClick={handleSaveProject}>
                             Save Project
                         </Button>

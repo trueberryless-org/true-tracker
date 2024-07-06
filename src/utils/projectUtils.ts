@@ -19,8 +19,6 @@ export function calcPriorityComparison(user: User | null | undefined, priority: 
         return proj.priority === "low";
     }).length;
 
-    console.log(higherPriorityCount, mediumPriorityCount, lowerPriorityCount);
-
     if (priority === "high") {
         return `Higher priority than ${lowerPriorityCount + mediumPriorityCount} other projects`;
     } else if (priority === "medium") {

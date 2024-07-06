@@ -22,6 +22,15 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import {
     Form,
     FormControl,
     FormDescription,
@@ -35,6 +44,8 @@ import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@/components/UserContext";
 import { clearLocalStorage } from "@/utils/localStorage";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const FormSchemaUsername = z.object({
     username: z.string().min(2, {
@@ -120,9 +131,6 @@ export default function Settings() {
                 importData(fileData)
                     .then((importedUser: User) => {
                         setUser(importedUser);
-                        toast({
-                            title: "Data imported successfully.",
-                        });
                     })
                     .catch((error) => console.error("Error importing data", error));
             } catch (error) {
@@ -178,28 +186,38 @@ export default function Settings() {
     };
 
     const deleteAllProjects = () => {
-        if (
-            confirm("Are you sure you want to delete all projects? This action cannot be undone.")
-        ) {
-            if (user) {
-                const updatedUser = { ...user, projects: [] };
-                setUser(updatedUser);
-                saveData(updatedUser);
-            }
+        if (user) {
+            const updatedUser = { ...user, projects: [] };
+            setUser(updatedUser);
+            saveData(updatedUser);
+            toast({
+                title: "All projects deleted successfully.",
+            });
         }
     };
 
     const clearAllUserData = () => {
-        if (
-            confirm("Are you sure you want to delete all your data? This action cannot be undone.")
-        ) {
-            clearLocalStorage();
-            setUser(null);
-        }
+        clearLocalStorage();
+        setUser(null);
+        toast({
+            title: "All data cleared successfully.",
+        });
     };
 
     if (!user) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex w-full flex-col">
+                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+                    <Alert variant="default">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Loading...</AlertTitle>
+                        <AlertDescription>
+                            We are currently trying to fetch your data from your local storage.
+                        </AlertDescription>
+                    </Alert>
+                </main>
+            </div>
+        );
     }
 
     const exportNow = () => {
@@ -416,9 +434,24 @@ export default function Settings() {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardFooter className="border-t px-6 py-4">
-                                    <Button onClick={deleteAllProjects} variant={"destructive"}>
-                                        Delete
-                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <Button variant={"destructive"}>Delete</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                                <DialogDescription>
+                                                    This action cannot be undone. This will
+                                                    permanently delete all your projects and remove
+                                                    this data from your local storage.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <Button onClick={deleteAllProjects}>Confirm</Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
                                 </CardFooter>
                             </Card>
                             <Card x-chunk="dashboard-04-chunk-1">
@@ -431,9 +464,24 @@ export default function Settings() {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardFooter className="border-t px-6 py-4">
-                                    <Button onClick={clearAllUserData} variant={"destructive"}>
-                                        Delete
-                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <Button variant={"destructive"}>Delete</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                                <DialogDescription>
+                                                    This action cannot be undone. This will
+                                                    permanently delete your account and remove your
+                                                    data from your local storage.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <Button onClick={clearAllUserData}>Confirm</Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
                                 </CardFooter>
                             </Card>
                         </div>

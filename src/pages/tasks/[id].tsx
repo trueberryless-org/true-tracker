@@ -48,6 +48,7 @@ import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUti
 import { format } from "date-fns";
 import { saveData } from "@/utils/save";
 import Task, { getMostRecentTimeSpanDate } from "@/models/task";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
@@ -56,21 +57,11 @@ export default function Project() {
 
     const router = useRouter();
 
-    const project = user?.projects.find((project) => project.id === router.query.id);
+    const task = user?.projects
+        .flatMap((project) => project.tasks)
+        .find((task) => task.id === router.query.id);
 
-    const unarchiveProject = () => {
-        if (user && project) {
-            project.archivedAt = null;
-            const updatedProjects = user.projects.map((proj) =>
-                proj.id === project.id ? project : proj
-            );
-            const updatedUser = { ...user, projects: updatedProjects };
-            setUser(updatedUser);
-            saveData(updatedUser);
-        }
-    };
-
-    if (!project) {
+    if (!task) {
         return (
             <div className="flex w-full flex-col">
                 <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -106,7 +97,7 @@ export default function Project() {
                             <span className="sr-only">Back</span>
                         </Button>
                     </Link>
-                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 truncate">
+                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                         {project.name}
                     </h1>
                     <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
