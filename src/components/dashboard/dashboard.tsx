@@ -70,7 +70,7 @@ import { useUser } from "../UserContext";
 import { loadData } from "@/utils/load";
 import { useEffect } from "react";
 import { Task, User } from "@/models";
-import { getMostRecentTimeSpanDate } from "@/models/task";
+import { getMostRecentTimeSpanDate } from "@/utils/taskUtils";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { Overview } from "./overview";
 import { RecentSales } from "./recent-sales";

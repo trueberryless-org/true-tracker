@@ -47,7 +47,7 @@ import PriorityIconLabel from "@/components/projects/priority";
 import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUtils";
 import { format } from "date-fns";
 import { saveData } from "@/utils/save";
-import Task, { getMostRecentTimeSpanDate } from "@/models/task";
+import Task from "@/models/task";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";

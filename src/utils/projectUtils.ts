@@ -1,4 +1,4 @@
-import { User } from "@/models";
+import { Project, User } from "@/models";
 
 export function calcPriorityComparison(user: User | null | undefined, priority: string): string {
     if (!user || !priority) {
@@ -52,3 +52,10 @@ export function calcStatusComparison(user: User | null | undefined, status: stri
         return `${sameStatusCount} other projects have the same status`;
     }
 }
+
+export const getMostRecentTimeSpanDate = (project: Project) => {
+    const dates = project.tasks.flatMap((task) =>
+        task.timeSpans.map((span) => new Date(span.end ?? span.start).getTime())
+    );
+    return new Date(Math.max(...dates));
+};

@@ -7,7 +7,7 @@ import { priorities, statuses } from "@/models/task";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
 import { DataTableRowActions } from "../tasks/data-table-row-actions";
-import { calculateTotalTime, msToTime } from "@/models/task";
+import { calculateTotalTime, msToTime } from "@/utils/taskUtils";
 import { useEffect } from "react";
 import { loadData } from "@/utils/load";
 

@@ -20,9 +20,10 @@ import { saveData } from "@/utils/save";
 import Link from "next/link";
 import { AlertCircle, ChevronLeft } from "lucide-react";
 import { Task } from "@/models";
-import { getProject, priorities, statuses } from "@/models/task";
+import { priorities, statuses } from "@/models/task";
 import PriorityIconLabel from "@/components/tasks/priority";
 import StatusIconLabel from "@/components/tasks/status";
+import { getProject } from "@/utils/taskUtils";
 
 export default function EditProduct() {
     const { user, setUser } = useUser();

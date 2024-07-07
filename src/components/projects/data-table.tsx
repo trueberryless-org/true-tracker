@@ -29,23 +29,29 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface TEntity {
     id: number;
 }
 
 interface DataTableProps<TData extends TEntity, TValue> {
+    title: string;
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     pagination?: boolean;
     clickableRows?: boolean;
+    filtering?: boolean;
 }
 
 export function DataTable<TData extends TEntity, TValue>({
+    title,
     columns,
     data,
     pagination,
     clickableRows,
+    filtering,
 }: DataTableProps<TData, TValue>) {
     const router = useRouter();
 
@@ -83,58 +89,71 @@ export function DataTable<TData extends TEntity, TValue>({
     }
 
     return (
-        <div className="space-y-4">
-            <DataTableToolbar table={table} />
-            <div className="rounded-md border">
-                <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id} colSpan={header.colSpan}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                      header.column.columnDef.header,
-                                                      header.getContext()
-                                                  )}
-                                        </TableHead>
-                                    );
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    onClick={() => handleRowClick(row.original.id)}
-                                    className={clickableRows ? "cursor-pointer" : ""}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="truncate">
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
+        <Card>
+            <CardHeader>
+                <div className="flex items-center justify-between">
+                    {title}
+                    {!filtering && <DataTableViewOptions table={table} />}
+                </div>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4">
+                    {filtering && <DataTableToolbar table={table} />}
+                    <div className="rounded-md border">
+                        <Table>
+                            <TableHeader>
+                                {table.getHeaderGroups().map((headerGroup) => (
+                                    <TableRow key={headerGroup.id}>
+                                        {headerGroup.headers.map((header) => {
+                                            return (
+                                                <TableHead key={header.id} colSpan={header.colSpan}>
+                                                    {header.isPlaceholder
+                                                        ? null
+                                                        : flexRender(
+                                                              header.column.columnDef.header,
+                                                              header.getContext()
+                                                          )}
+                                                </TableHead>
+                                            );
+                                        })}
+                                    </TableRow>
+                                ))}
+                            </TableHeader>
+                            <TableBody>
+                                {table.getRowModel().rows?.length ? (
+                                    table.getRowModel().rows.map((row) => (
+                                        <TableRow
+                                            key={row.id}
+                                            data-state={row.getIsSelected() && "selected"}
+                                            onClick={() => handleRowClick(row.original.id)}
+                                            className={clickableRows ? "cursor-pointer" : ""}
+                                        >
+                                            {row.getVisibleCells().map((cell) => (
+                                                <TableCell key={cell.id} className="truncate">
+                                                    {flexRender(
+                                                        cell.column.columnDef.cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={columns.length}
+                                            className="h-24 text-center"
+                                        >
+                                            No results.
                                         </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
-            {pagination && <DataTablePagination table={table} />}
-        </div>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                    {pagination && <DataTablePagination table={table} />}
+                </div>
+            </CardContent>
+        </Card>
     );
 }
