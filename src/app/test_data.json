@@ -1,6 +1,6 @@
 {
-    "username": "Felix Schneider",
-    "lastExported": "2024-07-04T17:24:59.715Z",
+    "username": "trueberryless",
+    "lastExported": "2024-07-07T11:59:53.251Z",
     "exportReminder": "monthly",
     "projects": [
         {
@@ -8,9 +8,9 @@
             "name": "Project Alpha",
             "description": "This is the first project.",
             "createdAt": "2023-05-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-06-30T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:56:07.352Z",
             "archivedAt": null,
-            "status": "todo",
+            "status": "canceled",
             "priority": "high",
             "tasks": [
                 {
@@ -27,11 +27,12 @@
                             "start": "2024-07-02T11:00:00.000Z",
                             "end": "2024-07-02T12:30:00.000Z"
                         }
-                    ]
+                    ],
+                    "status": "in progress"
                 },
                 {
                     "id": "1720012345679",
-                    "name": "Task 2",
+                    "name": "Task 3",
                     "priority": "high",
                     "timeSpans": [
                         {
@@ -43,7 +44,8 @@
                             "end": "2024-07-02T12:30:00.000Z"
                         }
                     ],
-                    "description": "Complete the second task."
+                    "description": "Complete the second task.",
+                    "status": "backlog"
                 }
             ]
         },
@@ -52,10 +54,10 @@
             "name": "Project Beta",
             "description": "This is the second project.",
             "createdAt": "2023-06-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-06-30T12:00:00.000Z",
-            "archivedAt": "2024-06-30T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-06T18:27:56.240Z",
+            "archivedAt": null,
             "status": "in progress",
-            "priority": "low",
+            "priority": "medium",
             "tasks": [
                 {
                     "id": "1720012345680",
@@ -96,9 +98,9 @@
             "name": "Project Gamma",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
             "archivedAt": null,
-            "status": "backlog",
+            "status": "in review",
             "priority": "low",
             "tasks": [
                 {
@@ -120,7 +122,7 @@
                 {
                     "id": "1720012345683",
                     "name": "Task 2",
-                    "priority": "medium",
+                    "priority": "low",
                     "timeSpans": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
@@ -131,7 +133,8 @@
                             "end": "2024-07-02T14:30:00.000Z"
                         }
                     ],
-                    "description": "Complete the second task."
+                    "description": "Complete the second task.",
+                    "status": "done"
                 }
             ]
         },
@@ -140,10 +143,10 @@
             "name": "Project Delta",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:57:18.433Z",
             "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
+            "status": "completed",
+            "priority": "medium",
             "tasks": [
                 {
                     "id": "1720032345682",
@@ -184,10 +187,10 @@
             "name": "Project Pi",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
+            "lastUpdatedAt": "2024-07-07T11:55:50.842Z",
+            "archivedAt": "2024-07-07T11:57:39.147Z",
+            "status": "in review",
+            "priority": "medium",
             "tasks": [
                 {
                     "id": "1720012344682",
@@ -228,9 +231,9 @@
             "name": "Project Phi",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:44.459Z",
             "archivedAt": null,
-            "status": "backlog",
+            "status": "on hold",
             "priority": "low",
             "tasks": [
                 {
@@ -272,9 +275,9 @@
             "name": "Project Epsilon",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:56.671Z",
             "archivedAt": null,
-            "status": "backlog",
+            "status": "in progress",
             "priority": "low",
             "tasks": [
                 {
@@ -316,9 +319,9 @@
             "name": "Project Omega",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:56:58.307Z",
             "archivedAt": null,
-            "status": "backlog",
+            "status": "in review",
             "priority": "low",
             "tasks": [
                 {
@@ -360,15 +363,15 @@
             "name": "Project Gamma",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
             "archivedAt": null,
-            "status": "backlog",
+            "status": "in review",
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720022345682",
+                    "id": "1720012345682",
                     "name": "Task 1",
-                    "priority": "medium",
+                    "priority": "high",
                     "timeSpans": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
@@ -382,9 +385,9 @@
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012385683",
+                    "id": "1720012345683",
                     "name": "Task 2",
-                    "priority": "high",
+                    "priority": "low",
                     "timeSpans": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
@@ -395,7 +398,8 @@
                             "end": "2024-07-02T14:30:00.000Z"
                         }
                     ],
-                    "description": "Complete the second task."
+                    "description": "Complete the second task.",
+                    "status": "done"
                 }
             ]
         },
@@ -405,8 +409,8 @@
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
             "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
+            "archivedAt": "2024-07-07T11:58:01.570Z",
+            "status": "on hold",
             "priority": "low",
             "tasks": [
                 {
@@ -448,10 +452,10 @@
             "name": "Project Gamma",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:57:09.364Z",
             "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
+            "status": "on hold",
+            "priority": "high",
             "tasks": [
                 {
                     "id": "1720012341682",
@@ -489,13 +493,13 @@
         },
         {
             "id": "1719933644573532",
-            "name": "Project Gamma",
+            "name": "Project Gomme",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
+            "lastUpdatedAt": "2024-07-07T11:58:29.641Z",
+            "archivedAt": "2024-07-07T11:58:32.536Z",
+            "status": "on hold",
+            "priority": "medium",
             "tasks": [
                 {
                     "id": "1770012345682",
@@ -536,9 +540,9 @@
             "name": "Project Gamma",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:58:49.860Z",
             "archivedAt": null,
-            "status": "backlog",
+            "status": "completed",
             "priority": "low",
             "tasks": [
                 {
@@ -624,101 +628,13 @@
             "name": "Project Gamma",
             "description": "This is the third project.",
             "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
             "archivedAt": null,
-            "status": "backlog",
+            "status": "in review",
             "priority": "low",
             "tasks": [
                 {
-                    "id": "1720012345782",
-                    "name": "Task 1",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1720312345683",
-                    "name": "Task 2",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1720012545682",
-                    "name": "Task 1",
-                    "priority": "low",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1790012345683",
-                    "name": "Task 2",
-                    "priority": "high",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1720012345672",
+                    "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
                     "timeSpans": [
@@ -734,271 +650,7 @@
                     "description": "Complete the first task."
                 },
                 {
-                    "id": "1720012345783",
-                    "name": "Task 2",
-                    "priority": "high",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1720014345682",
-                    "name": "Task 1",
-                    "priority": "high",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1720032345683",
-                    "name": "Task 2",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1720082345682",
-                    "name": "Task 1",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1720012355683",
-                    "name": "Task 2",
-                    "priority": "high",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1720012345082",
-                    "name": "Task 1",
-                    "priority": "high",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1720013345683",
-                    "name": "Task 2",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1720012349682",
-                    "name": "Task 1",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1724012345683",
-                    "name": "Task 2",
-                    "priority": "high",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1729012345682",
-                    "name": "Task 1",
-                    "priority": "low",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1720010345683",
-                    "name": "Task 2",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T11:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T12:00:00.000Z",
-                            "end": "2024-07-02T14:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the second task."
-                }
-            ]
-        },
-        {
-            "id": "1719933344573532",
-            "name": "Project Gamma",
-            "description": "This is the third project.",
-            "createdAt": "2023-07-01T10:00:00.000Z",
-            "lastUpdatedAt": "2024-07-01T12:00:00.000Z",
-            "archivedAt": null,
-            "status": "backlog",
-            "priority": "low",
-            "tasks": [
-                {
-                    "id": "1720032345682",
-                    "name": "Task 1",
-                    "priority": "medium",
-                    "timeSpans": [
-                        {
-                            "start": "2024-07-01T08:30:00.000Z",
-                            "end": "2024-07-01T10:30:00.000Z"
-                        },
-                        {
-                            "start": "2024-07-02T11:00:00.000Z",
-                            "end": "2024-07-02T12:30:00.000Z"
-                        }
-                    ],
-                    "description": "Complete the first task."
-                },
-                {
-                    "id": "1720012305683",
+                    "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
                     "timeSpans": [
@@ -1011,7 +663,368 @@
                             "end": "2024-07-02T14:30:00.000Z"
                         }
                     ],
-                    "description": "Complete the second task."
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
+                }
+            ]
+        },
+        {
+            "id": "1719933344573532",
+            "name": "Project Gamma",
+            "description": "This is the third project.",
+            "createdAt": "2023-07-01T10:00:00.000Z",
+            "lastUpdatedAt": "2024-07-07T11:55:37.420Z",
+            "archivedAt": null,
+            "status": "in review",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "1720012345682",
+                    "name": "Task 1",
+                    "priority": "high",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T10:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T11:00:00.000Z",
+                            "end": "2024-07-02T12:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the first task."
+                },
+                {
+                    "id": "1720012345683",
+                    "name": "Task 2",
+                    "priority": "low",
+                    "timeSpans": [
+                        {
+                            "start": "2024-07-01T08:30:00.000Z",
+                            "end": "2024-07-01T11:30:00.000Z"
+                        },
+                        {
+                            "start": "2024-07-02T12:00:00.000Z",
+                            "end": "2024-07-02T14:30:00.000Z"
+                        }
+                    ],
+                    "description": "Complete the second task.",
+                    "status": "done"
                 }
             ]
         }

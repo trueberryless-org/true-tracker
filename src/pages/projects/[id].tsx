@@ -107,7 +107,7 @@ export default function Project() {
                             <span className="sr-only">Back</span>
                         </Button>
                     </Link>
-                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 truncate">
+                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                         {project.name}
                     </h1>
                     <Badge variant="outline" className="ml-auto sm:ml-0 py-2">

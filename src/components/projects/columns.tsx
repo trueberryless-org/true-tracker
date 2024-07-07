@@ -8,7 +8,11 @@ import { Badge } from "../ui/badge";
 import { format } from "date-fns";
 import { DataTableRowActions } from "./data-table-row-actions";
 
-export const columnsXl: ColumnDef<Project>[] = [
+interface ExtendedProject extends Project {
+    isArchived: boolean;
+}
+
+export const columnsXl: ColumnDef<ExtendedProject>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -17,7 +21,9 @@ export const columnsXl: ColumnDef<Project>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                    {row.original.isArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -135,7 +141,7 @@ export const columnsXl: ColumnDef<Project>[] = [
     },
 ];
 
-export const columnsXlWithArchivedAt: ColumnDef<Project>[] = [
+export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -144,7 +150,9 @@ export const columnsXlWithArchivedAt: ColumnDef<Project>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                    {row.original.isArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -280,7 +288,7 @@ export const columnsXlWithArchivedAt: ColumnDef<Project>[] = [
     },
 ];
 
-export const columnsLg: ColumnDef<Project>[] = [
+export const columnsLg: ColumnDef<ExtendedProject>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -289,7 +297,9 @@ export const columnsLg: ColumnDef<Project>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                    {row.original.isArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -387,7 +397,7 @@ export const columnsLg: ColumnDef<Project>[] = [
     },
 ];
 
-export const columnsMd: ColumnDef<Project>[] = [
+export const columnsMd: ColumnDef<ExtendedProject>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -396,7 +406,9 @@ export const columnsMd: ColumnDef<Project>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                    {row.original.isArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -478,7 +490,7 @@ export const columnsMd: ColumnDef<Project>[] = [
     },
 ];
 
-export const columnsSm: ColumnDef<Project>[] = [
+export const columnsSm: ColumnDef<ExtendedProject>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -487,7 +499,9 @@ export const columnsSm: ColumnDef<Project>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                    {row.original.isArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -551,7 +565,7 @@ export const columnsSm: ColumnDef<Project>[] = [
     },
 ];
 
-export const columnsMobile: ColumnDef<Project>[] = [
+export const columnsMobile: ColumnDef<ExtendedProject>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -559,8 +573,10 @@ export const columnsMobile: ColumnDef<Project>[] = [
             // const label = labels.find((label) => label.value === row.original.label)
 
             return (
-                <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                <div className="flex space-x-2 truncate">
+                    {/* {row.original.isArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )} */}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>

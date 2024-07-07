@@ -80,11 +80,16 @@ export default function Settings() {
         );
     }
 
-    const data = user.projects.filter((project) => !project.archivedAt);
-    const archivedData = user.projects.filter((project) => project.archivedAt);
+    const data = user.projects.map((project) => {
+        return {
+            ...project,
+            isArchived: project.archivedAt ? true : false,
+        };
+    });
     const recentData = data
         .map((project) => ({
             ...project,
+            isArchived: project.archivedAt ? true : false,
             mostRecentDate: getMostRecentTimeSpanDate(project),
         }))
         .sort((project1, project2) => project2.mostRecentDate - project1.mostRecentDate)
@@ -190,7 +195,7 @@ export default function Settings() {
                     />
                 </div>
 
-                <div className="hidden h-full flex-1 flex-col xl:flex">
+                {/* <div className="hidden h-full flex-1 flex-col xl:flex">
                     <DataTable
                         title="Archived Projects"
                         data={archivedData}
@@ -239,7 +244,7 @@ export default function Settings() {
                         clickableRows={true}
                         filtering={true}
                     />
-                </div>
+                </div> */}
             </main>
         </div>
     );
