@@ -19,8 +19,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import ModeToggle from "./mode-switch";
+import ModeToggle from "./themes/mode-switch";
 import { useUser } from "./UserContext";
+import ThemeSwitcher from "./themes/theme-switcher";
+import { getChartThemes } from "@/lib/chart-themes";
+
+const chartThemes = getChartThemes();
 
 export default function Navbar() {
     const { user, setUser } = useUser();
@@ -185,9 +189,12 @@ export default function Navbar() {
                 <div className="ml-auto flex-1 sm:flex-initial">
                     <ModeToggle />
                 </div>
+                <div className="flex-1 sm:flex-initial">
+                    <ThemeSwitcher />
+                </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center gap-4 bg-secondary rounded-full ps-4">
-                        <h5 className="truncate max-w-32 sm:max-w-96 md:max-w-56 lg:max-w-96">
+                        <h5 className="truncate max-w-32 sm:max-w-96 md:max-w-56 lg:max-w-96 text-secondary-foreground">
                             {user.username}
                         </h5>
                         <Button size="icon" className="rounded-full relative">

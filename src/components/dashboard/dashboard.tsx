@@ -116,17 +116,17 @@ export default function Dashboard() {
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                {shouldShowExportNotification(user) && (
-                    <Alert>
-                        <Terminal className="h-4 w-4" />
-                        <AlertTitle>Notification!</AlertTitle>
-                        <AlertDescription>
-                            We recommend exporting your data regularly. Head to Settings → Data
-                            Management to export your data now. Stay safe!
-                        </AlertDescription>
-                    </Alert>
-                )}
                 <div className="flex-1 space-y-4 p-8 pt-6">
+                    {shouldShowExportNotification(user) && (
+                        <Alert className="mb-12">
+                            <Terminal className="h-4 w-4" />
+                            <AlertTitle>Notification!</AlertTitle>
+                            <AlertDescription>
+                                We recommend exporting your data regularly. Head to Settings → Data
+                                Management to export your data now. Stay safe!
+                            </AlertDescription>
+                        </Alert>
+                    )}
                     <div className="flex items-center justify-between space-y-2">
                         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
                         <div className="flex items-center space-x-2">
