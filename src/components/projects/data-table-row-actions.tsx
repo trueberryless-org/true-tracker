@@ -32,9 +32,11 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps<Project>) 
                 <Link href={`/projects/${projectId}`}>
                     <DropdownMenuItem>View</DropdownMenuItem>
                 </Link>
-                <Link href={`/projects/${projectId}/edit`}>
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                </Link>
+                {row.original.archivedAt === null && (
+                    <Link href={`/projects/${projectId}/edit`}>
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                    </Link>
+                )}
             </DropdownMenuContent>
         </DropdownMenu>
     );

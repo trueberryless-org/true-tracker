@@ -116,7 +116,7 @@ export default function Dashboard() {
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                <div className="flex-1 space-y-4 p-8 pt-6">
+                <div className="flex-1 space-y-4 px-8">
                     {shouldShowExportNotification(user) && (
                         <Alert className="mb-12">
                             <Terminal className="h-4 w-4" />
@@ -127,8 +127,8 @@ export default function Dashboard() {
                             </AlertDescription>
                         </Alert>
                     )}
-                    <div className="flex items-center justify-between space-y-2">
-                        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
                         <div className="flex items-center space-x-2">
                             <CalendarDateRangePicker />
                             <Button>Download</Button>
@@ -151,7 +151,7 @@ export default function Dashboard() {
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                                 <Card>
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">
+                                        <CardTitle className="text-sm font-medium text-primary">
                                             Total Revenue
                                         </CardTitle>
                                         <svg
@@ -176,7 +176,7 @@ export default function Dashboard() {
                                 </Card>
                                 <Card>
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">
+                                        <CardTitle className="text-sm font-medium text-primary">
                                             Subscriptions
                                         </CardTitle>
                                         <svg
@@ -203,7 +203,9 @@ export default function Dashboard() {
                                 </Card>
                                 <Card>
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                                        <CardTitle className="text-sm font-medium text-primary">
+                                            Sales
+                                        </CardTitle>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
@@ -227,7 +229,7 @@ export default function Dashboard() {
                                 </Card>
                                 <Card>
                                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium">
+                                        <CardTitle className="text-sm font-medium text-primary">
                                             Active Now
                                         </CardTitle>
                                         <svg

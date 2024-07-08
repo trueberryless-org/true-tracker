@@ -6,7 +6,6 @@ import { loadData } from "@/utils/load";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 import { UserProvider, useUser } from "@/components/UserContext";
-import { CHART_THEMES, getChartThemes } from "@/lib/chart-themes";
 
 const inter = Inter({ subsets: ["latin"] });
 

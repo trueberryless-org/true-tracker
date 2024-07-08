@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,6 +46,10 @@ import { clearLocalStorage } from "@/utils/localStorage";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { useTheme as useNextTheme } from "next-themes";
+import React from "react";
+import { setTheme as setColorTheme, getCurrentTheme } from "@/utils/themes";
 
 const FormSchemaUsername = z.object({
     username: z.string().min(2, {
@@ -61,6 +65,9 @@ const FormSchemaExportReminder = z.object({
 
 export default function Settings() {
     const { user, setUser } = useUser();
+    const { theme, setTheme } = useNextTheme();
+    const [currentTheme, setCurrentTheme] = useState("default");
+
     const [fileData, setFileData] = useState<any>(null);
     const [pictureData, setPictureData] = useState<any>(null);
     const [activeTab, setActiveTab] = useState("General");
@@ -75,7 +82,24 @@ export default function Settings() {
         if (storedTab) {
             setActiveTab(storedTab.toString());
         }
+
+        const initialTheme = user?.theme || getCurrentTheme();
+        setColorTheme(initialTheme);
+        setCurrentTheme(initialTheme);
     }, []);
+
+    const handleThemeChange = useCallback(
+        (theme: any) => {
+            setColorTheme(theme);
+            setCurrentTheme(theme);
+
+            if (user) {
+                user.theme = theme;
+                saveData(user);
+            }
+        },
+        [user]
+    );
 
     const handleTabClick = (tabName: string) => {
         setActiveTab(tabName);
@@ -256,6 +280,14 @@ export default function Settings() {
                         </a>
                         <a
                             className={` ${
+                                activeTab === "Themes" ? "font-semibold text-primary" : ""
+                            }`}
+                            onClick={() => handleTabClick("Themes")}
+                        >
+                            Themes
+                        </a>
+                        <a
+                            className={` ${
                                 activeTab === "Danger Zone" ? "font-semibold text-primary" : ""
                             }`}
                             onClick={() => handleTabClick("Danger Zone")}
@@ -419,6 +451,104 @@ export default function Settings() {
                                 <CardFooter className="border-t px-6 py-4">
                                     <Button onClick={importNow}>Import</Button>
                                 </CardFooter>
+                            </Card>
+                        </div>
+                    )}
+                    {activeTab === "Themes" && (
+                        <div className="grid gap-6">
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Light / Dark Mode</CardTitle>
+                                    <CardDescription>
+                                        Choose the lightness / darkness of your interface here.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <RadioGroup defaultValue={theme}>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => setTheme("light")}
+                                        >
+                                            <RadioGroupItem value="light" id="r1" />
+                                            <Label htmlFor="r1">Light</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => setTheme("dark")}
+                                        >
+                                            <RadioGroupItem value="dark" id="r2" />
+                                            <Label htmlFor="r2">Dark</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => setTheme("system")}
+                                        >
+                                            <RadioGroupItem value="system" id="r3" />
+                                            <Label htmlFor="r3">System</Label>
+                                        </div>
+                                    </RadioGroup>
+                                </CardContent>
+                            </Card>
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Color Modes</CardTitle>
+                                    <CardDescription>
+                                        Choose the color theme which you like most.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <RadioGroup defaultValue={currentTheme}>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("default")}
+                                        >
+                                            <RadioGroupItem value="default" id="r4" />
+                                            <Label htmlFor="r4">Default</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("palette")}
+                                        >
+                                            <RadioGroupItem value="palette" id="r5" />
+                                            <Label htmlFor="r5">Palette</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("sapphire")}
+                                        >
+                                            <RadioGroupItem value="sapphire" id="r6" />
+                                            <Label htmlFor="r6">Sapphire</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("ruby")}
+                                        >
+                                            <RadioGroupItem value="ruby" id="r7" />
+                                            <Label htmlFor="r7">Ruby</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("emerald")}
+                                        >
+                                            <RadioGroupItem value="emerald" id="r8" />
+                                            <Label htmlFor="r8">Emerald</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("daylight")}
+                                        >
+                                            <RadioGroupItem value="daylight" id="r9" />
+                                            <Label htmlFor="r9">Daylight</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("midnight")}
+                                        >
+                                            <RadioGroupItem value="midnight" id="r10" />
+                                            <Label htmlFor="r10">Midnight</Label>
+                                        </div>
+                                    </RadioGroup>
+                                </CardContent>
                             </Card>
                         </div>
                     )}

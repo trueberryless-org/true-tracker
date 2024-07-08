@@ -117,11 +117,17 @@ export default function EditProduct() {
                         <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                             {project.name}
                         </h1>
-                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
-                            <PriorityIconLabel priorityValue={project.priority} />
+                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                            <PriorityIconLabel
+                                priorityValue={project.priority}
+                                className="text-muted-foreground"
+                            />
                         </Badge>
-                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
-                            <StatusIconLabel statusValue={project.status} />
+                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                            <StatusIconLabel
+                                statusValue={project.status}
+                                className="text-muted-foreground"
+                            />
                         </Badge>
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
                             <Link

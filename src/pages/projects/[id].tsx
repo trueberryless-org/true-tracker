@@ -110,11 +110,20 @@ export default function Project() {
                     <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                         {project.name}
                     </h1>
-                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
-                        <PriorityIconLabel priorityValue={project.priority} />
+                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                        <PriorityIconLabel
+                            priorityValue={project.priority}
+                            className="text-muted-foreground"
+                        />
                     </Badge>
-                    <Badge variant="outline" className="hidden ml-auto sm:ml-0 py-2 sm:block">
-                        <StatusIconLabel statusValue={project.status} />
+                    <Badge
+                        variant="outline"
+                        className="hidden ml-auto sm:ml-0 py-2 sm:block bg-background"
+                    >
+                        <StatusIconLabel
+                            statusValue={project.status}
+                            className="text-muted-foreground"
+                        />
                     </Badge>
                     {project.archivedAt && (
                         <Badge
@@ -122,7 +131,7 @@ export default function Project() {
                             className="hidden ml-auto sm:ml-0 py-2 md:block"
                         >
                             <div className="flex items-center">
-                                <Archive className="mr-2 h-4 w-4 text-muted-foreground" />
+                                <Archive className="mr-2 h-4 w-4" />
                                 Archived
                             </div>
                         </Badge>
@@ -145,7 +154,9 @@ export default function Project() {
                 >
                     <Card x-chunk="dashboard-01-chunk-0">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Creation</CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">
+                                Creation
+                            </CardTitle>
                             <CalendarPlus className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -177,7 +188,9 @@ export default function Project() {
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-1">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Last Update</CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">
+                                Last Update
+                            </CardTitle>
                             <CalendarCog className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -201,7 +214,9 @@ export default function Project() {
                     {project.archivedAt && (
                         <Card className="hidden xl:block" x-chunk="dashboard-01-chunk-1">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Deletion</CardTitle>
+                                <CardTitle className="text-sm font-medium text-primary">
+                                    Deletion
+                                </CardTitle>
                                 <CalendarMinus className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
@@ -229,7 +244,9 @@ export default function Project() {
                     )}
                     <Card x-chunk="dashboard-01-chunk-2">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Status</CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">
+                                Status
+                            </CardTitle>
                             <Workflow className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -243,7 +260,9 @@ export default function Project() {
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-3">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Priority</CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">
+                                Priority
+                            </CardTitle>
                             <Activity className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>

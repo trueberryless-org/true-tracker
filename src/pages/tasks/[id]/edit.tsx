@@ -97,13 +97,19 @@ export default function EditProduct() {
                             {task.name}
                         </h1>
                         {task.priority && (
-                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
-                                <PriorityIconLabel priorityValue={task.priority} />
+                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                                <PriorityIconLabel
+                                    priorityValue={task.priority}
+                                    className="text-muted-foreground"
+                                />
                             </Badge>
                         )}
                         {task.status && (
-                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2">
-                                <StatusIconLabel statusValue={task.status} />
+                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                                <StatusIconLabel
+                                    statusValue={task.status}
+                                    className="text-muted-foreground"
+                                />
                             </Badge>
                         )}
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">

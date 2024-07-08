@@ -22,9 +22,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import ModeToggle from "./themes/mode-switch";
 import { useUser } from "./UserContext";
 import ThemeSwitcher from "./themes/theme-switcher";
-import { getChartThemes } from "@/lib/chart-themes";
-
-const chartThemes = getChartThemes();
 
 export default function Navbar() {
     const { user, setUser } = useUser();
