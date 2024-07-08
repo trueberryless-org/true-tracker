@@ -12,6 +12,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeDiamond } from "./theme-diamond";
+import { useUser } from "../UserContext";
+import { saveData } from "@/utils/save";
 
 // Utility function to set the theme
 function setTheme(theme: any) {
@@ -41,18 +43,28 @@ function getCurrentTheme() {
 }
 
 export default function ThemeSwitcher() {
+    const { user } = useUser();
     const [currentTheme, setCurrentTheme] = React.useState("default");
 
+    // Load and set the initial theme on mount
     React.useEffect(() => {
-        // Load the current theme on mount
-        const theme = getCurrentTheme();
-        setCurrentTheme(theme);
-    }, []);
+        const initialTheme = user?.theme || getCurrentTheme();
+        setTheme(initialTheme);
+        setCurrentTheme(initialTheme);
+    }, [user]);
 
-    const handleThemeChange = (theme: any) => {
-        setTheme(theme);
-        setCurrentTheme(theme);
-    };
+    const handleThemeChange = React.useCallback(
+        (theme: any) => {
+            setTheme(theme);
+            setCurrentTheme(theme);
+
+            if (user) {
+                user.theme = theme;
+                saveData(user);
+            }
+        },
+        [user]
+    );
 
     return (
         <DropdownMenu>
@@ -62,44 +74,44 @@ export default function ThemeSwitcher() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleThemeChange("default")}>
-                    <div className="flex items-center space-x-2 group">
+                <DropdownMenuItem onClick={() => handleThemeChange("default")} className="group">
+                    <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Default"} color={"default"} />
                         <div>Default</div>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleThemeChange("palette")}>
-                    <div className="flex items-center space-x-2 group">
+                <DropdownMenuItem onClick={() => handleThemeChange("palette")} className="group">
+                    <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Palette"} color={"palette"} />
                         <div>Palette</div>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleThemeChange("sapphire")}>
-                    <div className="flex items-center space-x-2 group">
+                <DropdownMenuItem onClick={() => handleThemeChange("sapphire")} className="group">
+                    <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Sapphire"} color={"sapphire"} />
                         <div>Sapphire</div>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleThemeChange("ruby")}>
-                    <div className="flex items-center space-x-2 group">
+                <DropdownMenuItem onClick={() => handleThemeChange("ruby")} className="group">
+                    <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Ruby"} color={"ruby"} />
                         <div>Ruby</div>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleThemeChange("emerald")}>
-                    <div className="flex items-center space-x-2 group">
+                <DropdownMenuItem onClick={() => handleThemeChange("emerald")} className="group">
+                    <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Emerald"} color={"emerald"} />
                         <div>Emerald</div>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleThemeChange("daylight")}>
-                    <div className="flex items-center space-x-2 group">
+                <DropdownMenuItem onClick={() => handleThemeChange("daylight")} className="group">
+                    <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Daylight"} color={"daylight"} />
                         <div>Daylight</div>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleThemeChange("midnight")}>
-                    <div className="flex items-center space-x-2 group">
+                <DropdownMenuItem onClick={() => handleThemeChange("midnight")} className="group">
+                    <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Midnight"} color={"midnight"} />
                         <div>Midnight</div>
                     </div>

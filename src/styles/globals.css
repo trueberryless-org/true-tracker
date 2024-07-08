@@ -34,11 +34,11 @@
 
         --radius: 0.5rem;
 
-        --chart-1: 222.2 84% 4.9%;
-        --chart-2: 222.2 47.4% 11.2%;
-        --chart-3: 217.2 32.6% 17.5%;
-        --chart-4: 217.2 26.8% 23.5%;
-        --chart-5: 206.2 13.8% 32.5%;
+        --chart-1: 217.2 32.6% 17.5%;
+        --chart-2: 217.2 26.8% 23.5%;
+        --chart-3: 224.8 22.5% 49.3%;
+        --chart-4: 215 20.2% 65.1%;
+        --chart-5: 212.7 26.8% 83.9%;
 
         --color-1: hsl(var(--chart-1));
         --color-2: hsl(var(--chart-2));
@@ -46,11 +46,11 @@
         --color-4: hsl(var(--chart-4));
         --color-5: hsl(var(--chart-5));
 
-        --color-1-default: hsl(222.2 84% 4.9%);
-        --color-2-default: hsl(222.2 47.4% 11.2%);
-        --color-3-default: hsl(217.2 32.6% 17.5%);
-        --color-4-default: hsl(217.2 26.8% 23.5%);
-        --color-5-default: hsl(206.2 13.8% 32.5%);
+        --color-1-default: hsl(217.2 32.6% 17.5%);
+        --color-2-default: hsl(217.2 26.8% 23.5%);
+        --color-3-default: hsl(224.8 22.5% 49.3%);
+        --color-4-default: hsl(215 20.2% 65.1%);
+        --color-5-default: hsl(212.7 26.8% 83.9%);
         --color-1-palette: hsl(12 76% 61%);
         --color-2-palette: hsl(173 58% 39%);
         --color-3-palette: hsl(197 37% 24%);
@@ -431,7 +431,7 @@
         --accent-foreground: 60 0% 0%;
         --destructive: 0 60% 80%;
         --destructive-foreground: 0 0% 20%;
-        --muted: 240 5% 75%;
+        --muted: 240 5% 85%;
         --muted-foreground: 60 5% 15%;
         --card: 240 4% 85%;
         --card-foreground: 60 5% 10%;

@@ -8,4 +8,6 @@ export default interface User {
 
     lastExported: Date;
     exportReminder: "daily" | "weekly" | "monthly";
+
+    theme?: "default" | "palette" | "sapphire" | "ruby" | "emerald" | "daylight" | "midnight";
 }

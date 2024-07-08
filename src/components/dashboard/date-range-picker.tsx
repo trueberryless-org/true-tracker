@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { CalendarIcon } from "lucide-react";
-import { addDays, format } from "date-fns";
+import { addMonths, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -12,8 +12,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 export function CalendarDateRangePicker({ className }: React.HTMLAttributes<HTMLDivElement>) {
     const [date, setDate] = React.useState<DateRange | undefined>({
-        from: new Date(2023, 0, 20),
-        to: addDays(new Date(2023, 0, 20), 20),
+        from: addMonths(new Date(), -6),
+        to: new Date(),
     });
 
     return (
