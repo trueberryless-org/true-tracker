@@ -49,7 +49,7 @@ export default function NewTask() {
             const project = user?.projects.find((p) => p.id === projectId) || null;
             setProject(project);
         }
-    }, []);
+    }, [router.query.projectId, user?.projects]);
 
     const handleInputChange = (field: keyof Task, value: any) => {
         setTask((prevTask) => (prevTask ? { ...prevTask, [field]: value } : null));

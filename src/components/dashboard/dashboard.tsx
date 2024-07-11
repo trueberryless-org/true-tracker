@@ -83,7 +83,7 @@ export default function Dashboard() {
         if (data) {
             setUser(data);
         }
-    }, []);
+    }, [setUser]);
 
     const shouldShowExportNotification = (user: User) => {
         const oneDayAgo = new Date(new Date().setDate(new Date().getDate() - 1)).getTime();
