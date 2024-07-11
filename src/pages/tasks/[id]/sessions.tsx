@@ -99,32 +99,46 @@ export default function Tasks() {
           }
         : undefined;
 
+    if (!task) {
+        return (
+            <div className="flex w-full flex-col">
+                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+                    <Alert variant="destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>
+                            Unfortunately, this task does not exist.
+                        </AlertDescription>
+                    </Alert>
+                </main>
+            </div>
+        );
+    }
+
     const handleSessionChange = (taskId: string, newSession: Session) => {
         if (user) {
             const updatedProjects = user.projects.map((project) => {
-                const updatedTasks = project.tasks.map(
-                    (task: { id: string; sessions: Session[] }) => {
-                        if (task.id === taskId) {
-                            if (newSession.end === null) {
-                                // Start a new Session
-                                return {
-                                    ...task,
-                                    sessions: [...task.sessions, newSession],
-                                };
-                            } else {
-                                // Stop the current Session
-                                const updatedSessions = task.sessions.map((session) =>
-                                    session.end ? session : { ...session, end: new Date() }
-                                );
-                                return {
-                                    ...task,
-                                    sessions: updatedSessions,
-                                };
-                            }
+                const updatedTasks = project.tasks.map((task: Task) => {
+                    if (task.id === taskId) {
+                        if (newSession.end === null) {
+                            // Start a new Session
+                            return {
+                                ...task,
+                                sessions: [...task.sessions, newSession],
+                            };
+                        } else {
+                            // Stop the current Session
+                            const updatedSessions = task.sessions.map((session) =>
+                                session.end ? session : { ...session, end: new Date() }
+                            );
+                            return {
+                                ...task,
+                                sessions: updatedSessions,
+                            };
                         }
-                        return task;
                     }
-                );
+                    return task;
+                });
 
                 return {
                     ...project,

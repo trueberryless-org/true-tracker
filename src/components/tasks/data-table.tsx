@@ -87,7 +87,7 @@ export function DataTable<TData extends TEntity, TValue>({
         getFacetedUniqueValues: getFacetedUniqueValues(),
     });
 
-    function handleRowClick(id: number): void {
+    function handleRowClick(id: string): void {
         if (clickableRows) {
             router.push(`/tasks/${id}`);
         }

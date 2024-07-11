@@ -59,7 +59,7 @@ export default function ProjectPage() {
 
     const router = useRouter();
 
-    const project: Project = user?.projects.find((project) => project.id === router.query.id);
+    const project = user?.projects.find((project) => project.id === router.query.id);
 
     const unarchiveProject = () => {
         if (user && project) {
