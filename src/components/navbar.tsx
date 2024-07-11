@@ -24,16 +24,9 @@ import { useUser } from "./UserContext";
 import ThemeSwitcher from "./themes/theme-switcher";
 
 export default function Navbar() {
-    const { user, setUser } = useUser();
+    const { user } = useUser();
     const router = useRouter();
     const [isSheetOpen, setIsSheetOpen] = useState(false);
-
-    useEffect(() => {
-        const data = loadData();
-        if (data) {
-            setUser(data);
-        }
-    }, []);
 
     if (!user) {
         return <div>Loading...</div>;
@@ -127,7 +120,7 @@ export default function Navbar() {
                         <Link
                             href="/projects"
                             className={`${
-                                router.pathname.includes("projects")
+                                router.pathname === "/projects"
                                     ? "text-foreground"
                                     : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
@@ -142,7 +135,7 @@ export default function Navbar() {
                         <Link
                             href="/tasks"
                             className={`${
-                                router.pathname.includes("task")
+                                router.pathname === "/tasks"
                                     ? "text-foreground"
                                     : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
@@ -157,7 +150,7 @@ export default function Navbar() {
                         <Link
                             href="/settings"
                             className={`${
-                                router.pathname.includes("settings")
+                                router.pathname === "/settings"
                                     ? "text-foreground"
                                     : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
@@ -183,10 +176,8 @@ export default function Navbar() {
                         />
                     </div>
                 </form> */}
-                <div className="ml-auto flex-1 sm:flex-initial">
+                <div className="ml-auto flex-1 sm:flex-initial flex items-center gap-4">
                     <ModeToggle />
-                </div>
-                <div className="flex-1 sm:flex-initial">
                     <ThemeSwitcher />
                 </div>
                 <DropdownMenu>

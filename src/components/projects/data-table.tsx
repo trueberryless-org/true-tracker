@@ -31,6 +31,9 @@ import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { DataTableViewOptions } from "./data-table-view-options";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 
 interface TEntity {
     id: number;
@@ -94,6 +97,14 @@ export function DataTable<TData extends TEntity, TValue>({
                 <div className="flex items-center justify-between">
                     {title}
                     {!filtering && <DataTableViewOptions table={table} />}
+                    {filtering && (
+                        <Button asChild size="sm" className="gap-1">
+                            <Link href={`/projects/new`}>
+                                Create New Project
+                                <Plus className="h-4 w-4" />
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </CardHeader>
             <CardContent>

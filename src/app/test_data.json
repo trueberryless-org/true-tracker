@@ -18,7 +18,7 @@
                     "name": "Task 1",
                     "description": "Complete the first task.",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -34,7 +34,7 @@
                     "id": "1720012345679",
                     "name": "Task 3",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -63,7 +63,7 @@
                     "id": "1720012345680",
                     "name": "Task 1",
                     "priority": "medium",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -79,7 +79,7 @@
                     "id": "1720012345681",
                     "name": "Task 2",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -107,7 +107,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -123,7 +123,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -152,7 +152,7 @@
                     "id": "1720032345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -168,7 +168,7 @@
                     "id": "1720012365683",
                     "name": "Task 2",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -196,7 +196,7 @@
                     "id": "1720012344682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -212,7 +212,7 @@
                     "id": "1720012345283",
                     "name": "Task 2",
                     "priority": "medium",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -240,7 +240,7 @@
                     "id": "1723012345682",
                     "name": "Task 1",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -256,7 +256,7 @@
                     "id": "1720012355683",
                     "name": "Task 2",
                     "priority": "medium",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -284,7 +284,7 @@
                     "id": "1720012342682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -300,7 +300,7 @@
                     "id": "1720012345183",
                     "name": "Task 2",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -328,7 +328,7 @@
                     "id": "1721012345682",
                     "name": "Task 1",
                     "priority": "medium",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -344,7 +344,7 @@
                     "id": "1720012345693",
                     "name": "Task 2",
                     "priority": "medium",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -372,7 +372,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -388,7 +388,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -417,7 +417,7 @@
                     "id": "1720012347682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -433,7 +433,7 @@
                     "id": "1720012945683",
                     "name": "Task 2",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -461,7 +461,7 @@
                     "id": "1720012341682",
                     "name": "Task 1",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -477,7 +477,7 @@
                     "id": "1720012445683",
                     "name": "Task 2",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -505,7 +505,7 @@
                     "id": "1770012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -521,7 +521,7 @@
                     "id": "1720012325683",
                     "name": "Task 2",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -549,7 +549,7 @@
                     "id": "1720012345782",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -565,7 +565,7 @@
                     "id": "1720012345183",
                     "name": "Task 2",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -593,7 +593,7 @@
                     "id": "1720017345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -609,7 +609,7 @@
                     "id": "1720016345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -637,7 +637,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -653,7 +653,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -682,7 +682,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -698,7 +698,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -727,7 +727,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -743,7 +743,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -772,7 +772,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -788,7 +788,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -817,7 +817,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -833,7 +833,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -862,7 +862,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -878,7 +878,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -907,7 +907,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -923,7 +923,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -952,7 +952,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -968,7 +968,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"
@@ -997,7 +997,7 @@
                     "id": "1720012345682",
                     "name": "Task 1",
                     "priority": "high",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T10:30:00.000Z"
@@ -1013,7 +1013,7 @@
                     "id": "1720012345683",
                     "name": "Task 2",
                     "priority": "low",
-                    "timeSpans": [
+                    "sessions": [
                         {
                             "start": "2024-07-01T08:30:00.000Z",
                             "end": "2024-07-01T11:30:00.000Z"

@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,24 +21,21 @@ import Link from "next/link";
 import { AlertCircle, ChevronLeft } from "lucide-react";
 import StatusIconLabel from "@/components/projects/status";
 import PriorityIconLabel from "@/components/projects/priority";
+import { initializeProject } from "@/utils/projectUtils";
 
-export default function EditProduct() {
+export default function NewProduct() {
     const { user, setUser } = useUser();
-    const [project, setProject] = useState<Project | null>(null);
-    const router = useRouter();
-    const projectId = router.query.id as string;
+    const [project, setProject] = useState<Project | null>();
 
     const [projectStatus, setProjectStatus] = useState<string>("");
     const [projectPriority, setProjectPriority] = useState<string>("");
 
     useEffect(() => {
-        if (user) {
-            const foundProject = user.projects.find((project) => project.id === projectId);
-            setProject(foundProject || null);
-            setProjectStatus(foundProject?.status || "");
-            setProjectPriority(foundProject?.priority || "");
-        }
-    }, [user, projectId]);
+        const newProject = initializeProject();
+        setProject(newProject);
+        setProjectPriority(newProject.priority);
+        setProjectStatus(newProject.status);
+    }, []);
 
     const handleInputChange = (field: keyof Project, value: any) => {
         setProject((prevProject) => (prevProject ? { ...prevProject, [field]: value } : null));
@@ -47,23 +44,7 @@ export default function EditProduct() {
     const handleSaveProject = () => {
         if (project && user) {
             project.lastUpdatedAt = new Date();
-            const updatedProjects = user.projects.map((proj) =>
-                proj.id === project.id ? project : proj
-            );
-            const updatedUser = { ...user, projects: updatedProjects };
-            setUser(updatedUser);
-            saveData(updatedUser);
-            router.push(`/projects/${project.id}`);
-        }
-    };
-
-    const archiveProject = () => {
-        if (user && project) {
-            project.archivedAt = new Date();
-            const updatedProjects = user.projects.map((proj) =>
-                proj.id === project.id ? project : proj
-            );
-            const updatedUser = { ...user, projects: updatedProjects };
+            const updatedUser = { ...user, projects: [...user.projects, project] };
             setUser(updatedUser);
             saveData(updatedUser);
             router.push(`/projects/${project.id}`);
@@ -78,7 +59,7 @@ export default function EditProduct() {
                         <AlertCircle className="h-4 w-4" />
                         <AlertTitle>Loading...</AlertTitle>
                         <AlertDescription>
-                            We are currently trying to fetch your data from your local storage.
+                            We are currently trying to create the project.
                         </AlertDescription>
                     </Alert>
                 </main>
@@ -103,18 +84,14 @@ export default function EditProduct() {
         );
     }
 
+    console.log(project);
+
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="grid flex-1 auto-rows-max gap-4">
                     <div className="flex items-center gap-4">
-                        <Link href={`/projects/${project.id}`} className="text-muted-foreground">
-                            <Button variant="outline" size="icon" className="h-7 w-7">
-                                <ChevronLeft className="h-4 w-4" />
-                                <span className="sr-only">Back</span>
-                            </Button>
-                        </Link>
-                        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0 truncate">
+                        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                             {project.name}
                         </h1>
                         <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
@@ -130,10 +107,7 @@ export default function EditProduct() {
                             />
                         </Badge>
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                            <Link
-                                href={`/projects/${project.id}`}
-                                className="text-muted-foreground"
-                            >
+                            <Link href={`/projects`} className="text-muted-foreground">
                                 <Button variant="outline" size="sm">
                                     Discard
                                 </Button>
@@ -268,34 +242,10 @@ export default function EditProduct() {
                                     </div>
                                 </CardContent>
                             </Card>
-                            <Card x-chunk="dashboard-07-chunk-3">
-                                <CardHeader>
-                                    <CardTitle>Archive Project</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="grid gap-6">
-                                        <div className="grid gap-3">
-                                            <p>
-                                                The archive is a place where no properties can be
-                                                edited any more. You can still view the project and
-                                                unarchive it again, but it will be locked. Archived
-                                                projects will not be visible in the projects list.
-                                            </p>
-                                            <Button
-                                                onClick={archiveProject}
-                                                variant="destructive"
-                                                size="sm"
-                                            >
-                                                Archive
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
                         </div>
                     </div>
                     <div className="flex items-center justify-end gap-2 md:hidden">
-                        <Link href={`/projects/${project.id}`} className="text-muted-foreground">
+                        <Link href={`/projects`} className="text-muted-foreground">
                             <Button variant="outline" size="sm">
                                 Discard
                             </Button>

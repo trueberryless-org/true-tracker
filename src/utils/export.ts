@@ -1,5 +1,5 @@
 import { loadData } from "./load";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { saveData } from "./save";
 
 export const exportData = () => {
@@ -15,19 +15,13 @@ export const exportData = () => {
             a.click();
             document.body.removeChild(a); // Clean up: remove anchor from body
             URL.revokeObjectURL(url); // Clean up: revoke the URL object
-            toast({
-                title: "Data exported successfully.",
-            });
+            toast("Data exported successfully.");
         } catch (error) {
             console.error("Error exporting data", error);
-            toast({
-                title: "Error exporting data. Please try again.",
-            });
+            toast("Error exporting data. Please try again.");
         }
     } else {
         console.error("No data to export");
-        toast({
-            title: "No data available to export.",
-        });
+        toast("No data available to export.");
     }
 };

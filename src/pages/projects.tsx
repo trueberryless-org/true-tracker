@@ -27,7 +27,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@/components/UserContext";
 
 import {
@@ -52,17 +51,11 @@ import {
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { getMostRecentTimeSpanDate } from "@/utils/projectUtils";
+import { getMostRecentSessionDate } from "@/utils/projectUtils";
+import router from "next/router";
 
-export default function Settings() {
-    const { user, setUser } = useUser();
-
-    useEffect(() => {
-        const data = loadData();
-        if (data) {
-            setUser(data);
-        }
-    }, []);
+export default function Projects() {
+    const { user } = useUser();
 
     if (!user) {
         return (
@@ -86,11 +79,41 @@ export default function Settings() {
             isArchived: project.archivedAt ? true : false,
         };
     });
+
+    if (data.length === 0) {
+        return (
+            <div className="flex w-full flex-col">
+                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col items-center justify-center gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+                    <Card className="sm:col-span-2">
+                        <CardHeader className="pb-3">
+                            <CardTitle>Welcome to Your Project Dashboard</CardTitle>
+                            <CardDescription className="max-w-xl text-balance leading-relaxed pt-2">
+                                You currently have no projects set up. Start by creating your very
+                                first project! Your projects will help you organize tasks and track
+                                their progress effectively. Each project includes a name,
+                                description, status (planned, in progress, completed, etc.),
+                                priority (low, medium, high), and a list of associated tasks. Begin
+                                by clicking the &quot;Create New Project&quot; button below to get
+                                started.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent></CardContent>
+                        <CardFooter>
+                            <Button onClick={() => router.push("/projects/new")}>
+                                Create New Project
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                </main>
+            </div>
+        );
+    }
+
     const recentData = data
         .map((project) => ({
             ...project,
             isArchived: project.archivedAt ? true : false,
-            mostRecentDate: getMostRecentTimeSpanDate(project),
+            mostRecentDate: getMostRecentSessionDate(project),
         }))
         .sort((project1, project2) => project2.mostRecentDate - project1.mostRecentDate)
         .slice(0, 5);

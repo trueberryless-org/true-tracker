@@ -4,7 +4,7 @@ import Layout from "../components/layout";
 import { useEffect, useMemo } from "react";
 import { loadData } from "@/utils/load";
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 import { UserProvider, useUser } from "@/components/UserContext";
 
 const inter = Inter({ subsets: ["latin"] });

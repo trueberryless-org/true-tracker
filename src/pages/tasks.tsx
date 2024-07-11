@@ -29,7 +29,6 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@/components/UserContext";
 
 import {
@@ -51,15 +50,8 @@ import {
     columnsMobile,
 } from "@/components/tasks/columns";
 
-export default function Settings() {
-    const { user, setUser } = useUser();
-
-    useEffect(() => {
-        const data = loadData();
-        if (data) {
-            setUser(data);
-        }
-    }, []);
+export default function Tasks() {
+    const { user } = useUser();
 
     if (!user) {
         return (
@@ -86,6 +78,7 @@ export default function Settings() {
             return {
                 ...task,
                 projectName: project ? project.name : "Project Not Found",
+                projectIsArchived: project ? project.archivedAt !== null : false,
             };
         });
 
@@ -93,69 +86,54 @@ export default function Settings() {
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="hidden h-full flex-1 flex-col xl:flex">
-                    <Card>
-                        <CardHeader>Tasks</CardHeader>
-                        <CardContent>
-                            <DataTable
-                                data={data}
-                                columns={columnsXl}
-                                pagination={true}
-                                clickableRows={true}
-                            />
-                        </CardContent>
-                    </Card>
+                    <DataTable
+                        title="Tasks"
+                        data={data}
+                        columns={columnsXl}
+                        pagination={true}
+                        clickableRows={true}
+                        filtering={true}
+                    />
                 </div>
                 <div className="hidden h-full flex-1 flex-col lg:flex xl:hidden">
-                    <Card>
-                        <CardHeader>Tasks</CardHeader>
-                        <CardContent>
-                            <DataTable
-                                data={data}
-                                columns={columnsLg}
-                                pagination={true}
-                                clickableRows={true}
-                            />
-                        </CardContent>
-                    </Card>
+                    <DataTable
+                        title="Tasks"
+                        data={data}
+                        columns={columnsLg}
+                        pagination={true}
+                        clickableRows={true}
+                        filtering={true}
+                    />
                 </div>
                 <div className="hidden h-full flex-1 flex-col md:flex lg:hidden">
-                    <Card>
-                        <CardHeader>Tasks</CardHeader>
-                        <CardContent>
-                            <DataTable
-                                data={data}
-                                columns={columnsMd}
-                                pagination={true}
-                                clickableRows={true}
-                            />
-                        </CardContent>
-                    </Card>
+                    <DataTable
+                        title="Tasks"
+                        data={data}
+                        columns={columnsMd}
+                        pagination={true}
+                        clickableRows={true}
+                        filtering={true}
+                    />
                 </div>
                 <div className="hidden h-full flex-1 flex-col sm:flex md:hidden">
-                    <Card>
-                        <CardHeader>Tasks</CardHeader>
-                        <CardContent>
-                            <DataTable
-                                data={data}
-                                columns={columnsSm}
-                                pagination={true}
-                                clickableRows={true}
-                            />
-                        </CardContent>
-                    </Card>
+                    <DataTable
+                        title="Tasks"
+                        data={data}
+                        columns={columnsSm}
+                        pagination={true}
+                        clickableRows={true}
+                        filtering={true}
+                    />
                 </div>
                 <div className="flex h-full flex-1 flex-col sm:hidden">
-                    <Card>
-                        <CardHeader>Tasks</CardHeader>
-                        <CardContent>
-                            <DataTable
-                                data={data}
-                                columns={columnsMobile}
-                                pagination={false}
-                                clickableRows={true}
-                            />
-                        </CardContent>
-                    </Card>
+                    <DataTable
+                        title="Tasks"
+                        data={data}
+                        columns={columnsMobile}
+                        pagination={false}
+                        clickableRows={true}
+                        filtering={true}
+                    />
                 </div>
             </main>
         </div>

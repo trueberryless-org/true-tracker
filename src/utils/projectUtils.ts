@@ -1,5 +1,18 @@
 import { Project, User } from "@/models";
 
+export const initializeProject = (): Project => {
+    return {
+        id: crypto.randomUUID(),
+        name: "New Project",
+        createdAt: new Date(),
+        lastUpdatedAt: new Date(),
+        archivedAt: null,
+        status: "planned",
+        priority: "medium",
+        tasks: [],
+    };
+};
+
 export function calcPriorityComparison(user: User | null | undefined, priority: string): string {
     if (!user || !priority) {
         return "";
@@ -20,11 +33,17 @@ export function calcPriorityComparison(user: User | null | undefined, priority: 
     }).length;
 
     if (priority === "high") {
-        return `Higher priority than ${lowerPriorityCount + mediumPriorityCount} other projects`;
+        return `Higher priority than ${lowerPriorityCount + mediumPriorityCount} other project${
+            lowerPriorityCount + mediumPriorityCount > 1 ? "s" : ""
+        }`;
     } else if (priority === "medium") {
-        return `Higher priority than ${lowerPriorityCount} other projects`;
+        return `Higher priority than ${lowerPriorityCount} other project${
+            lowerPriorityCount > 1 ? "s" : ""
+        }`;
     } else {
-        return `Lower priority than ${higherPriorityCount + mediumPriorityCount} other projects`;
+        return `Lower priority than ${higherPriorityCount + mediumPriorityCount} other project${
+            higherPriorityCount + mediumPriorityCount > 1 ? "s" : ""
+        }`;
     }
 }
 
@@ -34,15 +53,8 @@ export function calcStatusComparison(user: User | null | undefined, status: stri
     }
 
     const projects = user.projects || [];
-    const currentProject = projects.find((proj) => proj.status === status);
 
-    if (!currentProject) {
-        return "";
-    }
-
-    const sameStatusCount = projects.filter(
-        (proj) => proj.status === status && proj.id !== currentProject.id
-    ).length;
+    const sameStatusCount = projects.filter((proj) => proj.status === status).length - 1;
 
     if (sameStatusCount === 0) {
         return `No other projects have the same status`;
@@ -53,9 +65,9 @@ export function calcStatusComparison(user: User | null | undefined, status: stri
     }
 }
 
-export const getMostRecentTimeSpanDate = (project: Project) => {
+export const getMostRecentSessionDate = (project: Project) => {
     const dates = project.tasks.flatMap((task) =>
-        task.timeSpans.map((span) => new Date(span.end ?? span.start).getTime())
+        task.sessions.map((session) => new Date(session.end ?? session.start).getTime())
     );
     return new Date(Math.max(...dates));
 };

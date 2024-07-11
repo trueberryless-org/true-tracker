@@ -40,7 +40,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { useUser } from "@/components/UserContext";
 import { clearLocalStorage } from "@/utils/localStorage";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -73,11 +73,6 @@ export default function Settings() {
     const [activeTab, setActiveTab] = useState("General");
 
     useEffect(() => {
-        const data = loadData();
-        if (data) {
-            setUser(data);
-        }
-
         const storedTab = getSessionStorageItem("activeTab");
         if (storedTab) {
             setActiveTab(storedTab.toString());
@@ -86,7 +81,7 @@ export default function Settings() {
         const initialTheme = user?.theme || getCurrentTheme();
         setColorTheme(initialTheme);
         setCurrentTheme(initialTheme);
-    }, []);
+    }, [user?.theme]);
 
     const handleThemeChange = useCallback(
         (theme: any) => {
@@ -118,9 +113,7 @@ export default function Settings() {
             const updatedUser = { ...user, username: data.username };
             setUser(updatedUser);
             saveData(updatedUser);
-            toast({
-                title: 'You changed your username to "' + data.username + '".',
-            });
+            toast('You changed your username to "' + data.username + '".');
         }
     }
 
@@ -136,9 +129,7 @@ export default function Settings() {
             const updatedUser = { ...user, exportReminder: data.type };
             setUser(updatedUser);
             saveData(updatedUser);
-            toast({
-                title: 'You changed your notification frequency to "' + data.type + '".',
-            });
+            toast('You changed your notification frequency to "' + data.type + '".');
         }
     }
 
@@ -159,9 +150,7 @@ export default function Settings() {
                     .catch((error) => console.error("Error importing data", error));
             } catch (error) {
                 console.error("Error parsing JSON file", error);
-                toast({
-                    title: "Error importing data. Please try again.",
-                });
+                toast("Error importing data. Please try again.");
             }
         } else {
             console.error("No file data to import");
@@ -187,14 +176,10 @@ export default function Settings() {
             const updatedUser = { ...user, profilePicture: pictureData };
             setUser(updatedUser);
             saveData(updatedUser);
-            toast({
-                title: "Profile picture updated successfully.",
-            });
+            toast("Profile picture updated successfully.");
         } else {
             console.error("No picture data to set");
-            toast({
-                title: "No picture selected. Please choose a picture.",
-            });
+            toast("No picture selected. Please choose a picture.");
         }
     };
 
@@ -203,9 +188,7 @@ export default function Settings() {
             const updatedUser = { ...user, profilePicture: null };
             setUser(updatedUser);
             saveData(updatedUser);
-            toast({
-                title: "Profile picture removed successfully.",
-            });
+            toast("Profile picture removed successfully.");
         }
     };
 
@@ -214,18 +197,14 @@ export default function Settings() {
             const updatedUser = { ...user, projects: [] };
             setUser(updatedUser);
             saveData(updatedUser);
-            toast({
-                title: "All projects deleted successfully.",
-            });
+            toast("All projects deleted successfully.");
         }
     };
 
     const clearAllUserData = () => {
         clearLocalStorage();
         setUser(null);
-        toast({
-            title: "All data cleared successfully.",
-        });
+        toast("All data cleared successfully.");
     };
 
     if (!user) {

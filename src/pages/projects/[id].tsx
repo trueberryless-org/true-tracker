@@ -18,6 +18,7 @@ import {
     CalendarCog,
     CalendarMinus,
     Workflow,
+    Plus,
 } from "lucide-react";
 
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -50,14 +51,15 @@ import { saveData } from "@/utils/save";
 import Task from "@/models/task";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { getMostRecentTimeSpanDate } from "@/utils/taskUtils";
+import { getMostRecentSessionDate } from "@/utils/taskUtils";
+import { Project } from "@/models";
 
-export default function Project() {
+export default function ProjectPage() {
     const { user, setUser } = useUser();
 
     const router = useRouter();
 
-    const project = user?.projects.find((project) => project.id === router.query.id);
+    const project: Project = user?.projects.find((project) => project.id === router.query.id);
 
     const unarchiveProject = () => {
         if (user && project) {
@@ -87,8 +89,12 @@ export default function Project() {
         );
     }
 
-    const recentTasks: Task[] = project.tasks
-        .map((task: any) => ({ ...task, mostRecentDate: getMostRecentTimeSpanDate(task) }))
+    const recentTasks: any[] = project.tasks
+        .map((task: any) => ({
+            ...task,
+            mostRecentDate: getMostRecentSessionDate(task),
+            isRunning: task.sessions.find((session: any) => session.end === null),
+        }))
         .sort(
             (task1: { mostRecentDate: number }, task2: { mostRecentDate: number }) =>
                 task2.mostRecentDate - task1.mostRecentDate
@@ -204,8 +210,8 @@ export default function Project() {
                             </div>
                             <p className="text-xs text-muted-foreground">
                                 {(
-                                    (new Date(project.lastUpdatedAt).getTime() -
-                                        new Date(project.createdAt).getTime()) /
+                                    (new Date(project.lastUpdatedAt!).getTime() -
+                                        new Date(project.createdAt!).getTime()) /
                                     (1000 * 60 * 60 * 24)
                                 ).toFixed(0) + " days after creation"}
                             </p>
@@ -277,17 +283,40 @@ export default function Project() {
                 </div>
                 <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
                     <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-                        <CardHeader className="flex flex-row items-center">
+                        <CardHeader className="flex flex-row items-center gap-4">
                             <div className="grid gap-2">
                                 <CardTitle>Tasks</CardTitle>
                                 <CardDescription>Recent tasks for this project.</CardDescription>
                             </div>
-                            <Button asChild size="sm" className="ml-auto gap-1">
-                                <Link href="/tasks">
-                                    View All
-                                    <ArrowUpRight className="h-4 w-4" />
-                                </Link>
-                            </Button>
+                            {project.archivedAt && (
+                                <Button
+                                    asChild
+                                    size="sm"
+                                    className="ml-auto gap-1"
+                                    variant={"outline"}
+                                >
+                                    <Link href={`/tasks?projectId=${project.id}`}>
+                                        View All
+                                        <ArrowUpRight className="h-4 w-4" />
+                                    </Link>
+                                </Button>
+                            )}
+                            {!project.archivedAt && (
+                                <div className="ml-auto flex flex-row items-center gap-4">
+                                    <Button asChild size="sm" className="gap-1">
+                                        <Link href={`/tasks/new?projectId=${project.id}`}>
+                                            Create New Task
+                                            <Plus className="h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                    <Button asChild size="sm" className="gap-1" variant={"outline"}>
+                                        <Link href={`/tasks?projectId=${project.id}`}>
+                                            View All
+                                            <ArrowUpRight className="h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                </div>
+                            )}
                         </CardHeader>
                         <CardContent>
                             <Table>
@@ -306,9 +335,23 @@ export default function Project() {
                                                 className="cursor-pointer"
                                             >
                                                 <TableCell>
-                                                    <div className="font-medium">{task.name}</div>
-                                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                                        {task.description}
+                                                    <div className="flex items-center space-x-2">
+                                                        {task.isRunning && (
+                                                            <Badge
+                                                                variant={"default"}
+                                                                className="px-3 py-1"
+                                                            >
+                                                                Running
+                                                            </Badge>
+                                                        )}
+                                                        <div>
+                                                            <div className="font-medium">
+                                                                {task.name}
+                                                            </div>
+                                                            <div className="hidden text-sm text-muted-foreground md:inline">
+                                                                {task.description}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="text-right">

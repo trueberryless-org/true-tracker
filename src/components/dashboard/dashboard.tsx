@@ -70,7 +70,7 @@ import { useUser } from "../UserContext";
 import { loadData } from "@/utils/load";
 import { useEffect } from "react";
 import { Task, User } from "@/models";
-import { getMostRecentTimeSpanDate } from "@/utils/taskUtils";
+import { getMostRecentSessionDate } from "@/utils/taskUtils";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { Overview } from "./overview";
 import { RecentSales } from "./recent-sales";
@@ -105,7 +105,7 @@ export default function Dashboard() {
     const recentTasks: Task[] = user.projects
         .flatMap((project: any) =>
             project.tasks
-                .map((task: any) => ({ ...task, mostRecentDate: getMostRecentTimeSpanDate(task) }))
+                .map((task: any) => ({ ...task, mostRecentDate: getMostRecentSessionDate(task) }))
                 .sort(
                     (task1: { mostRecentDate: number }, task2: { mostRecentDate: number }) =>
                         task2.mostRecentDate - task1.mostRecentDate

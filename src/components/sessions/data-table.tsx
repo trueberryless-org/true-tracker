@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import {
     ColumnDef,
@@ -30,11 +30,10 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { Card, CardContent, CardHeader } from "../ui/card";
-import { Button } from "../ui/button";
 import { DataTableViewOptions } from "./data-table-view-options";
+import { Button } from "../ui/button";
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import { useUser } from "../UserContext";
 
 interface TEntity {
     id: number;
@@ -58,7 +57,6 @@ export function DataTable<TData extends TEntity, TValue>({
     filtering,
 }: DataTableProps<TData, TValue>) {
     const router = useRouter();
-    const { user } = useUser();
 
     const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -89,21 +87,9 @@ export function DataTable<TData extends TEntity, TValue>({
 
     function handleRowClick(id: number): void {
         if (clickableRows) {
-            router.push(`/tasks/${id}`);
+            router.push(`/projects/${id}`);
         }
     }
-
-    const [newQueryParams, setNewQueryParams] = React.useState("");
-    const project = user?.projects.find((project) => project.id === router.query?.projectId);
-
-    React.useEffect(() => {
-        if (project && user?.projects.map((project) => project.name).includes(project.name)) {
-            table.getColumn("projectName")?.setFilterValue([project.name]);
-            setNewQueryParams(`?projectId=${project.id}`);
-        }
-    }, [table, router.query.projectId, user?.projects, project]);
-
-    const [onlyArchivedTasks, setOnlyArchivedTasks] = React.useState(false);
 
     return (
         <Card>
@@ -111,25 +97,11 @@ export function DataTable<TData extends TEntity, TValue>({
                 <div className="flex items-center justify-between">
                     {title}
                     {!filtering && <DataTableViewOptions table={table} />}
-                    {filtering && !onlyArchivedTasks && (
-                        <Button asChild size="sm" className="gap-1">
-                            <Link href={`/tasks/new${newQueryParams}`}>
-                                Create New Task
-                                <Plus className="h-4 w-4" />
-                            </Link>
-                        </Button>
-                    )}
                 </div>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {filtering && (
-                        <DataTableToolbar
-                            table={table}
-                            setNewQueryParams={setNewQueryParams}
-                            setOnlyArchivedTasks={setOnlyArchivedTasks}
-                        />
-                    )}
+                    {filtering && <DataTableToolbar table={table} />}
                     <div className="rounded-md border">
                         <Table>
                             <TableHeader>
@@ -160,7 +132,7 @@ export function DataTable<TData extends TEntity, TValue>({
                                             className={clickableRows ? "cursor-pointer" : ""}
                                         >
                                             {row.getVisibleCells().map((cell) => (
-                                                <TableCell key={cell.id}>
+                                                <TableCell key={cell.id} className="truncate">
                                                     {flexRender(
                                                         cell.column.columnDef.cell,
                                                         cell.getContext()

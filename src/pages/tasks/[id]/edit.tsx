@@ -18,14 +18,16 @@ import Project from "@/models/project";
 import { useEffect, useState } from "react";
 import { saveData } from "@/utils/save";
 import Link from "next/link";
-import { AlertCircle, ChevronLeft } from "lucide-react";
+import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import { Task } from "@/models";
 import { priorities, statuses } from "@/models/task";
 import PriorityIconLabel from "@/components/tasks/priority";
 import StatusIconLabel from "@/components/tasks/status";
 import { getProject } from "@/utils/taskUtils";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function EditProduct() {
+export default function EditTask() {
     const { user, setUser } = useUser();
     const [task, setTask] = useState<Task | null>(null);
     const router = useRouter();
@@ -75,6 +77,27 @@ export default function EditProduct() {
                         <AlertTitle>Loading...</AlertTitle>
                         <AlertDescription>
                             We are currently trying to fetch your data from your local storage.
+                        </AlertDescription>
+                    </Alert>
+                </main>
+            </div>
+        );
+    }
+
+    if (
+        user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === task.id))
+            ?.archivedAt !== null
+    ) {
+        return (
+            <div className="flex w-full flex-col">
+                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+                    <Alert variant="destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>
+                            This task belongs to a project that has been archived. Please unarchive
+                            the project again, by clicking the button in the top right of the
+                            project view!
                         </AlertDescription>
                     </Alert>
                 </main>
@@ -174,7 +197,44 @@ export default function EditProduct() {
                         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                             <Card x-chunk="dashboard-07-chunk-3">
                                 <CardHeader>
-                                    <CardTitle>Task Status</CardTitle>
+                                    <CardTitle>
+                                        <div className="flex items-center justify-between">
+                                            <div>Task Status</div>
+                                            <HoverCard>
+                                                <HoverCardTrigger asChild>
+                                                    <BadgeInfo className="h-5 w-5" />
+                                                </HoverCardTrigger>
+                                                <HoverCardContent className="w-80" align="end">
+                                                    <div className="flex justify-between space-x-4">
+                                                        <Avatar>
+                                                            <AvatarImage src="https://github.com/trueberryless.png" />
+                                                            <AvatarFallback>T</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className="space-y-1">
+                                                            <h4 className="text-sm font-semibold">
+                                                                @true-tracker
+                                                            </h4>
+                                                            <p className="text-sm">
+                                                                We try to automate this status in
+                                                                order to help you focus on your
+                                                                projects, not this app.
+                                                            </p>
+                                                            <div className="flex items-center pt-2">
+                                                                <span className="text-xs text-muted-foreground">
+                                                                    For example we will
+                                                                    automatically move this task
+                                                                    from “Backlog” to “In Progress”,
+                                                                    when you start working on it -
+                                                                    when the first session is
+                                                                    started.
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </HoverCardContent>
+                                            </HoverCard>
+                                        </div>
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-6">

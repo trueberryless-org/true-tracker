@@ -1,5 +1,5 @@
 import { loadData } from "@/utils/load";
-import TimeSpan from "./timespan";
+import Session from "./session";
 
 import {
     ArrowDown,
@@ -24,7 +24,7 @@ export default interface Task {
     status: Status;
     priority: Priority;
 
-    timeSpans: TimeSpan[];
+    sessions: Session[];
 }
 
 export const statuses = [

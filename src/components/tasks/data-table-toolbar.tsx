@@ -14,15 +14,22 @@ import { DataTableViewOptions } from "./data-table-view-options";
 import { loadData } from "@/utils/load";
 import { DataTableFacetedFilterSimple } from "./data-table-faceted-filter-simple";
 import { Task } from "@/models";
+import { useEffect } from "react";
+import { useUser } from "../UserContext";
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
+    setNewQueryParams: React.Dispatch<React.SetStateAction<string>>;
+    setOnlyArchivedTasks: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
+export function DataTableToolbar<TData>({
+    table,
+    setNewQueryParams,
+    setOnlyArchivedTasks,
+}: DataTableToolbarProps<TData>) {
     const isFiltered = table.getState().columnFilters.length > 0;
-
-    const user = loadData();
+    const { user } = useUser();
 
     let projects: string[] = [];
     if (user && user.projects) {
@@ -33,6 +40,25 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             }
         }
     }
+
+    const handleFilterChange = (filterValues: string[]) => {
+        const projectNameColumn = table.getColumn("projectName");
+        if (projectNameColumn && filterValues.length === 1) {
+            const project = user?.projects.find((project) => project.name === filterValues[0]);
+            if (project) {
+                setNewQueryParams(`?projectId=${project.id}`);
+                if (project.archivedAt) {
+                    setOnlyArchivedTasks(true);
+                }
+            } else {
+                setNewQueryParams("");
+                setOnlyArchivedTasks(false);
+            }
+        } else {
+            setNewQueryParams("");
+            setOnlyArchivedTasks(false);
+        }
+    };
 
     return (
         <div className="flex items-center justify-between">
@@ -50,6 +76,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
                         column={table.getColumn("projectName")}
                         title="Project"
                         options={projects}
+                        onFilterChange={handleFilterChange}
                     />
                 )}
                 {table.getColumn("status") && (

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import {
     Form,
     FormControl,
@@ -65,9 +65,7 @@ export function SignUp() {
                     .catch((error) => console.error("Error importing data", error));
             } catch (error) {
                 console.error("Error parsing JSON file", error);
-                toast({
-                    title: "Error importing data. Please try again.",
-                });
+                toast("Error importing data. Please try again.");
             }
         } else {
             console.error("No file data to import");
@@ -83,9 +81,7 @@ export function SignUp() {
         };
         setUser(newUser);
         saveData(newUser);
-        toast({
-            title: 'You sign up with the username "' + data.username + '".',
-        });
+        toast('You sign up with the username "' + data.username + '".');
     }
 
     return (

@@ -11,21 +11,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Project, Task } from "@/models";
-import { useUser } from "../UserContext";
+import { Project } from "@/models";
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps<Task>) {
-    const taskId = row.original.id;
-    const { user } = useUser();
-
-    const projectIsArchived =
-        user?.projects.find((project) =>
-            project.tasks.some((task: { id: string }) => task.id === taskId)
-        )?.archivedAt !== null;
+export function DataTableRowActions({ row }: DataTableRowActionsProps<Project>) {
+    const projectId = row.original.id;
 
     return (
         <DropdownMenu>
@@ -36,11 +29,11 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps<Task>) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
-                <Link href={`/tasks/${taskId}`}>
+                <Link href={`/projects/${projectId}`}>
                     <DropdownMenuItem>View</DropdownMenuItem>
                 </Link>
-                {!projectIsArchived && (
-                    <Link href={`/tasks/${taskId}/edit`}>
+                {row.original.archivedAt === null && (
+                    <Link href={`/projects/${projectId}/edit`}>
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                     </Link>
                 )}

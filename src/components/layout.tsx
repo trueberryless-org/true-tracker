@@ -10,14 +10,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-    const { user, setUser } = useUser();
-
-    useEffect(() => {
-        const data = loadData();
-        if (data) {
-            setUser(data);
-        }
-    }, []);
+    const { user } = useUser();
 
     if (!user) {
         return <SignUp />;

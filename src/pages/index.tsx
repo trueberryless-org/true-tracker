@@ -9,15 +9,8 @@ import { useUser } from "@/components/UserContext";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
-const Home = () => {
-    const { user, setUser } = useUser();
-
-    useEffect(() => {
-        const data = loadData();
-        if (data) {
-            setUser(data);
-        }
-    }, []);
+export default function Home() {
+    const { user } = useUser();
 
     if (!user) {
         return (
@@ -37,11 +30,9 @@ const Home = () => {
 
     return (
         <div>
-            {/* <h1>User Data</h1>
-            <pre>{JSON.stringify(user, null, 2)}</pre> */}
+            <h1>User Data</h1>
+            <pre>{JSON.stringify(user, null, 2)}</pre>
             <Dashboard />
         </div>
     );
-};
-
-export default Home;
+}

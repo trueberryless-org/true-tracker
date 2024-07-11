@@ -18,6 +18,8 @@ import {
     CalendarCog,
     CalendarMinus,
     Workflow,
+    BadgeInfo,
+    Book,
 } from "lucide-react";
 
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -44,22 +46,53 @@ import {
 } from "@/components/ui/table";
 import StatusIconLabel from "@/components/tasks/status";
 import PriorityIconLabel from "@/components/tasks/priority";
-import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUtils";
+import { calcPriorityComparison, calcStatusComparison } from "@/utils/taskUtils";
 import { format } from "date-fns";
 import { saveData } from "@/utils/save";
 import Task from "@/models/task";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import StartStopButton from "@/components/tasks/start-stop-button";
+import { Session } from "@/models";
+import { Key, useEffect, useState } from "react";
+import { formatDateTime, formatDateToDistanceFromNow } from "@/utils/dateUtils";
+import { toast } from "sonner";
 
-export default function Project() {
+export default function TaskPage() {
     const { user, setUser } = useUser();
-
     const router = useRouter();
+    const [forceUpdate, setForceUpdate] = useState(0);
 
-    const task = user?.projects
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setForceUpdate((prev) => prev + 1);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const foundTask = user?.projects
         .flatMap((project) => project.tasks)
         .find((task) => task.id === router.query.id);
+
+    const task = foundTask
+        ? {
+              ...foundTask,
+              projectName:
+                  user?.projects.find((project) =>
+                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
+                  )?.name || "Project Not Found",
+              projectId:
+                  user?.projects.find((project) =>
+                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
+                  )?.id || undefined,
+              projectIsArchived:
+                  user?.projects.find((project) =>
+                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
+                  )?.archivedAt !== null,
+          }
+        : undefined;
 
     if (!task) {
         return (
@@ -76,6 +109,56 @@ export default function Project() {
             </div>
         );
     }
+
+    const handleSessionChange = (taskId: string, newSession: Session) => {
+        if (user) {
+            const updatedProjects = user.projects.map((project) => {
+                const updatedTasks = project.tasks.map((task: Task) => {
+                    if (task.id === taskId) {
+                        if (newSession.end === null) {
+                            // Start a new Session
+                            if (
+                                task.sessions.length === 0 &&
+                                (task.status === "backlog" || task.status === "todo")
+                            ) {
+                                task.status = "in progress";
+                                toast("We automatically moved your task to 'In Progress'.");
+                            }
+                            return {
+                                ...task,
+                                sessions: [...task.sessions, newSession],
+                            };
+                        } else {
+                            // Stop the current Session
+                            const updatedSessions = task.sessions.map((session) =>
+                                session.end ? session : { ...session, end: new Date() }
+                            );
+                            return {
+                                ...task,
+                                sessions: updatedSessions,
+                            };
+                        }
+                    }
+                    return task;
+                });
+
+                return {
+                    ...project,
+                    tasks: updatedTasks,
+                };
+            });
+
+            const updatedUser = {
+                ...user,
+                projects: updatedProjects,
+            };
+
+            setUser(updatedUser);
+            saveData(updatedUser);
+        }
+    };
+
+    const gridColsClass = task.description ? "lg:grid-cols-4" : "lg:grid-cols-3";
 
     return (
         <div className="flex w-full flex-col">
@@ -106,137 +189,122 @@ export default function Project() {
                             />
                         </Badge>
                     )}
+                    {task.projectIsArchived && (
+                        <Badge
+                            variant="destructive"
+                            className="hidden ml-auto sm:ml-0 py-2 md:block"
+                        >
+                            <div className="flex items-center">
+                                <Archive className="mr-2 h-4 w-4" />
+                                Archived by project
+                            </div>
+                        </Badge>
+                    )}
                     <div className="flex items-center gap-2 ml-auto">
-                        <Link href={`/tasks/${task.id}/edit`}>
-                            <Button size="sm">Edit Task</Button>
-                        </Link>
+                        {!task.projectIsArchived && (
+                            <Link href={`/tasks/${task.id}/edit`}>
+                                <Button size="sm">Edit Task</Button>
+                            </Link>
+                        )}
+                        {task.projectIsArchived && (
+                            <Button size="sm" disabled>
+                                Edit Task
+                            </Button>
+                        )}
                     </div>
                 </div>
-                {/* <div
-                    className={`grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4`}
-                >
-                    <Card x-chunk="dashboard-01-chunk-0">
+                <div className={`grid gap-4 md:grid-cols-2 md:gap-8 ${gridColsClass}`}>
+                    <Card
+                        className="cursor-pointer"
+                        x-chunk="dashboard-01-chunk-2"
+                        onClick={() => {
+                            router.push(`/projects/${task.projectId}`);
+                        }}
+                    >
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">Creation</CardTitle>
-                            <CalendarPlus className="h-4 w-4 text-muted-foreground" />
+                            <CardTitle className="text-sm font-medium text-primary">
+                                Project
+                            </CardTitle>
+                            <Book className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">
-                                {!isNaN(Date.parse(String(project.createdAt)))
-                                    ? format(Date.parse(String(project.createdAt)), "MMMM dd, yyyy")
-                                    : "N/A"}
-                            </div>
-                            <p className="text-xs text-muted-foreground">
-                                {user &&
-                                    user?.projects.filter(
-                                        (proj) =>
-                                            proj.createdAt &&
-                                            Date.parse(String(proj.createdAt)) <
-                                                Date.parse(String(project.createdAt))
-                                    ).length +
-                                        " project" +
-                                        (user?.projects.filter(
-                                            (proj) =>
-                                                proj.createdAt &&
-                                                Date.parse(String(proj.createdAt)) <
-                                                    Date.parse(String(project.createdAt))
-                                        ).length > 1
-                                            ? "s"
-                                            : "") +
-                                        " created before this one"}
-                            </p>
+                            <div className="text-2xl font-bold">{task.projectName}</div>
+                            <p className="text-xs text-muted-foreground">Click to go to project.</p>
                         </CardContent>
                     </Card>
-                    <Card x-chunk="dashboard-01-chunk-1">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">Last Update</CardTitle>
-                            <CalendarCog className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">
-                                {!isNaN(Date.parse(String(project.lastUpdatedAt)))
-                                    ? format(
-                                          Date.parse(String(project.lastUpdatedAt)),
-                                          "MMMM dd, yyyy"
-                                      )
-                                    : "N/A"}
-                            </div>
-                            <p className="text-xs text-muted-foreground">
-                                {(
-                                    (new Date(project.lastUpdatedAt).getTime() -
-                                        new Date(project.createdAt).getTime()) /
-                                    (1000 * 60 * 60 * 24)
-                                ).toFixed(0) + " days after creation"}
-                            </p>
-                        </CardContent>
-                    </Card>
-                    {project.archivedAt && (
-                        <Card className="hidden xl:block" x-chunk="dashboard-01-chunk-1">
+                    {task.description && (
+                        <Card x-chunk="dashboard-01-chunk-2">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium text-primary">Deletion</CardTitle>
-                                <CalendarMinus className="h-4 w-4 text-muted-foreground" />
+                                <CardTitle className="text-sm font-medium text-primary">
+                                    Description
+                                </CardTitle>
+                                <BadgeInfo className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">
-                                    {!isNaN(Date.parse(String(project.archivedAt)))
-                                        ? format(
-                                              Date.parse(String(project.archivedAt)),
-                                              "MMMM dd, yyyy"
-                                          )
-                                        : "N/A"}
+                                <div className="text-2xl font-bold truncate">
+                                    {task.description}
                                 </div>
-                                <p className="text-xs text-muted-foreground">
-                                    {user &&
-                                        "One of " +
-                                            user?.projects.filter((proj) => proj.archivedAt)
-                                                .length +
-                                            " archived project" +
-                                            (user?.projects.filter((proj) => proj.archivedAt)
-                                                .length > 1
-                                                ? "s"
-                                                : "")}
-                                </p>
+                                <p className="text-xs text-muted-foreground">Now it makes sense!</p>
                             </CardContent>
                         </Card>
                     )}
                     <Card x-chunk="dashboard-01-chunk-2">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">Status</CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">
+                                Status
+                            </CardTitle>
                             <Workflow className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                <StatusIconLabel statusValue={project.status} />
+                                <StatusIconLabel statusValue={task.status} />
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                {calcStatusComparison(user, project.status)}
+                                {calcStatusComparison(user, task.status)}
                             </p>
                         </CardContent>
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-3">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">Priority</CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">
+                                Priority
+                            </CardTitle>
                             <Activity className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                <PriorityIconLabel priorityValue={project.priority} />
+                                <PriorityIconLabel priorityValue={task.priority} />
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                {calcPriorityComparison(user, project.priority)}
+                                {calcPriorityComparison(user, task.priority)}
                             </p>
                         </CardContent>
                     </Card>
                 </div>
                 <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+                    {!task.projectIsArchived && (
+                        <div className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+                            <Card>
+                                <CardHeader>Quick Session Control</CardHeader>
+                                <CardContent>
+                                    <StartStopButton
+                                        key={task.id}
+                                        task={task}
+                                        onSessionChange={handleSessionChange}
+                                        showElapsedTime={true}
+                                    ></StartStopButton>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
                     <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
                         <CardHeader className="flex flex-row items-center">
                             <div className="grid gap-2">
-                                <CardTitle>Tasks</CardTitle>
-                                <CardDescription>Recent tasks for this project.</CardDescription>
+                                <CardTitle>Sessions</CardTitle>
+                                <CardDescription>Recent sessions for this task.</CardDescription>
                             </div>
-                            <Button asChild size="sm" className="ml-auto gap-1">
-                                <Link href="/tasks">
+                            <Button asChild size="sm" className="ml-auto gap-1" variant={"outline"}>
+                                <Link href={`/tasks/${task.id}/sessions`}>
                                     View All
                                     <ArrowUpRight className="h-4 w-4" />
                                 </Link>
@@ -246,112 +314,61 @@ export default function Project() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Task</TableHead>
-                                        <TableHead className="text-right">Priority</TableHead>
+                                        <TableHead>Start</TableHead>
+                                        <TableHead className="text-right">End</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {recentTasks.map((task, i) => {
-                                        return (
-                                            <TableRow
-                                                key={i}
-                                                onClick={() => router.push(`/tasks/${task.id}`)}
-                                                className="cursor-pointer"
-                                            >
-                                                <TableCell>
-                                                    <div className="font-medium">{task.name}</div>
-                                                    <div className="hidden text-sm text-muted-foreground md:inline">
-                                                        {task.description}
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="text-right">
-                                                    <PriorityIconLabel
-                                                        priorityValue={task.priority}
-                                                        justify="right"
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
+                                    {task.sessions
+                                        .sort(
+                                            (a: Session, b: Session) =>
+                                                new Date(b.start).getTime() -
+                                                new Date(a.start).getTime()
+                                        )
+                                        .slice(0, 3)
+                                        .map((session: Session, i: Key | null | undefined) => {
+                                            return (
+                                                <TableRow
+                                                    key={i}
+                                                    // onClick={() => router.push(`/tasks/${task.id}`)}
+                                                    // className="cursor-pointer"
+                                                >
+                                                    <TableCell>
+                                                        <div className="font-medium">
+                                                            {formatDateTime(
+                                                                new Date(session.start)
+                                                            )}
+                                                        </div>
+                                                        <div className="hidden text-sm text-muted-foreground md:inline">
+                                                            {formatDateToDistanceFromNow(
+                                                                new Date(session.start)
+                                                            )}
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-right">
+                                                        <div className="font-medium">
+                                                            {session.end
+                                                                ? formatDateTime(
+                                                                      new Date(session.end)
+                                                                  )
+                                                                : "Active"}
+                                                        </div>
+                                                        <div className="hidden text-sm text-muted-foreground md:inline">
+                                                            {session.end
+                                                                ? formatDateToDistanceFromNow(
+                                                                      new Date(session.end)
+                                                                  )
+                                                                : ""}
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
                                 </TableBody>
                             </Table>
                         </CardContent>
                     </Card>
-                    <Card x-chunk="dashboard-01-chunk-5">
-                        <CardHeader>
-                            <CardTitle>Recent Sales</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid gap-8">
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                                    <AvatarFallback>OM</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Olivia Martin
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        olivia.martin@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$1,999.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                                    <AvatarFallback>JL</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">Jackson Lee</p>
-                                    <p className="text-sm text-muted-foreground">
-                                        jackson.lee@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$39.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/03.png" alt="Avatar" />
-                                    <AvatarFallback>IN</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Isabella Nguyen
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        isabella.nguyen@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$299.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/04.png" alt="Avatar" />
-                                    <AvatarFallback>WK</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">William Kim</p>
-                                    <p className="text-sm text-muted-foreground">will@email.com</p>
-                                </div>
-                                <div className="ml-auto font-medium">+$99.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/05.png" alt="Avatar" />
-                                    <AvatarFallback>SD</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">Sofia Davis</p>
-                                    <p className="text-sm text-muted-foreground">
-                                        sofia.davis@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$39.00</div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div> */}
+                </div>
             </main>
         </div>
     );
