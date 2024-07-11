@@ -115,7 +115,10 @@ export default function Projects() {
             isArchived: project.archivedAt ? true : false,
             mostRecentDate: getMostRecentSessionDate(project),
         }))
-        .sort((project1, project2) => project2.mostRecentDate - project1.mostRecentDate)
+        .sort(
+            (project1, project2) =>
+                project2.mostRecentDate.valueOf() - project1.mostRecentDate.valueOf()
+        )
         .slice(0, 5);
 
     return (

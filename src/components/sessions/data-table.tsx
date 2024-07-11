@@ -36,7 +36,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 
 interface TEntity {
-    id: number;
+    id: string;
 }
 
 interface DataTableProps<TData extends TEntity, TValue> {

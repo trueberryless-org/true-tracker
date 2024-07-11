@@ -37,7 +37,7 @@ import { Plus } from "lucide-react";
 import { useUser } from "../UserContext";
 
 interface TEntity {
-    id: number;
+    id: string;
 }
 
 interface DataTableProps<TData extends TEntity, TValue> {

@@ -107,8 +107,9 @@ export default function Dashboard() {
             project.tasks
                 .map((task: any) => ({ ...task, mostRecentDate: getMostRecentSessionDate(task) }))
                 .sort(
-                    (task1: { mostRecentDate: number }, task2: { mostRecentDate: number }) =>
-                        task2.mostRecentDate - task1.mostRecentDate
+                    (task1: { mostRecentDate: Date }, task2: { mostRecentDate: Date }) =>
+                        new Date(task2.mostRecentDate).valueOf() -
+                        new Date(task1.mostRecentDate).valueOf()
                 )
         )
         .slice(0, 5);
