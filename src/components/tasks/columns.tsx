@@ -11,7 +11,11 @@ import { calculateTotalTime, msToTime } from "@/utils/taskUtils";
 import { useEffect } from "react";
 import { loadData } from "@/utils/load";
 
-export const columnsXl: ColumnDef<Task>[] = [
+interface ExtendedTask extends Task {
+    projectIsArchived: boolean;
+}
+
+export const columnsXl: ColumnDef<ExtendedTask>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -133,16 +137,16 @@ export const columnsXl: ColumnDef<Task>[] = [
     },
 ];
 
-export const columnsLg: ColumnDef<Task>[] = [
+export const columnsLg: ColumnDef<ExtendedTask>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
-
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                    {row.original.projectIsArchived && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -242,16 +246,16 @@ export const columnsLg: ColumnDef<Task>[] = [
     },
 ];
 
-export const columnsMd: ColumnDef<Task>[] = [
+export const columnsMd: ColumnDef<ExtendedTask>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
-
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
+                    {row.original.projectIsArchived && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -340,7 +344,7 @@ export const columnsMd: ColumnDef<Task>[] = [
     },
 ];
 
-export const columnsSm: ColumnDef<Task>[] = [
+export const columnsSm: ColumnDef<ExtendedTask>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
@@ -413,7 +417,7 @@ export const columnsSm: ColumnDef<Task>[] = [
     },
 ];
 
-export const columnsMobile: ColumnDef<Task>[] = [
+export const columnsMobile: ColumnDef<ExtendedTask>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
