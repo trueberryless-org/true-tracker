@@ -1,7 +1,7 @@
-.git/
-.gitignore
-.next/
-.dockerignore
 Dockerfile
-docker-compose.yml
-node_modules/
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.git

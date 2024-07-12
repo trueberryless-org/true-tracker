@@ -17,6 +17,7 @@ export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];
 
 export default interface Task {
+    [x: string]: any;
     id: string;
     name: string;
     description?: string;
