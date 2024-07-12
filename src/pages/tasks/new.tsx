@@ -18,12 +18,14 @@ import Project from "@/models/project";
 import { useEffect, useRef, useState } from "react";
 import { saveData } from "@/utils/save";
 import Link from "next/link";
-import { AlertCircle, ChevronLeft } from "lucide-react";
+import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import { Task } from "@/models";
 import { priorities, statuses } from "@/models/task";
 import PriorityIconLabel from "@/components/tasks/priority";
 import StatusIconLabel from "@/components/tasks/status";
 import { getProject, initializeTask } from "@/utils/taskUtils";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 
 export default function NewTask() {
@@ -212,7 +214,44 @@ export default function NewTask() {
                         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                             <Card x-chunk="dashboard-07-chunk-3">
                                 <CardHeader>
-                                    <CardTitle>Task Status</CardTitle>
+                                    <CardTitle>
+                                        <div className="flex items-center justify-between">
+                                            <div>Task Status</div>
+                                            <HoverCard>
+                                                <HoverCardTrigger asChild>
+                                                    <BadgeInfo className="h-5 w-5 text-primary" />
+                                                </HoverCardTrigger>
+                                                <HoverCardContent className="w-80" align="end">
+                                                    <div className="flex justify-between space-x-4">
+                                                        <Avatar>
+                                                            <AvatarImage src="https://github.com/trueberryless.png" />
+                                                            <AvatarFallback>T</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className="space-y-1">
+                                                            <h4 className="text-sm font-semibold">
+                                                                @trueberryless
+                                                            </h4>
+                                                            <p className="text-sm">
+                                                                We try to automate this status in
+                                                                order to help you focus on your
+                                                                projects, not this app.
+                                                            </p>
+                                                            <div className="flex items-center pt-2">
+                                                                <span className="text-xs text-muted-foreground">
+                                                                    For example we will
+                                                                    automatically move this task
+                                                                    from “Backlog” to “In Progress”,
+                                                                    when you start working on it -
+                                                                    when the first session is
+                                                                    started.
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </HoverCardContent>
+                                            </HoverCard>
+                                        </div>
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-6">

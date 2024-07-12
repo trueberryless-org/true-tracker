@@ -1,13 +1,16 @@
 import Project from "./project";
+import Settings from "./settings";
+import Version from "./version";
+import Visit from "./visits";
 
 export default interface User {
+    id: string;
     username: string;
+    profilePicture?: string | null;
+    settings: Settings;
+
     projects: Project[];
 
-    profilePicture?: string | null;
-
-    lastExported: Date;
-    exportReminder: "daily" | "weekly" | "monthly";
-
-    theme?: "default" | "palette" | "sapphire" | "ruby" | "emerald" | "daylight" | "midnight";
+    visits: Visit[];
+    version: Version;
 }

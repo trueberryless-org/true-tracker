@@ -12,6 +12,12 @@ export default interface Session {
     end: Date | null;
 }
 
+export interface ExtendedSession extends Session {
+    projectName: string;
+    projectIsArchived: boolean;
+    taskName: string;
+}
+
 export const flows = [
     {
         value: "smooth",

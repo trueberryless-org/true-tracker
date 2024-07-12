@@ -50,6 +50,9 @@ import { Label } from "@/components/ui/label";
 import { useTheme as useNextTheme } from "next-themes";
 import React from "react";
 import { setTheme as setColorTheme, getCurrentTheme } from "@/utils/themes";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@radix-ui/react-separator";
+import { automationSettings } from "@/models/settings";
 
 const FormSchemaUsername = z.object({
     username: z.string().min(2, {
@@ -78,10 +81,10 @@ export default function Settings() {
             setActiveTab(storedTab.toString());
         }
 
-        const initialTheme = user?.theme || getCurrentTheme();
+        const initialTheme = user?.settings.theme || getCurrentTheme();
         setColorTheme(initialTheme);
         setCurrentTheme(initialTheme);
-    }, [user?.theme]);
+    }, [user?.settings.theme]);
 
     const handleThemeChange = useCallback(
         (theme: any) => {
@@ -89,7 +92,7 @@ export default function Settings() {
             setCurrentTheme(theme);
 
             if (user) {
-                user.theme = theme;
+                user.settings.theme = theme;
                 saveData(user);
             }
         },
@@ -110,9 +113,9 @@ export default function Settings() {
 
     function onSubmitUsername(data: z.infer<typeof FormSchemaUsername>) {
         if (data && user) {
-            const updatedUser = { ...user, username: data.username };
-            setUser(updatedUser);
-            saveData(updatedUser);
+            user.username = data.username;
+            setUser(user);
+            saveData(user);
             toast('You changed your username to "' + data.username + '".');
         }
     }
@@ -120,15 +123,15 @@ export default function Settings() {
     const formExportReminder = useForm<z.infer<typeof FormSchemaExportReminder>>({
         resolver: zodResolver(FormSchemaExportReminder),
         defaultValues: {
-            type: user?.exportReminder || "weekly",
+            type: user?.settings.exportReminder || "weekly",
         },
     });
 
     function onSubmitExportReminder(data: z.infer<typeof FormSchemaExportReminder>) {
         if (data && user) {
-            const updatedUser = { ...user, exportReminder: data.type };
-            setUser(updatedUser);
-            saveData(updatedUser);
+            user.settings.exportReminder = data.type;
+            setUser(user);
+            saveData(user);
             toast('You changed your notification frequency to "' + data.type + '".');
         }
     }
@@ -173,9 +176,9 @@ export default function Settings() {
 
     const setPictureNow = () => {
         if (pictureData && user) {
-            const updatedUser = { ...user, profilePicture: pictureData };
-            setUser(updatedUser);
-            saveData(updatedUser);
+            user.profilePicture = pictureData;
+            setUser(user);
+            saveData(user);
             toast("Profile picture updated successfully.");
         } else {
             console.error("No picture data to set");
@@ -185,18 +188,40 @@ export default function Settings() {
 
     const removeProfilePicture = () => {
         if (user) {
-            const updatedUser = { ...user, profilePicture: null };
-            setUser(updatedUser);
-            saveData(updatedUser);
+            user.profilePicture = null;
+            setUser(user);
+            saveData(user);
             toast("Profile picture removed successfully.");
+        }
+    };
+
+    const [settingsState, setSettingsState] = useState<any>({});
+
+    useEffect(() => {
+        const initialSettingsState: any = {};
+        automationSettings.forEach((setting) => {
+            initialSettingsState[setting.key] = user?.settings.automation[setting.key];
+        });
+        setSettingsState(initialSettingsState);
+    }, [user]);
+
+    const handleChange = (key: string, checked: any) => {
+        if (user) {
+            const updatedSettings = { ...settingsState, [key]: checked };
+            setSettingsState(updatedSettings);
+            user.settings.automation[key] = checked;
+            setUser(user);
+            saveData(user);
+            const setting = automationSettings.find((setting) => setting.key === key);
+            if (setting) toast(checked ? setting.toastActivate : setting.toastDeactivate);
         }
     };
 
     const deleteAllProjects = () => {
         if (user) {
-            const updatedUser = { ...user, projects: [] };
-            setUser(updatedUser);
-            saveData(updatedUser);
+            user.projects = [];
+            setUser(user);
+            saveData(user);
             toast("All projects deleted successfully.");
         }
     };
@@ -224,7 +249,7 @@ export default function Settings() {
     }
 
     const exportNow = () => {
-        user.lastExported = new Date();
+        user.settings.lastExported = new Date();
         setUser(user);
         saveData(user);
         exportData();
@@ -251,19 +276,27 @@ export default function Settings() {
                         </a>
                         <a
                             className={` ${
-                                activeTab === "Data Management" ? "font-semibold text-primary" : ""
-                            }`}
-                            onClick={() => handleTabClick("Data Management")}
-                        >
-                            Data Management
-                        </a>
-                        <a
-                            className={` ${
                                 activeTab === "Themes" ? "font-semibold text-primary" : ""
                             }`}
                             onClick={() => handleTabClick("Themes")}
                         >
                             Themes
+                        </a>
+                        <a
+                            className={` ${
+                                activeTab === "Automation" ? "font-semibold text-primary" : ""
+                            }`}
+                            onClick={() => handleTabClick("Automation")}
+                        >
+                            Automation
+                        </a>
+                        <a
+                            className={` ${
+                                activeTab === "Export / Import" ? "font-semibold text-primary" : ""
+                            }`}
+                            onClick={() => handleTabClick("Export / Import")}
+                        >
+                            Export / Import
                         </a>
                         <a
                             className={` ${
@@ -331,104 +364,6 @@ export default function Settings() {
                                     <Button onClick={removeProfilePicture} variant="destructive">
                                         Remove Profile Picture
                                     </Button>
-                                </CardFooter>
-                            </Card>
-                            <Form {...formExportReminder}>
-                                <form
-                                    onSubmit={formExportReminder.handleSubmit(
-                                        onSubmitExportReminder
-                                    )}
-                                    className="space-y-6"
-                                >
-                                    <Card x-chunk="dashboard-04-chunk-1">
-                                        <CardHeader>
-                                            <CardTitle>Export Notification Frequency</CardTitle>
-                                            <CardDescription>
-                                                How often do you want to be reminded to export data?
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <FormField
-                                                control={formExportReminder.control}
-                                                name="type"
-                                                render={({ field }) => (
-                                                    <FormItem className="space-y-3">
-                                                        <FormLabel>Notify me...</FormLabel>
-                                                        <FormControl>
-                                                            <RadioGroup
-                                                                onValueChange={field.onChange}
-                                                                defaultValue={field.value}
-                                                                className="flex flex-col space-y-1"
-                                                            >
-                                                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                                                    <FormControl>
-                                                                        <RadioGroupItem value="daily" />
-                                                                    </FormControl>
-                                                                    <FormLabel className="font-normal">
-                                                                        Daily
-                                                                    </FormLabel>
-                                                                </FormItem>
-                                                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                                                    <FormControl>
-                                                                        <RadioGroupItem value="weekly" />
-                                                                    </FormControl>
-                                                                    <FormLabel className="font-normal">
-                                                                        Weekly
-                                                                    </FormLabel>
-                                                                </FormItem>
-                                                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                                                    <FormControl>
-                                                                        <RadioGroupItem value="monthly" />
-                                                                    </FormControl>
-                                                                    <FormLabel className="font-normal">
-                                                                        Monthly
-                                                                    </FormLabel>
-                                                                </FormItem>
-                                                            </RadioGroup>
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </CardContent>
-                                        <CardFooter className="border-t px-6 py-4">
-                                            <Button type="submit">Save</Button>
-                                        </CardFooter>
-                                    </Card>
-                                </form>
-                            </Form>
-                        </div>
-                    )}
-                    {activeTab === "Data Management" && (
-                        <div className="grid gap-6">
-                            <Card x-chunk="dashboard-04-chunk-1">
-                                <CardHeader>
-                                    <CardTitle>Export Data</CardTitle>
-                                    <CardDescription>
-                                        This will generate a JSON with your data, so you can import
-                                        it again later.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardFooter className="border-t px-6 py-4">
-                                    <Button onClick={exportNow}>Export</Button>
-                                </CardFooter>
-                            </Card>
-                            <Card x-chunk="dashboard-04-chunk-1">
-                                <CardHeader>
-                                    <CardTitle>Import Data</CardTitle>
-                                    <CardDescription>
-                                        Import you recently exported data here.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <Input
-                                        type="file"
-                                        accept="application/json"
-                                        onChange={saveFileTemp}
-                                    />
-                                </CardContent>
-                                <CardFooter className="border-t px-6 py-4">
-                                    <Button onClick={importNow}>Import</Button>
                                 </CardFooter>
                             </Card>
                         </div>
@@ -529,6 +464,142 @@ export default function Settings() {
                                     </RadioGroup>
                                 </CardContent>
                             </Card>
+                        </div>
+                    )}
+                    {activeTab === "Automation" && (
+                        <div className="grid gap-6">
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Make your life easier</CardTitle>
+                                    <CardDescription>
+                                        Here you can see options for automating your workflow
+                                        withing the app.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardFooter className="border-t px-6 py-4 flex-col gap-4">
+                                    {automationSettings.map((setting) => (
+                                        <div
+                                            key={setting.key}
+                                            className="flex items-center justify-between w-full pb-4 border-b-2"
+                                        >
+                                            <Label
+                                                htmlFor={`automation-${setting.key}`}
+                                                className="space-y-0"
+                                            >
+                                                <div className="text-base">{setting.label}</div>
+                                                <div className="text-muted-foreground">
+                                                    {setting.description}
+                                                </div>
+                                            </Label>
+                                            <Switch
+                                                id={`automation-${setting.key}`}
+                                                checked={settingsState[setting.key]}
+                                                onCheckedChange={(checked: any) =>
+                                                    handleChange(setting.key, checked)
+                                                }
+                                            />
+                                        </div>
+                                    ))}
+                                </CardFooter>
+                            </Card>
+                        </div>
+                    )}
+                    {activeTab === "Export / Import" && (
+                        <div className="grid gap-6">
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Export Data</CardTitle>
+                                    <CardDescription>
+                                        This will generate a JSON with your data, so you can import
+                                        it again later.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardFooter className="border-t px-6 py-4">
+                                    <Button onClick={exportNow}>Export</Button>
+                                </CardFooter>
+                            </Card>
+                            <Card x-chunk="dashboard-04-chunk-1">
+                                <CardHeader>
+                                    <CardTitle>Import Data</CardTitle>
+                                    <CardDescription>
+                                        Import you recently exported data here.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Input
+                                        type="file"
+                                        accept="application/json"
+                                        onChange={saveFileTemp}
+                                    />
+                                </CardContent>
+                                <CardFooter className="border-t px-6 py-4">
+                                    <Button onClick={importNow}>Import</Button>
+                                </CardFooter>
+                            </Card>
+                            <Form {...formExportReminder}>
+                                <form
+                                    onSubmit={formExportReminder.handleSubmit(
+                                        onSubmitExportReminder
+                                    )}
+                                    className="space-y-6"
+                                >
+                                    <Card x-chunk="dashboard-04-chunk-1">
+                                        <CardHeader>
+                                            <CardTitle>Export Notification Frequency</CardTitle>
+                                            <CardDescription>
+                                                How often do you want to be reminded to export data?
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <FormField
+                                                control={formExportReminder.control}
+                                                name="type"
+                                                render={({ field }) => (
+                                                    <FormItem className="space-y-3">
+                                                        <FormLabel>Notify me...</FormLabel>
+                                                        <FormControl>
+                                                            <RadioGroup
+                                                                onValueChange={field.onChange}
+                                                                defaultValue={field.value}
+                                                                className="flex flex-col space-y-1"
+                                                            >
+                                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value="daily" />
+                                                                    </FormControl>
+                                                                    <FormLabel className="font-normal">
+                                                                        Daily
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value="weekly" />
+                                                                    </FormControl>
+                                                                    <FormLabel className="font-normal">
+                                                                        Weekly
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                    <FormControl>
+                                                                        <RadioGroupItem value="monthly" />
+                                                                    </FormControl>
+                                                                    <FormLabel className="font-normal">
+                                                                        Monthly
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                            </RadioGroup>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </CardContent>
+                                        <CardFooter className="border-t px-6 py-4">
+                                            <Button type="submit">Save</Button>
+                                        </CardFooter>
+                                    </Card>
+                                </form>
+                            </Form>
                         </div>
                     )}
                     {activeTab === "Danger Zone" && (

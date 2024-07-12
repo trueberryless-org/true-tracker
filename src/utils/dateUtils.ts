@@ -64,3 +64,25 @@ function formatDateToDate(date: Date): string {
     const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
     return date.toLocaleDateString([], options);
 }
+
+export const msToTime = (duration: number) => {
+    let seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60),
+        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+    // Initialize an array to store non-zero time components
+    let timeComponents: string[] = [];
+
+    if (hours > 0) {
+        timeComponents.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+    }
+    if (minutes > 0) {
+        timeComponents.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+    }
+    if (seconds > 0 || timeComponents.length === 0) {
+        timeComponents.push(`${seconds} second${seconds > 1 ? "s" : ""}`);
+    }
+
+    // Join time components with commas and return as a single string
+    return timeComponents.join(", ");
+};

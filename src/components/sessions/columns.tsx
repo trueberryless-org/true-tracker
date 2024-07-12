@@ -1,31 +1,60 @@
 "use client";
 
-import { Project } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { priorities, statuses } from "@/models/project";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
 import { DataTableRowActions } from "./data-table-row-actions";
+import { ExtendedSession, flows } from "@/models/session";
+import { msToTime } from "@/utils/dateUtils";
 
-interface ExtendedProject extends Project {
-    isArchived: boolean;
-}
-
-export const columnsXl: ColumnDef<ExtendedProject>[] = [
+export const columnsXl: ColumnDef<ExtendedSession>[] = [
     {
-        accessorKey: "name",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+        accessorKey: "flow",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
+            const flow = flows.find((flow) => flow.value === row.getValue("flow"));
+
+            if (!flow) {
+                return null;
+            }
 
             return (
-                <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
+                <div className="flex w-[100px] items-center">
+                    {row.original.projectIsArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
                     )}
+                    {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                    <span>{flow.label}</span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: "projectName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Project" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
                     <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
+                        {row.getValue("projectName")}
+                    </span>
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("taskName")}
                     </span>
                 </div>
             );
@@ -35,11 +64,8 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
         accessorKey: "description",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
-
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("description")}
                     </span>
@@ -48,16 +74,16 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
         },
     },
     {
-        accessorKey: "createdAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
+        accessorKey: "start",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Start Time" />,
         cell: ({ row }) => {
-            const dateValue = row.getValue("createdAt");
+            const dateValue = row.getValue("start");
             const dateString = String(dateValue);
             const parsedDate = Date.parse(dateString);
             let formattedDate = "";
 
             if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "MMMM dd, yyyy");
+                formattedDate = format(parsedDate, "hh:mm:ss");
             } else {
                 formattedDate = "-";
             }
@@ -66,16 +92,19 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
         },
     },
     {
-        accessorKey: "lastUpdatedAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Last Updated At" />,
+        accessorKey: "end",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="End Time" />,
         cell: ({ row }) => {
-            const dateValue = row.getValue("lastUpdatedAt");
+            const dateValue = row.getValue("end");
+            if (dateValue === null) {
+                return <div className="font-medium">Still running</div>;
+            }
             const dateString = String(dateValue);
             const parsedDate = Date.parse(dateString);
             let formattedDate = "";
 
             if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "MMMM dd, yyyy");
+                formattedDate = format(parsedDate, "hh:mm:ss");
             } else {
                 formattedDate = "-";
             }
@@ -84,49 +113,14 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
         },
     },
     {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+        accessorKey: "duration",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Duration" />,
         cell: ({ row }) => {
-            const status = statuses.find((status) => status.value === row.getValue("status"));
+            const start: string = row.getValue("start");
+            const end: string = row.getValue("end") || new Date().toString();
+            const duration = new Date(end).getTime() - new Date(start).getTime();
 
-            if (!status) {
-                return null;
-            }
-
-            return (
-                <div className="flex w-[100px] items-center">
-                    {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-                    <span>{status.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "priority",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
-        cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
-
-            if (!priority) {
-                return null;
-            }
-
-            return (
-                <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{priority.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
+            return <div className="font-medium">{msToTime(duration)}</div>;
         },
     },
     {
@@ -141,109 +135,24 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
     },
 ];
 
-export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
+export const columnsLg: ColumnDef<ExtendedSession>[] = [
     {
-        accessorKey: "name",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+        accessorKey: "flow",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
+            const flow = flows.find((flow) => flow.value === row.getValue("flow"));
 
-            return (
-                <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "description",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
-        cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
-
-            return (
-                <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "createdAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
-        cell: ({ row }) => {
-            const dateValue = row.getValue("createdAt");
-            const dateString = String(dateValue);
-            const parsedDate = Date.parse(dateString);
-            let formattedDate = "";
-
-            if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "MMMM dd, yyyy");
-            } else {
-                formattedDate = "-";
-            }
-
-            return <div className="font-medium">{formattedDate}</div>;
-        },
-    },
-    {
-        accessorKey: "lastUpdatedAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Last Updated At" />,
-        cell: ({ row }) => {
-            const dateValue = row.getValue("lastUpdatedAt");
-            const dateString = String(dateValue);
-            const parsedDate = Date.parse(dateString);
-            let formattedDate = "";
-
-            if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "MMMM dd, yyyy");
-            } else {
-                formattedDate = "-";
-            }
-
-            return <div className="font-medium">{formattedDate}</div>;
-        },
-    },
-    {
-        accessorKey: "archivedAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Archived At" />,
-        cell: ({ row }) => {
-            const dateValue = row.getValue("archivedAt");
-            const dateString = String(dateValue);
-            const parsedDate = Date.parse(dateString);
-            let formattedDate = "";
-
-            if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "MMMM dd, yyyy");
-            } else {
-                formattedDate = "-";
-            }
-
-            return <div className="font-medium">{formattedDate}</div>;
-        },
-    },
-    {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-        cell: ({ row }) => {
-            const status = statuses.find((status) => status.value === row.getValue("status"));
-
-            if (!status) {
+            if (!flow) {
                 return null;
             }
 
             return (
                 <div className="flex w-[100px] items-center">
-                    {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-                    <span>{status.label}</span>
+                    {row.original.projectIsArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                    <span>{flow.label}</span>
                 </div>
             );
         },
@@ -252,28 +161,79 @@ export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
         },
     },
     {
-        accessorKey: "priority",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
+        accessorKey: "projectName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Project" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
-
-            if (!priority) {
-                return null;
-            }
-
             return (
-                <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{priority.label}</span>
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("projectName")}
+                    </span>
                 </div>
             );
         },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
+    },
+    {
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("taskName")}
+                    </span>
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: "start",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Start Time" />,
+        cell: ({ row }) => {
+            const dateValue = row.getValue("start");
+            const dateString = String(dateValue);
+            const parsedDate = Date.parse(dateString);
+            let formattedDate = "";
+
+            if (!isNaN(parsedDate)) {
+                formattedDate = format(parsedDate, "hh:mm:ss");
+            } else {
+                formattedDate = "-";
+            }
+
+            return <div className="font-medium">{formattedDate}</div>;
+        },
+    },
+    {
+        accessorKey: "end",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="End Time" />,
+        cell: ({ row }) => {
+            const dateValue = row.getValue("end");
+            if (dateValue === null) {
+                return <div className="font-medium">Still running</div>;
+            }
+            const dateString = String(dateValue);
+            const parsedDate = Date.parse(dateString);
+            let formattedDate = "";
+
+            if (!isNaN(parsedDate)) {
+                formattedDate = format(parsedDate, "hh:mm:ss");
+            } else {
+                formattedDate = "-";
+            }
+
+            return <div className="font-medium">{formattedDate}</div>;
+        },
+    },
+    {
+        accessorKey: "duration",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Duration" />,
+        cell: ({ row }) => {
+            const start: string = row.getValue("start");
+            const end: string = row.getValue("end") || new Date().toString();
+            const duration = new Date(end).getTime() - new Date(start).getTime();
+
+            return <div className="font-medium">{msToTime(duration)}</div>;
         },
     },
     {
@@ -288,52 +248,55 @@ export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
     },
 ];
 
-export const columnsLg: ColumnDef<ExtendedProject>[] = [
+export const columnsMd: ColumnDef<ExtendedSession>[] = [
     {
-        accessorKey: "name",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+        accessorKey: "flow",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
+            const flow = flows.find((flow) => flow.value === row.getValue("flow"));
+
+            if (!flow) {
+                return null;
+            }
 
             return (
-                <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
+                <div className="flex w-[100px] items-center">
+                    {row.original.projectIsArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
                     )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                    <span>{flow.label}</span>
                 </div>
             );
         },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
     },
     {
-        accessorKey: "description",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
-
             return (
                 <div className="flex space-x-2">
-                    {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
                     <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
+                        {row.getValue("taskName")}
                     </span>
                 </div>
             );
         },
     },
     {
-        accessorKey: "createdAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
+        accessorKey: "start",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Start Time" />,
         cell: ({ row }) => {
-            const dateValue = row.getValue("createdAt");
+            const dateValue = row.getValue("start");
             const dateString = String(dateValue);
             const parsedDate = Date.parse(dateString);
             let formattedDate = "";
 
             if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "MMMM dd, yyyy");
+                formattedDate = format(parsedDate, "hh:mm:ss");
             } else {
                 formattedDate = "-";
             }
@@ -342,91 +305,19 @@ export const columnsLg: ColumnDef<ExtendedProject>[] = [
         },
     },
     {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+        accessorKey: "end",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="End Time" />,
         cell: ({ row }) => {
-            const status = statuses.find((status) => status.value === row.getValue("status"));
-
-            if (!status) {
-                return null;
+            const dateValue = row.getValue("end");
+            if (dateValue === null) {
+                return <div className="font-medium">Still running</div>;
             }
-
-            return (
-                <div className="flex w-[100px] items-center">
-                    {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-                    <span>{status.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "priority",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
-        cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
-
-            if (!priority) {
-                return null;
-            }
-
-            return (
-                <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{priority.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
-        },
-    },
-    {
-        id: "actions",
-        cell: ({ row }) => (
-            <div className="flex justify-end">
-                <DataTableRowActions row={row} />
-            </div>
-        ),
-    },
-];
-
-export const columnsMd: ColumnDef<ExtendedProject>[] = [
-    {
-        accessorKey: "name",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
-        cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
-
-            return (
-                <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "createdAt",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
-        cell: ({ row }) => {
-            const dateValue = row.getValue("createdAt");
             const dateString = String(dateValue);
             const parsedDate = Date.parse(dateString);
             let formattedDate = "";
 
             if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "MMMM dd, yyyy");
+                formattedDate = format(parsedDate, "hh:mm:ss");
             } else {
                 formattedDate = "-";
             }
@@ -435,174 +326,126 @@ export const columnsMd: ColumnDef<ExtendedProject>[] = [
         },
     },
     {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-        cell: ({ row }) => {
-            const status = statuses.find((status) => status.value === row.getValue("status"));
-
-            if (!status) {
-                return null;
-            }
-
-            return (
-                <div className="flex w-[100px] items-center">
-                    {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-                    <span>{status.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "priority",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
-        cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
-
-            if (!priority) {
-                return null;
-            }
-
-            return (
-                <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{priority.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
-        },
-    },
-    {
         id: "actions",
         cell: ({ row }) => (
             <div className="flex justify-end">
-                <DataTableRowActions row={row} />
+                <div className="flex justify-end">
+                    <DataTableRowActions row={row} />
+                </div>
             </div>
         ),
     },
 ];
 
-export const columnsSm: ColumnDef<ExtendedProject>[] = [
+export const columnsSm: ColumnDef<ExtendedSession>[] = [
     {
-        accessorKey: "name",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+        accessorKey: "flow",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
+            const flow = flows.find((flow) => flow.value === row.getValue("flow"));
 
+            if (!flow) {
+                return null;
+            }
+
+            return (
+                <div className="flex w-[100px] items-center">
+                    {row.original.projectIsArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                    <span>{flow.label}</span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+        cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
                     <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
+                        {row.getValue("taskName")}
                     </span>
                 </div>
             );
         },
     },
     {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+        accessorKey: "start",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Start Time" />,
         cell: ({ row }) => {
-            const status = statuses.find((status) => status.value === row.getValue("status"));
+            const dateValue = row.getValue("start");
+            const dateString = String(dateValue);
+            const parsedDate = Date.parse(dateString);
+            let formattedDate = "";
 
-            if (!status) {
-                return null;
+            if (!isNaN(parsedDate)) {
+                formattedDate = format(parsedDate, "hh:mm:ss");
+            } else {
+                formattedDate = "-";
             }
 
-            return (
-                <div className="flex w-[100px] items-center">
-                    {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-                    <span>{status.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "priority",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
-        cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
-
-            if (!priority) {
-                return null;
-            }
-
-            return (
-                <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{priority.label}</span>
-                </div>
-            );
-        },
-        filterFn: (row, id, value) => {
-            return value.includes(row.getValue(id));
+            return <div className="font-medium">{formattedDate}</div>;
         },
     },
     {
         id: "actions",
         cell: ({ row }) => (
             <div className="flex justify-end">
-                <DataTableRowActions row={row} />
+                <div className="flex justify-end">
+                    <DataTableRowActions row={row} />
+                </div>
             </div>
         ),
     },
 ];
 
-export const columnsMobile: ColumnDef<ExtendedProject>[] = [
+export const columnsMobile: ColumnDef<ExtendedSession>[] = [
     {
-        accessorKey: "name",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+        accessorKey: "flow",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
-            // const label = labels.find((label) => label.value === row.original.label)
+            const flow = flows.find((flow) => flow.value === row.getValue("flow"));
 
-            return (
-                <div className="flex space-x-2 truncate">
-                    {/* {row.original.isArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-        cell: ({ row }) => {
-            const status = statuses.find((status) => status.value === row.getValue("status"));
-
-            if (!status) {
+            if (!flow) {
                 return null;
             }
 
             return (
                 <div className="flex w-[100px] items-center">
-                    {status.icon && <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
-                    <span>{status.label}</span>
+                    {row.original.projectIsArchived === true && (
+                        <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                    <span>{flow.label}</span>
                 </div>
             );
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: "start",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Start Time" />,
+        cell: ({ row }) => {
+            const dateValue = row.getValue("start");
+            const dateString = String(dateValue);
+            const parsedDate = Date.parse(dateString);
+            let formattedDate = "";
+
+            if (!isNaN(parsedDate)) {
+                formattedDate = format(parsedDate, "hh:mm:ss");
+            } else {
+                formattedDate = "-";
+            }
+
+            return <div className="font-medium">{formattedDate}</div>;
         },
     },
 ];

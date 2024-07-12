@@ -18,9 +18,11 @@ import Project, { priorities, statuses } from "@/models/project";
 import { useEffect, useState } from "react";
 import { saveData } from "@/utils/save";
 import Link from "next/link";
-import { AlertCircle, ChevronLeft } from "lucide-react";
+import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import StatusIconLabel from "@/components/projects/status";
 import PriorityIconLabel from "@/components/projects/priority";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function EditProduct() {
     const { user, setUser } = useUser();
@@ -60,6 +62,25 @@ export default function EditProduct() {
     const archiveProject = () => {
         if (user && project) {
             project.archivedAt = new Date();
+
+            if (user.settings.automation.archiveStopSessions) {
+                project.tasks.forEach((task) => {
+                    task.sessions.forEach((session) => {
+                        if (session.end === null) session.end = new Date();
+                    });
+                });
+            }
+
+            if (user.settings.automation.archiveProjectStatusRetirement) {
+                project.status = "completed";
+            }
+
+            if (user.settings.automation.archiveTaskStatusRetirement) {
+                project.tasks.forEach((task) => {
+                    task.status = "done";
+                });
+            }
+
             const updatedProjects = user.projects.map((proj) =>
                 proj.id === project.id ? project : proj
             );
@@ -194,7 +215,44 @@ export default function EditProduct() {
                         <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                             <Card x-chunk="dashboard-07-chunk-3">
                                 <CardHeader>
-                                    <CardTitle>Project Status</CardTitle>
+                                    <CardTitle>
+                                        <div className="flex items-center justify-between">
+                                            <div>Task Status</div>
+                                            <HoverCard>
+                                                <HoverCardTrigger asChild>
+                                                    <BadgeInfo className="h-5 w-5 text-primary" />
+                                                </HoverCardTrigger>
+                                                <HoverCardContent className="w-80" align="end">
+                                                    <div className="flex justify-between space-x-4">
+                                                        <Avatar>
+                                                            <AvatarImage src="https://github.com/trueberryless.png" />
+                                                            <AvatarFallback>T</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className="space-y-1">
+                                                            <h4 className="text-sm font-semibold">
+                                                                @trueberryless
+                                                            </h4>
+                                                            <p className="text-sm">
+                                                                We try to automate this status in
+                                                                order to help you focus on your
+                                                                projects, not this app.
+                                                            </p>
+                                                            <div className="flex items-center pt-2">
+                                                                <span className="text-xs text-muted-foreground">
+                                                                    For example we will
+                                                                    automatically move this task
+                                                                    from “Planned” to “In Progress”,
+                                                                    when you start working on it -
+                                                                    when the first session is
+                                                                    started.
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </HoverCardContent>
+                                            </HoverCard>
+                                        </div>
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-6">

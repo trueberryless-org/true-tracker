@@ -11,14 +11,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Project } from "@/models";
+import { ExtendedSession } from "@/models/session";
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps<Project>) {
-    const projectId = row.original.id;
+export function DataTableRowActions({ row }: DataTableRowActionsProps<ExtendedSession>) {
+    const sessionId = row.original.id;
 
     return (
         <DropdownMenu>
@@ -29,11 +29,11 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps<Project>) 
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
-                <Link href={`/projects/${projectId}`}>
+                <Link href={`/sessions/${sessionId}`}>
                     <DropdownMenuItem>View</DropdownMenuItem>
                 </Link>
-                {row.original.archivedAt === null && (
-                    <Link href={`/projects/${projectId}/edit`}>
+                {!row.original.projectIsArchived && (
+                    <Link href={`/sessions/${sessionId}/edit`}>
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                     </Link>
                 )}

@@ -1,4 +1,3 @@
-import { loadData } from "@/utils/load";
 import Session from "./session";
 
 import {
@@ -11,13 +10,11 @@ import {
     CircleHelp,
     Timer,
 } from "lucide-react";
-import Project from "./project";
 
 export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];
 
 export default interface Task {
-    [x: string]: any;
     id: string;
     name: string;
     description?: string;
@@ -26,6 +23,12 @@ export default interface Task {
     priority: Priority;
 
     sessions: Session[];
+}
+
+export interface ExtendedTask extends Task {
+    projectName: string;
+    projectIsArchived: boolean;
+    someSessionIsRunning: boolean;
 }
 
 export const statuses = [

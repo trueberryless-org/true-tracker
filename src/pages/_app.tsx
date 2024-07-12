@@ -6,6 +6,13 @@ import { loadData } from "@/utils/load";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { UserProvider, useUser } from "@/components/UserContext";
+import { sameVersion } from "@/utils/versionUtils";
+import version from "@/constants/version";
+import { upgradeData } from "@/utils/upgradeUtils";
+import { initializeUpgradeFunctions } from "@/utils/upgradeFunctions";
+import { exportData } from "@/utils/export";
+import { toast } from "sonner";
+import { saveData } from "@/utils/save";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +25,18 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     const { user, setUser } = useUser();
 
     useEffect(() => {
-        const data = loadData();
+        var data = loadData();
         if (data) {
+            if (!sameVersion(data.version, version)) {
+                initializeUpgradeFunctions();
+                exportData();
+                if (!data.version) data.version = { major: 0, minor: 1, patch: 0 };
+                data = upgradeData(data, version);
+                toast("We migrate your data to the latest version.");
+            }
+            data.visits = [{ id: crypto.randomUUID(), time: new Date() }, ...data.visits];
             setUser(data);
+            saveData(data);
         }
     }, [setUser]);
 

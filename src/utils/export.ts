@@ -1,6 +1,5 @@
 import { loadData } from "./load";
 import { toast } from "sonner";
-import { saveData } from "./save";
 
 export const exportData = () => {
     const data = loadData();

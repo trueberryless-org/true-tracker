@@ -3,17 +3,14 @@
 import { Project, Task } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../tasks/data-table-column-header";
-import { priorities, statuses } from "@/models/task";
+import { ExtendedTask, priorities, statuses } from "@/models/task";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
 import { DataTableRowActions } from "../tasks/data-table-row-actions";
-import { calculateTotalTime, msToTime } from "@/utils/taskUtils";
+import { calculateTotalTime } from "@/utils/taskUtils";
+import { msToTime } from "@/utils/dateUtils";
 import { useEffect } from "react";
 import { loadData } from "@/utils/load";
-
-interface ExtendedTask extends Task {
-    projectIsArchived: boolean;
-}
 
 export const columnsXl: ColumnDef<ExtendedTask>[] = [
     {
@@ -24,6 +21,9 @@ export const columnsXl: ColumnDef<ExtendedTask>[] = [
                 <div className="flex space-x-2">
                     {row.original.projectIsArchived && (
                         <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
                     )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
@@ -147,6 +147,9 @@ export const columnsLg: ColumnDef<ExtendedTask>[] = [
                     {row.original.projectIsArchived && (
                         <Badge variant="destructive">Archived</Badge>
                     )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
+                    )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
@@ -255,6 +258,9 @@ export const columnsMd: ColumnDef<ExtendedTask>[] = [
                 <div className="flex space-x-2">
                     {row.original.projectIsArchived && (
                         <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
                     )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}

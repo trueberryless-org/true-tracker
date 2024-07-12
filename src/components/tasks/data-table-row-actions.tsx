@@ -11,21 +11,15 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Project, Task } from "@/models";
 import { useUser } from "../UserContext";
+import { ExtendedTask } from "@/models/task";
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps<Task>) {
+export function DataTableRowActions({ row }: DataTableRowActionsProps<ExtendedTask>) {
     const taskId = row.original.id;
-    const { user } = useUser();
-
-    const projectIsArchived =
-        user?.projects.find((project) =>
-            project.tasks.some((task: { id: string }) => task.id === taskId)
-        )?.archivedAt !== null;
 
     return (
         <DropdownMenu>
@@ -39,7 +33,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps<Task>) {
                 <Link href={`/tasks/${taskId}`}>
                     <DropdownMenuItem>View</DropdownMenuItem>
                 </Link>
-                {!projectIsArchived && (
+                {!row.original.projectIsArchived && (
                     <Link href={`/tasks/${taskId}/edit`}>
                         <DropdownMenuItem>Edit</DropdownMenuItem>
                     </Link>

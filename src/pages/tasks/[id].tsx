@@ -121,9 +121,29 @@ export default function TaskPage() {
                                 task.sessions.length === 0 &&
                                 (task.status === "backlog" || task.status === "todo")
                             ) {
-                                task.status = "in progress";
-                                toast("We automatically moved your task to 'In Progress'.");
+                                let taskMoved = false;
+                                let projectMoved = false;
+
+                                if (user.settings.automation.taskStatusKickoff) {
+                                    task.status = "in progress";
+                                    taskMoved = true;
+                                }
+                                if (user.settings.automation.projectStatusKickoff) {
+                                    project.status = "in progress";
+                                    projectMoved = true;
+                                }
+
+                                if (taskMoved && projectMoved) {
+                                    toast(
+                                        "We automatically moved your task and project to “In Progress”."
+                                    );
+                                } else if (taskMoved) {
+                                    toast("We automatically moved your task to “In Progress”.");
+                                } else if (projectMoved) {
+                                    toast("We automatically moved your project to “In Progress”.");
+                                }
                             }
+
                             return {
                                 ...task,
                                 sessions: [...task.sessions, newSession],

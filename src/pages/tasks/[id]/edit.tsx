@@ -202,7 +202,7 @@ export default function EditTask() {
                                             <div>Task Status</div>
                                             <HoverCard>
                                                 <HoverCardTrigger asChild>
-                                                    <BadgeInfo className="h-5 w-5" />
+                                                    <BadgeInfo className="h-5 w-5 text-primary" />
                                                 </HoverCardTrigger>
                                                 <HoverCardContent className="w-80" align="end">
                                                     <div className="flex justify-between space-x-4">
@@ -212,7 +212,7 @@ export default function EditTask() {
                                                         </Avatar>
                                                         <div className="space-y-1">
                                                             <h4 className="text-sm font-semibold">
-                                                                @true-tracker
+                                                                @trueberryless
                                                             </h4>
                                                             <p className="text-sm">
                                                                 We try to automate this status in

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 import {
     ColumnDef,
@@ -34,6 +34,7 @@ import { DataTableViewOptions } from "./data-table-view-options";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { useUser } from "../UserContext";
 
 interface TEntity {
     id: string;
@@ -57,6 +58,7 @@ export function DataTable<TData extends TEntity, TValue>({
     filtering,
 }: DataTableProps<TData, TValue>) {
     const router = useRouter();
+    const { user } = useUser();
 
     const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -87,9 +89,21 @@ export function DataTable<TData extends TEntity, TValue>({
 
     function handleRowClick(id: string): void {
         if (clickableRows) {
-            router.push(`/projects/${id}`);
+            router.push(`/sessions/${id}`);
         }
     }
+
+    const [newQueryParams, setNewQueryParams] = React.useState("");
+    const project = user?.projects.find((project) => project.id === router.query?.projectId);
+
+    React.useEffect(() => {
+        if (project && user?.projects.map((project) => project.name).includes(project.name)) {
+            table.getColumn("projectName")?.setFilterValue([project.name]);
+            setNewQueryParams(`?projectId=${project.id}`);
+        }
+    }, [table, router.query.projectId, user?.projects, project]);
+
+    const [onlyArchivedTasks, setOnlyArchivedTasks] = React.useState(false);
 
     return (
         <Card>
@@ -97,11 +111,25 @@ export function DataTable<TData extends TEntity, TValue>({
                 <div className="flex items-center justify-between">
                     {title}
                     {!filtering && <DataTableViewOptions table={table} />}
+                    {filtering && !onlyArchivedTasks && (
+                        <Button asChild size="sm" className="gap-1">
+                            <Link href={`/sessions/new${newQueryParams}`}>
+                                Create New Session
+                                <Plus className="h-4 w-4" />
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {filtering && <DataTableToolbar table={table} />}
+                    {filtering && (
+                        <DataTableToolbar
+                            table={table}
+                            setNewQueryParams={setNewQueryParams}
+                            setOnlyArchivedTasks={setOnlyArchivedTasks}
+                        />
+                    )}
                     <div className="rounded-md border">
                         <Table>
                             <TableHeader>

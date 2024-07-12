@@ -71,6 +71,21 @@ export default function Navbar() {
                     Tasks
                 </Link>
                 <Link
+                    href="/sessions"
+                    className={`${
+                        router.pathname === "/sessions"
+                            ? "text-foreground"
+                            : "text-muted-foreground"
+                    } transition-colors hover:text-foreground`}
+                    onClick={() =>
+                        setTimeout(() => {
+                            setIsSheetOpen(false);
+                        }, 200)
+                    }
+                >
+                    Sessions
+                </Link>
+                <Link
                     href="/settings"
                     className={`${
                         router.pathname.includes("settings")
@@ -146,6 +161,21 @@ export default function Navbar() {
                             }
                         >
                             Tasks
+                        </Link>
+                        <Link
+                            href="/sessions"
+                            className={`${
+                                router.pathname === "/sessions"
+                                    ? "text-foreground"
+                                    : "text-muted-foreground"
+                            } transition-colors hover:text-foreground`}
+                            onClick={() =>
+                                setTimeout(() => {
+                                    setIsSheetOpen(false);
+                                }, 200)
+                            }
+                        >
+                            Sessions
                         </Link>
                         <Link
                             href="/settings"

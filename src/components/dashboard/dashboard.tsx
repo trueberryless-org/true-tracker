@@ -89,12 +89,12 @@ export default function Dashboard() {
         const oneDayAgo = new Date(new Date().setDate(new Date().getDate() - 1)).getTime();
         const oneWeekAgo = new Date(new Date().setDate(new Date().getDate() - 7)).getTime();
         const oneMonthAgo = new Date(new Date().setMonth(new Date().getMonth() - 1)).getTime();
-        const lastExportedTime = new Date(user.lastExported).getTime();
+        const lastExportedTime = new Date(user.settings.lastExported).getTime();
 
         return (
-            (user.exportReminder === "daily" && lastExportedTime <= oneDayAgo) ||
-            (user.exportReminder === "weekly" && lastExportedTime <= oneWeekAgo) ||
-            (user.exportReminder === "monthly" && lastExportedTime <= oneMonthAgo)
+            (user.settings.exportReminder === "daily" && lastExportedTime <= oneDayAgo) ||
+            (user.settings.exportReminder === "weekly" && lastExportedTime <= oneWeekAgo) ||
+            (user.settings.exportReminder === "monthly" && lastExportedTime <= oneMonthAgo)
         );
     };
 

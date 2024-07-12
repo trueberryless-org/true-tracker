@@ -22,7 +22,7 @@ export default function ThemeSwitcher() {
 
     // Load and set the initial theme on mount
     React.useEffect(() => {
-        const initialTheme = user?.theme || getCurrentTheme();
+        const initialTheme = user?.settings.theme || getCurrentTheme();
         setTheme(initialTheme);
         setCurrentTheme(initialTheme);
     }, [user]);
@@ -33,7 +33,7 @@ export default function ThemeSwitcher() {
             setCurrentTheme(theme);
 
             if (user) {
-                user.theme = theme;
+                user.settings.theme = theme;
                 saveData(user);
             }
         },

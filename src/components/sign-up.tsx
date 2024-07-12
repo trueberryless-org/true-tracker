@@ -30,6 +30,7 @@ import { useUser } from "./UserContext";
 import { saveData } from "@/utils/save";
 import { useState } from "react";
 import { importData } from "@/utils/import";
+import version from "@/constants/version";
 
 const FormSchema = z.object({
     username: z.string().min(2, {
@@ -74,10 +75,19 @@ export function SignUp() {
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         const newUser: User = {
+            id: crypto.randomUUID(),
             username: data.username,
             projects: [],
-            lastExported: new Date(),
-            exportReminder: "weekly",
+            settings: {
+                lastExported: new Date(),
+                exportReminder: "weekly",
+                theme: "default",
+                automation: {
+                    projectStatusKickoff: true,
+                },
+            },
+            visits: [],
+            version: version,
         };
         setUser(newUser);
         saveData(newUser);

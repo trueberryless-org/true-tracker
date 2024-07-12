@@ -53,6 +53,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { getMostRecentSessionDate } from "@/utils/projectUtils";
 import router from "next/router";
+import { ExtendedProject } from "@/models/project";
 
 export default function Projects() {
     const { user } = useUser();
@@ -73,10 +74,14 @@ export default function Projects() {
         );
     }
 
-    const data = user.projects.map((project) => {
+    const data: ExtendedProject[] = user.projects.map((project) => {
         return {
             ...project,
-            isArchived: project.archivedAt ? true : false,
+            projectIsArchived: project.archivedAt ? true : false,
+            mostRecentDate: getMostRecentSessionDate(project),
+            someSessionIsRunning: project.tasks.some((task) =>
+                task.sessions.some((s) => s.end === null)
+            ),
         };
     });
 
@@ -109,11 +114,14 @@ export default function Projects() {
         );
     }
 
-    const recentData = data
+    const recentData: ExtendedProject[] = data
         .map((project) => ({
             ...project,
-            isArchived: project.archivedAt ? true : false,
+            projectIsArchived: project.archivedAt ? true : false,
             mostRecentDate: getMostRecentSessionDate(project),
+            someSessionIsRunning: project.tasks.some((task) =>
+                task.sessions.some((s) => s.end === null)
+            ),
         }))
         .sort(
             (project1, project2) =>

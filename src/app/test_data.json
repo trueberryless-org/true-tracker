@@ -1,4 +1,9 @@
 {
+    "version": {
+        "major": 0,
+        "minor": 1,
+        "patch": 0
+    },
     "username": "trueberryless",
     "lastExported": "2024-07-05T11:59:53.251Z",
     "exportReminder": "monthly",

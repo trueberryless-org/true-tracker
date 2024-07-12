@@ -31,6 +31,12 @@ export default interface Project {
     tasks: Task[];
 }
 
+export interface ExtendedProject extends Project {
+    projectIsArchived: boolean;
+    mostRecentDate: Date | null;
+    someSessionIsRunning: boolean;
+}
+
 export const statuses = [
     {
         value: "planned",

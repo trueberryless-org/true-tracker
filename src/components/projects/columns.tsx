@@ -3,14 +3,10 @@
 import { Project } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";
-import { priorities, statuses } from "@/models/project";
+import { ExtendedProject, priorities, statuses } from "@/models/project";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
 import { DataTableRowActions } from "./data-table-row-actions";
-
-interface ExtendedProject extends Project {
-    isArchived: boolean;
-}
 
 export const columnsXl: ColumnDef<ExtendedProject>[] = [
     {
@@ -21,8 +17,11 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
+                    {row.original.projectIsArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
                     )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
@@ -150,8 +149,11 @@ export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
+                    {row.original.projectIsArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
                     )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
@@ -297,8 +299,11 @@ export const columnsLg: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
+                    {row.original.projectIsArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
                     )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
@@ -406,8 +411,11 @@ export const columnsMd: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
+                    {row.original.projectIsArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
+                    )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
                     )}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
@@ -499,9 +507,12 @@ export const columnsSm: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.isArchived === true && (
+                    {/* {row.original.projectIsArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
                     )}
+                    {row.original.someSessionIsRunning === true && (
+                        <Badge variant="default">Running</Badge>
+                    )} */}
                     <span className="max-w-[500px] truncate font-medium">
                         {row.getValue("name")}
                     </span>
