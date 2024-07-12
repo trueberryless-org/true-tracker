@@ -44,6 +44,30 @@ export function DataTableToolbar<TData>({
             : [];
 
     const handleFilterChange = (filterValues: string[]) => {
+        const taskNameColumn = table.getColumn("taskName");
+        if (taskNameColumn && filterValues.length === 1) {
+            const task = user?.projects
+                .flatMap((project) => project.tasks)
+                .find((task) => task.name === filterValues[0]);
+            if (task) {
+                setNewQueryParams(`?taskId=${task.id}`);
+                if (
+                    user?.projects.find((project) => project.tasks.some((t) => t.id === task.id))
+                        ?.archivedAt
+                ) {
+                    setOnlyArchivedTasks(true);
+                }
+            } else {
+                setNewQueryParams("");
+                setOnlyArchivedTasks(false);
+            }
+        } else {
+            setNewQueryParams("");
+            setOnlyArchivedTasks(false);
+        }
+    };
+
+    const handleFilterChangeProject = (filterValues: string[]) => {
         const projectNameColumn = table.getColumn("projectName");
         if (projectNameColumn && filterValues.length === 1) {
             const project = user?.projects.find((project) => project.name === filterValues[0]);
@@ -73,19 +97,12 @@ export function DataTableToolbar<TData>({
                     }
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
-                {table.getColumn("flow") && (
-                    <DataTableFacetedFilter
-                        column={table.getColumn("flow")}
-                        title="Flow"
-                        options={flows}
-                    />
-                )}
                 {table.getColumn("projectName") && (
                     <DataTableFacetedFilterSimple
                         column={table.getColumn("projectName")}
                         title="Project"
                         options={projects}
-                        onFilterChange={handleFilterChange}
+                        onFilterChange={handleFilterChangeProject}
                     />
                 )}
                 {table.getColumn("taskName") && (
@@ -96,10 +113,20 @@ export function DataTableToolbar<TData>({
                         onFilterChange={handleFilterChange}
                     />
                 )}
+                {table.getColumn("flow") && (
+                    <DataTableFacetedFilter
+                        column={table.getColumn("flow")}
+                        title="Flow"
+                        options={flows}
+                    />
+                )}
                 {isFiltered && (
                     <Button
                         variant="ghost"
-                        onClick={() => table.resetColumnFilters()}
+                        onClick={() => {
+                            table.resetColumnFilters();
+                            handleFilterChange([]);
+                        }}
                         className="h-8 px-2 lg:px-3"
                     >
                         Reset

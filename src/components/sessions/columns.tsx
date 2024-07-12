@@ -11,6 +11,51 @@ import { msToTime } from "@/utils/dateUtils";
 
 export const columnsXl: ColumnDef<ExtendedSession>[] = [
     {
+        accessorKey: "projectName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Project" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("projectName")}
+                    </span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("taskName")}
+                    </span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: "description",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("description")}
+                    </span>
+                </div>
+            );
+        },
+    },
+    {
         accessorKey: "flow",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
@@ -32,45 +77,6 @@ export const columnsXl: ColumnDef<ExtendedSession>[] = [
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "projectName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Project" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("projectName")}
-                    </span>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "taskName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "description",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
-                </div>
-            );
         },
     },
     {
@@ -137,6 +143,38 @@ export const columnsXl: ColumnDef<ExtendedSession>[] = [
 
 export const columnsLg: ColumnDef<ExtendedSession>[] = [
     {
+        accessorKey: "projectName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Project" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("projectName")}
+                    </span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("taskName")}
+                    </span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
         accessorKey: "flow",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
@@ -158,32 +196,6 @@ export const columnsLg: ColumnDef<ExtendedSession>[] = [
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "projectName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Project" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("projectName")}
-                    </span>
-                </div>
-            );
-        },
-    },
-    {
-        accessorKey: "taskName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
-                </div>
-            );
         },
     },
     {
@@ -250,6 +262,22 @@ export const columnsLg: ColumnDef<ExtendedSession>[] = [
 
 export const columnsMd: ColumnDef<ExtendedSession>[] = [
     {
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("taskName")}
+                    </span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
         accessorKey: "flow",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
@@ -271,19 +299,6 @@ export const columnsMd: ColumnDef<ExtendedSession>[] = [
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "taskName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
-                </div>
-            );
         },
     },
     {
@@ -339,6 +354,22 @@ export const columnsMd: ColumnDef<ExtendedSession>[] = [
 
 export const columnsSm: ColumnDef<ExtendedSession>[] = [
     {
+        accessorKey: "taskName",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex space-x-2">
+                    <span className="max-w-[500px] truncate font-medium">
+                        {row.getValue("taskName")}
+                    </span>
+                </div>
+            );
+        },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id));
+        },
+    },
+    {
         accessorKey: "flow",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
@@ -360,19 +391,6 @@ export const columnsSm: ColumnDef<ExtendedSession>[] = [
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "taskName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Task" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
-                </div>
-            );
         },
     },
     {
@@ -407,6 +425,24 @@ export const columnsSm: ColumnDef<ExtendedSession>[] = [
 
 export const columnsMobile: ColumnDef<ExtendedSession>[] = [
     {
+        accessorKey: "start",
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Start Time" />,
+        cell: ({ row }) => {
+            const dateValue = row.getValue("start");
+            const dateString = String(dateValue);
+            const parsedDate = Date.parse(dateString);
+            let formattedDate = "";
+
+            if (!isNaN(parsedDate)) {
+                formattedDate = format(parsedDate, "hh:mm:ss");
+            } else {
+                formattedDate = "-";
+            }
+
+            return <div className="font-medium">{formattedDate}</div>;
+        },
+    },
+    {
         accessorKey: "flow",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Flow" />,
         cell: ({ row }) => {
@@ -428,24 +464,6 @@ export const columnsMobile: ColumnDef<ExtendedSession>[] = [
         },
         filterFn: (row, id, value) => {
             return value.includes(row.getValue(id));
-        },
-    },
-    {
-        accessorKey: "start",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Start Time" />,
-        cell: ({ row }) => {
-            const dateValue = row.getValue("start");
-            const dateString = String(dateValue);
-            const parsedDate = Date.parse(dateString);
-            let formattedDate = "";
-
-            if (!isNaN(parsedDate)) {
-                formattedDate = format(parsedDate, "hh:mm:ss");
-            } else {
-                formattedDate = "-";
-            }
-
-            return <div className="font-medium">{formattedDate}</div>;
         },
     },
 ];

@@ -94,14 +94,21 @@ export function DataTable<TData extends TEntity, TValue>({
     }
 
     const [newQueryParams, setNewQueryParams] = React.useState("");
-    const project = user?.projects.find((project) => project.id === router.query?.projectId);
+    const task = user?.projects
+        .flatMap((project) => project.tasks)
+        .find((task) => task.id === router.query.taskId);
 
     React.useEffect(() => {
-        if (project && user?.projects.map((project) => project.name).includes(project.name)) {
-            table.getColumn("projectName")?.setFilterValue([project.name]);
-            setNewQueryParams(`?projectId=${project.id}`);
+        if (
+            task &&
+            user?.projects.some((project) =>
+                project.tasks.map((task) => task.name).includes(task.name)
+            )
+        ) {
+            table.getColumn("taskName")?.setFilterValue([task.name]);
+            setNewQueryParams(`?taskId=${task.id}`);
         }
-    }, [table, router.query.projectId, user?.projects, project]);
+    }, [table, router.query.projectId, user?.projects, task]);
 
     const [onlyArchivedTasks, setOnlyArchivedTasks] = React.useState(false);
 

@@ -119,7 +119,7 @@ export default function NewTask() {
                         )}
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
                             <Button
-                                onClick={() => router.back}
+                                onClick={() => router.back()}
                                 variant="outline"
                                 size="sm"
                                 className="text-muted-foreground"
@@ -328,11 +328,14 @@ export default function NewTask() {
                         </div>
                     </div>
                     <div className="flex items-center justify-end gap-2 md:hidden">
-                        <Link href={`/tasks/${task.id}`} className="text-muted-foreground">
-                            <Button variant="outline" size="sm">
-                                Discard
-                            </Button>
-                        </Link>
+                        <Button
+                            onClick={() => router.back()}
+                            variant="outline"
+                            size="sm"
+                            className="text-muted-foreground"
+                        >
+                            Discard
+                        </Button>
                         <Button size="sm" onClick={handleSaveTask}>
                             Save Task
                         </Button>

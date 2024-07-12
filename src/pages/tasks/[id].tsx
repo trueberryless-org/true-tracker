@@ -324,7 +324,7 @@ export default function TaskPage() {
                                 <CardDescription>Recent sessions for this task.</CardDescription>
                             </div>
                             <Button asChild size="sm" className="ml-auto gap-1" variant={"outline"}>
-                                <Link href={`/tasks/${task.id}/sessions`}>
+                                <Link href={`/sessions?taskId=${task.id}`}>
                                     View All
                                     <ArrowUpRight className="h-4 w-4" />
                                 </Link>
@@ -350,8 +350,10 @@ export default function TaskPage() {
                                             return (
                                                 <TableRow
                                                     key={i}
-                                                    // onClick={() => router.push(`/tasks/${task.id}`)}
-                                                    // className="cursor-pointer"
+                                                    onClick={() =>
+                                                        router.push(`/sessions/${session.id}`)
+                                                    }
+                                                    className="cursor-pointer"
                                                 >
                                                     <TableCell>
                                                         <div className="font-medium">

@@ -74,16 +74,21 @@ export default function Projects() {
         );
     }
 
-    const data: ExtendedProject[] = user.projects.map((project) => {
-        return {
-            ...project,
-            projectIsArchived: project.archivedAt ? true : false,
-            mostRecentDate: getMostRecentSessionDate(project),
-            someSessionIsRunning: project.tasks.some((task) =>
-                task.sessions.some((s) => s.end === null)
-            ),
-        };
-    });
+    const data: ExtendedProject[] = user.projects
+        .map((project) => {
+            return {
+                ...project,
+                projectIsArchived: project.archivedAt ? true : false,
+                mostRecentDate: getMostRecentSessionDate(project),
+                someSessionIsRunning: project.tasks.some((task) =>
+                    task.sessions.some((s) => s.end === null)
+                ),
+            };
+        })
+        .sort(
+            (project1, project2) =>
+                project2.mostRecentDate.valueOf() - project1.mostRecentDate.valueOf()
+        );
 
     if (data.length === 0) {
         return (
@@ -114,73 +119,12 @@ export default function Projects() {
         );
     }
 
-    const recentData: ExtendedProject[] = data
-        .map((project) => ({
-            ...project,
-            projectIsArchived: project.archivedAt ? true : false,
-            mostRecentDate: getMostRecentSessionDate(project),
-            someSessionIsRunning: project.tasks.some((task) =>
-                task.sessions.some((s) => s.end === null)
-            ),
-        }))
-        .sort(
-            (project1, project2) =>
-                project2.mostRecentDate.valueOf() - project1.mostRecentDate.valueOf()
-        )
-        .slice(0, 5);
-
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="hidden h-full flex-1 flex-col xl:flex">
                     <DataTable
-                        title="Recent Projects"
-                        data={recentData}
-                        columns={columnsXl}
-                        pagination={false}
-                        clickableRows={true}
-                    />
-                </div>
-                <div className="hidden h-full flex-1 flex-col lg:flex xl:hidden">
-                    <DataTable
-                        title="Recent Projects"
-                        data={recentData}
-                        columns={columnsLg}
-                        pagination={false}
-                        clickableRows={true}
-                    />
-                </div>
-                <div className="hidden h-full flex-1 flex-col md:flex lg:hidden">
-                    <DataTable
-                        title="Recent Projects"
-                        data={recentData}
-                        columns={columnsMd}
-                        pagination={false}
-                        clickableRows={true}
-                    />
-                </div>
-                <div className="hidden h-full flex-1 flex-col sm:flex md:hidden">
-                    <DataTable
-                        title="Recent Projects"
-                        data={recentData}
-                        columns={columnsSm}
-                        pagination={false}
-                        clickableRows={true}
-                    />
-                </div>
-                <div className="flex h-full flex-1 flex-col sm:hidden">
-                    <DataTable
-                        title="Recent Projects"
-                        data={recentData}
-                        columns={columnsMobile}
-                        pagination={false}
-                        clickableRows={true}
-                    />
-                </div>
-
-                <div className="hidden h-full flex-1 flex-col xl:flex">
-                    <DataTable
-                        title="All Active Projects"
+                        title="Projects"
                         data={data}
                         columns={columnsXl}
                         pagination={true}
@@ -190,7 +134,7 @@ export default function Projects() {
                 </div>
                 <div className="hidden h-full flex-1 flex-col lg:flex xl:hidden">
                     <DataTable
-                        title="All Active Projects"
+                        title="Projects"
                         data={data}
                         columns={columnsLg}
                         pagination={true}
@@ -200,7 +144,7 @@ export default function Projects() {
                 </div>
                 <div className="hidden h-full flex-1 flex-col md:flex lg:hidden">
                     <DataTable
-                        title="All Active Projects"
+                        title="Projects"
                         data={data}
                         columns={columnsMd}
                         pagination={true}
@@ -210,7 +154,7 @@ export default function Projects() {
                 </div>
                 <div className="hidden h-full flex-1 flex-col sm:flex md:hidden">
                     <DataTable
-                        title="All Active Projects"
+                        title="Projects"
                         data={data}
                         columns={columnsSm}
                         pagination={true}
@@ -220,7 +164,7 @@ export default function Projects() {
                 </div>
                 <div className="flex h-full flex-1 flex-col sm:hidden">
                     <DataTable
-                        title="All Active Projects"
+                        title="Projects"
                         data={data}
                         columns={columnsMobile}
                         pagination={false}
@@ -228,57 +172,6 @@ export default function Projects() {
                         filtering={true}
                     />
                 </div>
-
-                {/* <div className="hidden h-full flex-1 flex-col xl:flex">
-                    <DataTable
-                        title="Archived Projects"
-                        data={archivedData}
-                        columns={columnsXlWithArchivedAt}
-                        pagination={true}
-                        clickableRows={true}
-                        filtering={true}
-                    />
-                </div>
-                <div className="hidden h-full flex-1 flex-col lg:flex xl:hidden">
-                    <DataTable
-                        title="Archived Projects"
-                        data={archivedData}
-                        columns={columnsLg}
-                        pagination={true}
-                        clickableRows={true}
-                        filtering={true}
-                    />
-                </div>
-                <div className="hidden h-full flex-1 flex-col md:flex lg:hidden">
-                    <DataTable
-                        title="Archived Projects"
-                        data={archivedData}
-                        columns={columnsMd}
-                        pagination={true}
-                        clickableRows={true}
-                        filtering={true}
-                    />
-                </div>
-                <div className="hidden h-full flex-1 flex-col sm:flex md:hidden">
-                    <DataTable
-                        title="Archived Projects"
-                        data={archivedData}
-                        columns={columnsSm}
-                        pagination={true}
-                        clickableRows={true}
-                        filtering={true}
-                    />
-                </div>
-                <div className="flex h-full flex-1 flex-col sm:hidden">
-                    <DataTable
-                        title="Archived Projects"
-                        data={archivedData}
-                        columns={columnsMobile}
-                        pagination={false}
-                        clickableRows={true}
-                        filtering={true}
-                    />
-                </div> */}
             </main>
         </div>
     );

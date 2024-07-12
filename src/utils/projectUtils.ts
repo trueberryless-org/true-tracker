@@ -34,15 +34,15 @@ export function calcPriorityComparison(user: User | null | undefined, priority: 
 
     if (priority === "high") {
         return `Higher priority than ${lowerPriorityCount + mediumPriorityCount} other project${
-            lowerPriorityCount + mediumPriorityCount > 1 ? "s" : ""
+            lowerPriorityCount + mediumPriorityCount !== 1 ? "s" : ""
         }`;
     } else if (priority === "medium") {
         return `Higher priority than ${lowerPriorityCount} other project${
-            lowerPriorityCount > 1 ? "s" : ""
+            lowerPriorityCount !== 1 ? "s" : ""
         }`;
     } else {
         return `Lower priority than ${higherPriorityCount + mediumPriorityCount} other project${
-            higherPriorityCount + mediumPriorityCount > 1 ? "s" : ""
+            higherPriorityCount + mediumPriorityCount !== 1 ? "s" : ""
         }`;
     }
 }
