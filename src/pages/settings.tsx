@@ -39,6 +39,15 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useUser } from "@/components/UserContext";
@@ -52,7 +61,7 @@ import React from "react";
 import { setTheme as setColorTheme, getCurrentTheme } from "@/utils/themes";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@radix-ui/react-separator";
-import { automationSettings } from "@/models/settings";
+import { AutomationSettings, automationSettings } from "@/models/settings";
 
 const FormSchemaUsername = z.object({
     username: z.string().min(2, {
@@ -254,6 +263,18 @@ export default function Settings() {
         saveData(user);
         exportData();
     };
+
+    const groupedSettings = automationSettings.reduce(
+        (groups: any, setting: AutomationSettings) => {
+            const group = setting.group;
+            if (!groups[group]) {
+                groups[group] = [];
+            }
+            groups[group].push(setting);
+            return groups;
+        },
+        {}
+    );
 
     return (
         <div className="flex w-full flex-col">
@@ -468,40 +489,58 @@ export default function Settings() {
                     )}
                     {activeTab === "Automation" && (
                         <div className="grid gap-6">
-                            <Card x-chunk="dashboard-04-chunk-1">
-                                <CardHeader>
-                                    <CardTitle>Make your life easier</CardTitle>
-                                    <CardDescription>
-                                        Here you can see options for automating your workflow
-                                        withing the app.
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardFooter className="border-t px-6 py-4 flex-col gap-4">
-                                    {automationSettings.map((setting) => (
-                                        <div
-                                            key={setting.key}
-                                            className="flex items-center justify-between w-full pb-4 border-b-2"
-                                        >
-                                            <Label
-                                                htmlFor={`automation-${setting.key}`}
-                                                className="space-y-0"
-                                            >
-                                                <div className="text-base">{setting.label}</div>
-                                                <div className="text-muted-foreground">
-                                                    {setting.description}
-                                                </div>
-                                            </Label>
-                                            <Switch
-                                                id={`automation-${setting.key}`}
-                                                checked={settingsState[setting.key]}
-                                                onCheckedChange={(checked: any) =>
-                                                    handleChange(setting.key, checked)
-                                                }
-                                            />
-                                        </div>
-                                    ))}
-                                </CardFooter>
-                            </Card>
+                            {Object.keys(groupedSettings).map((group) => (
+                                <Card key={group} x-chunk="dashboard-04-chunk-1">
+                                    <CardHeader>
+                                        <CardTitle>{group}</CardTitle>
+                                        <CardDescription>
+                                            Here you can see options for automating your workflow
+                                            within the app.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardFooter className="border-t flex-col p-0">
+                                        <Table>
+                                            <TableBody>
+                                                {groupedSettings[group].map(
+                                                    (setting: AutomationSettings) => (
+                                                        <TableRow key={setting.key}>
+                                                            <TableCell className="font-medium px-6">
+                                                                <Label
+                                                                    htmlFor={`automation-${setting.key}`}
+                                                                    className="space-y-0"
+                                                                >
+                                                                    <div className="text-base">
+                                                                        {setting.label}
+                                                                    </div>
+                                                                    <div className="text-muted-foreground">
+                                                                        {setting.description}
+                                                                    </div>
+                                                                </Label>
+                                                            </TableCell>
+                                                            <TableCell className="text-right px-6">
+                                                                <Switch
+                                                                    id={`automation-${setting.key}`}
+                                                                    checked={
+                                                                        settingsState[setting.key]
+                                                                    }
+                                                                    onCheckedChange={(
+                                                                        checked: any
+                                                                    ) =>
+                                                                        handleChange(
+                                                                            setting.key,
+                                                                            checked
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                )}
+                                            </TableBody>
+                                        </Table>
+                                    </CardFooter>
+                                </Card>
+                            ))}
                         </div>
                     )}
                     {activeTab === "Export / Import" && (

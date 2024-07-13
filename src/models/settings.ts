@@ -16,6 +16,7 @@ export interface AutomationSettings {
     toastActivate: string;
     toastDeactivate: string;
     type: AutomationValueTypes;
+    group: string;
 }
 
 export const automationSettings: AutomationSettings[] = [
@@ -27,6 +28,7 @@ export const automationSettings: AutomationSettings[] = [
         toastDeactivate:
             "Sessions will no longer automatically be stopped when the project gets archived.",
         type: "boolean",
+        group: "Archive",
     },
     {
         key: "archiveProjectStatusRetirement",
@@ -37,6 +39,7 @@ export const automationSettings: AutomationSettings[] = [
         toastDeactivate:
             "Projects will no longer automatically be marked as “Completed” when they get archived.",
         type: "boolean",
+        group: "Archive",
     },
     {
         key: "archiveTaskStatusRetirement",
@@ -47,6 +50,7 @@ export const automationSettings: AutomationSettings[] = [
         toastDeactivate:
             "Tasks will no longer automatically be marked as “Completed” when their project gets archived.",
         type: "boolean",
+        group: "Archive",
     },
     {
         key: "projectStatusKickoff",
@@ -57,6 +61,7 @@ export const automationSettings: AutomationSettings[] = [
         toastDeactivate:
             "Projects will no longer automatically be marked as “In Progress” when a session is started.",
         type: "boolean",
+        group: "Project",
     },
     {
         key: "projectStatusRetirement",
@@ -67,6 +72,7 @@ export const automationSettings: AutomationSettings[] = [
         toastDeactivate:
             "Projects will no longer automatically be marked as “Completed” when no session has been started for 3 months.",
         type: "boolean",
+        group: "Project",
     },
     {
         key: "taskStatusKickoff",
@@ -77,6 +83,7 @@ export const automationSettings: AutomationSettings[] = [
         toastDeactivate:
             "Tasks will no longer automatically be marked as “In Progress” when a session is started.",
         type: "boolean",
+        group: "Task",
     },
     {
         key: "taskStatusRetirement",
@@ -87,5 +94,6 @@ export const automationSettings: AutomationSettings[] = [
         toastDeactivate:
             "Tasks will no longer automatically be marked as “Completed” when no session has been started for one month.",
         type: "boolean",
+        group: "Task",
     },
 ];
