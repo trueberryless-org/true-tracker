@@ -49,10 +49,12 @@ export default function EditProduct() {
     const handleSaveProject = () => {
         if (project && user) {
             project.lastUpdatedAt = new Date();
-            const updatedProjects = user.projects.map((proj) =>
-                proj.id === project.id ? project : proj
-            );
-            const updatedUser = { ...user, projects: updatedProjects };
+
+            const updatedUser = { ...user };
+            updatedUser.projects = updatedUser.projects.map((p) => {
+                return p.id === project.id ? project : p;
+            });
+
             setUser(updatedUser);
             saveData(updatedUser);
             router.push(`/projects/${project.id}`);

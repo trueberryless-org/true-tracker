@@ -19,55 +19,54 @@ import { useEffect, useState } from "react";
 import { saveData } from "@/utils/save";
 import Link from "next/link";
 import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
-import { Task } from "@/models";
-import { priorities, statuses } from "@/models/task";
-import PriorityIconLabel from "@/components/tasks/priority";
-import StatusIconLabel from "@/components/tasks/status";
-import { getProject } from "@/utils/taskUtils";
+import { Session } from "@/models";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import FlowIconLabel from "@/components/sessions/flow";
+import { flows } from "@/models/session";
 
-export default function EditTask() {
+export default function EditSession() {
     const { user, setUser } = useUser();
-    const [task, setTask] = useState<Task | null>(null);
+    const [session, setSession] = useState<Session | null>(null);
     const router = useRouter();
-    const taskId = router.query.id as string;
 
-    const [taskStatus, setTaskStatus] = useState<string>("");
-    const [taskPriority, setTaskPriority] = useState<string>("");
+    const [sessionFlow, setSessionFlow] = useState<string>("");
 
     useEffect(() => {
         if (user) {
-            const foundTask = user?.projects
+            const foundSession = user?.projects
                 .flatMap((project) => project.tasks)
-                .find((task) => task.id === taskId);
-            setTask(foundTask || null);
-            setTaskStatus(foundTask?.status || "");
-            setTaskPriority(foundTask?.priority || "");
+                .flatMap((task) => task.sessions)
+                .find((session) => session.id === router.query.id);
+            setSession(foundSession || null);
+            setSessionFlow(foundSession?.flow || "");
         }
-    }, [user, taskId]);
+    }, [user, router.query.id]);
 
-    const handleInputChange = (field: keyof Task, value: any) => {
-        setTask((prevTask) => (prevTask ? { ...prevTask, [field]: value } : null));
+    const handleInputChange = (field: keyof Session, value: any) => {
+        setSession((prevSession) => (prevSession ? { ...prevSession, [field]: value } : null));
     };
 
-    const handleSaveTask = () => {
-        if (task && user) {
+    const handleSaveSession = () => {
+        if (session && user) {
             const updatedUser = { ...user };
             updatedUser.projects = updatedUser.projects.map((project) => {
-                const updatedTasks = project.tasks.map((t) => {
-                    return t.id === task.id ? task : t;
+                const updatedTasks = project.tasks.map((task) => {
+                    const updatedSessions = task.sessions.map((s) =>
+                        s.id === session.id ? session : s
+                    );
+                    return { ...task, sessions: updatedSessions };
                 });
                 return { ...project, tasks: updatedTasks };
             });
 
             setUser(updatedUser);
             saveData(updatedUser);
-            router.push(`/tasks/${task.id}`);
+            router.push(`/sessions/${session.id}`);
         }
     };
 
-    if (!task) {
+    if (!session) {
         return (
             <div className="flex w-full flex-col">
                 <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -84,8 +83,11 @@ export default function EditTask() {
     }
 
     if (
-        user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === task.id))
-            ?.archivedAt !== null
+        user?.projects.find((project) =>
+            project.tasks.some((task) =>
+                task.sessions.some((session) => session.id === router.query.id)
+            )
+        )?.archivedAt !== null
     ) {
         return (
             <div className="flex w-full flex-col">
@@ -109,39 +111,31 @@ export default function EditTask() {
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="grid flex-1 auto-rows-max gap-4">
                     <div className="flex items-center gap-4">
-                        <Link href={`/tasks/${task.id}`} className="text-muted-foreground">
+                        <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
                             <Button variant="outline" size="icon" className="h-7 w-7">
                                 <ChevronLeft className="h-4 w-4" />
                                 <span className="sr-only">Back</span>
                             </Button>
                         </Link>
-                        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                            {task.name}
-                        </h1>
-                        {task.priority && (
+                        {session.flow && (
                             <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                                <PriorityIconLabel
-                                    priorityValue={task.priority}
-                                    className="text-muted-foreground"
-                                />
-                            </Badge>
-                        )}
-                        {task.status && (
-                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                                <StatusIconLabel
-                                    statusValue={task.status}
+                                <FlowIconLabel
+                                    flowValue={session.flow}
                                     className="text-muted-foreground"
                                 />
                             </Badge>
                         )}
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                            <Link href={`/tasks/${task.id}`} className="text-muted-foreground">
+                            <Link
+                                href={`/sessions/${session.id}`}
+                                className="text-muted-foreground"
+                            >
                                 <Button variant="outline" size="sm">
                                     Discard
                                 </Button>
                             </Link>
-                            <Button size="sm" onClick={handleSaveTask}>
-                                Save Task
+                            <Button size="sm" onClick={handleSaveSession}>
+                                Save Session
                             </Button>
                         </div>
                     </div>
@@ -149,9 +143,9 @@ export default function EditTask() {
                         <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
                             <Card x-chunk="dashboard-07-chunk-0">
                                 <CardHeader>
-                                    <CardTitle>Task Details</CardTitle>
+                                    <CardTitle>Session Details</CardTitle>
                                     <CardDescription>
-                                        Edit the name and description of the task.
+                                        Edit the description of the session.
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
@@ -162,27 +156,15 @@ export default function EditTask() {
                                                 id="id"
                                                 type="text"
                                                 className="w-full"
-                                                value={task.id}
+                                                value={session.id}
                                                 disabled
-                                            />
-                                        </div>
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="name">Name</Label>
-                                            <Input
-                                                id="name"
-                                                type="text"
-                                                className="w-full"
-                                                value={task.name}
-                                                onChange={(e) =>
-                                                    handleInputChange("name", e.target.value)
-                                                }
                                             />
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="description">Description</Label>
                                             <Textarea
                                                 id="description"
-                                                value={task.description}
+                                                value={session.description}
                                                 onChange={(e) =>
                                                     handleInputChange("description", e.target.value)
                                                 }
@@ -198,8 +180,8 @@ export default function EditTask() {
                                 <CardHeader>
                                     <CardTitle>
                                         <div className="flex items-center justify-between">
-                                            <div>Task Status</div>
-                                            <HoverCard>
+                                            <div>Session Flow</div>
+                                            {/* <HoverCard>
                                                 <HoverCardTrigger asChild>
                                                     <BadgeInfo className="h-5 w-5 text-primary" />
                                                 </HoverCardTrigger>
@@ -214,14 +196,14 @@ export default function EditTask() {
                                                                 @trueberryless
                                                             </h4>
                                                             <p className="text-sm">
-                                                                We try to automate this status in
+                                                                We try to automate this flow in
                                                                 order to help you focus on your
                                                                 projects, not this app.
                                                             </p>
                                                             <div className="flex items-center pt-2">
                                                                 <span className="text-xs text-muted-foreground">
                                                                     For example we will
-                                                                    automatically move this task
+                                                                    automatically move this session
                                                                     from “Backlog” to “In Progress”,
                                                                     when you start working on it -
                                                                     when the first session is
@@ -231,74 +213,31 @@ export default function EditTask() {
                                                         </div>
                                                     </div>
                                                 </HoverCardContent>
-                                            </HoverCard>
+                                            </HoverCard> */}
                                         </div>
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-6">
                                         <div className="grid gap-3">
-                                            <Label htmlFor="status">Status</Label>
+                                            <Label htmlFor="flow">Flow</Label>
                                             <Select
-                                                value={taskStatus}
+                                                value={sessionFlow}
                                                 onValueChange={(value) => {
-                                                    setTaskStatus(value);
-                                                    handleInputChange("status", value);
+                                                    setSessionFlow(value);
+                                                    handleInputChange("flow", value);
                                                 }}
                                             >
-                                                <SelectTrigger
-                                                    id="status"
-                                                    aria-label="Select status"
-                                                >
-                                                    <SelectValue placeholder="Select status" />
+                                                <SelectTrigger id="flow" aria-label="Select flow">
+                                                    <SelectValue placeholder="Select flow" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {statuses.map((status) => (
+                                                    {flows.map((flow) => (
                                                         <SelectItem
-                                                            key={status.value}
-                                                            value={status.value}
+                                                            key={flow.value}
+                                                            value={flow.value}
                                                         >
-                                                            <StatusIconLabel
-                                                                statusValue={status.value}
-                                                            />
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                            <Card x-chunk="dashboard-07-chunk-3">
-                                <CardHeader>
-                                    <CardTitle>Task Priority</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="grid gap-6">
-                                        <div className="grid gap-3">
-                                            <Label htmlFor="priority">Priority</Label>
-                                            <Select
-                                                value={taskPriority}
-                                                onValueChange={(value) => {
-                                                    setTaskPriority(value);
-                                                    handleInputChange("priority", value);
-                                                }}
-                                            >
-                                                <SelectTrigger
-                                                    id="priority"
-                                                    aria-label="Select priority"
-                                                >
-                                                    <SelectValue placeholder="Select priority" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {priorities.map((priority) => (
-                                                        <SelectItem
-                                                            key={priority.value}
-                                                            value={priority.value}
-                                                        >
-                                                            <PriorityIconLabel
-                                                                priorityValue={priority.value}
-                                                            />
+                                                            <FlowIconLabel flowValue={flow.value} />
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>
@@ -310,13 +249,13 @@ export default function EditTask() {
                         </div>
                     </div>
                     <div className="flex items-center justify-end gap-2 md:hidden">
-                        <Link href={`/tasks/${task.id}`} className="text-muted-foreground">
+                        <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
                             <Button variant="outline" size="sm">
                                 Discard
                             </Button>
                         </Link>
-                        <Button size="sm" onClick={handleSaveTask}>
-                            Save Task
+                        <Button size="sm" onClick={handleSaveSession}>
+                            Save Session
                         </Button>
                     </div>
                 </div>

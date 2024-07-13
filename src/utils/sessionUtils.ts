@@ -1,5 +1,14 @@
 import { Session, User } from "@/models";
 
+export const initializeSession = (): Session => {
+    return {
+        id: crypto.randomUUID(),
+        flow: "good",
+        start: new Date(Date.now() - 3 * 60 * 60 * 1000),
+        end: new Date(),
+    };
+};
+
 export function calcFlowComparison(user: User | null | undefined, flow: string): string {
     if (!user || !flow) {
         return "";
