@@ -60,10 +60,22 @@ export default function ThemeSwitcher() {
                         <div>Palette</div>
                     </div>
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleThemeChange("amethyst")} className="group">
+                    <div className="flex items-center space-x-2">
+                        <ThemeDiamond title={"Amethyst"} color={"amethyst"} />
+                        <div>Amethyst</div>
+                    </div>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleThemeChange("sapphire")} className="group">
                     <div className="flex items-center space-x-2">
                         <ThemeDiamond title={"Sapphire"} color={"sapphire"} />
                         <div>Sapphire</div>
+                    </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleThemeChange("emerald")} className="group">
+                    <div className="flex items-center space-x-2">
+                        <ThemeDiamond title={"Emerald"} color={"emerald"} />
+                        <div>Emerald</div>
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleThemeChange("ruby")} className="group">
@@ -72,10 +84,16 @@ export default function ThemeSwitcher() {
                         <div>Ruby</div>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleThemeChange("emerald")} className="group">
+                <DropdownMenuItem onClick={() => handleThemeChange("coral")} className="group">
                     <div className="flex items-center space-x-2">
-                        <ThemeDiamond title={"Emerald"} color={"emerald"} />
-                        <div>Emerald</div>
+                        <ThemeDiamond title={"Coral"} color={"coral"} />
+                        <div>Coral</div>
+                    </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleThemeChange("amber")} className="group">
+                    <div className="flex items-center space-x-2">
+                        <ThemeDiamond title={"Amber"} color={"amber"} />
+                        <div>Amber</div>
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleThemeChange("daylight")} className="group">

@@ -449,17 +449,17 @@ export default function Settings() {
                                         </div>
                                         <div
                                             className="flex items-center space-x-2"
-                                            onClick={() => handleThemeChange("sapphire")}
+                                            onClick={() => handleThemeChange("amethyst")}
                                         >
-                                            <RadioGroupItem value="sapphire" id="r6" />
-                                            <Label htmlFor="r6">Sapphire</Label>
+                                            <RadioGroupItem value="amethyst" id="r6" />
+                                            <Label htmlFor="r6">Amethyst</Label>
                                         </div>
                                         <div
                                             className="flex items-center space-x-2"
-                                            onClick={() => handleThemeChange("ruby")}
+                                            onClick={() => handleThemeChange("sapphire")}
                                         >
-                                            <RadioGroupItem value="ruby" id="r7" />
-                                            <Label htmlFor="r7">Ruby</Label>
+                                            <RadioGroupItem value="sapphire" id="r7" />
+                                            <Label htmlFor="r7">Sapphire</Label>
                                         </div>
                                         <div
                                             className="flex items-center space-x-2"
@@ -470,17 +470,38 @@ export default function Settings() {
                                         </div>
                                         <div
                                             className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("ruby")}
+                                        >
+                                            <RadioGroupItem value="ruby" id="r9" />
+                                            <Label htmlFor="r9">Ruby</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("coral")}
+                                        >
+                                            <RadioGroupItem value="coral" id="r10" />
+                                            <Label htmlFor="r10">Coral</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
+                                            onClick={() => handleThemeChange("amber")}
+                                        >
+                                            <RadioGroupItem value="amber" id="r11" />
+                                            <Label htmlFor="r11">Amber</Label>
+                                        </div>
+                                        <div
+                                            className="flex items-center space-x-2"
                                             onClick={() => handleThemeChange("daylight")}
                                         >
-                                            <RadioGroupItem value="daylight" id="r9" />
-                                            <Label htmlFor="r9">Daylight</Label>
+                                            <RadioGroupItem value="daylight" id="r12" />
+                                            <Label htmlFor="r12">Daylight</Label>
                                         </div>
                                         <div
                                             className="flex items-center space-x-2"
                                             onClick={() => handleThemeChange("midnight")}
                                         >
-                                            <RadioGroupItem value="midnight" id="r10" />
-                                            <Label htmlFor="r10">Midnight</Label>
+                                            <RadioGroupItem value="midnight" id="r13" />
+                                            <Label htmlFor="r13">Midnight</Label>
                                         </div>
                                     </RadioGroup>
                                 </CardContent>

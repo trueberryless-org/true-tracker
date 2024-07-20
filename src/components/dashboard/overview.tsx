@@ -33,7 +33,7 @@ const chartConfig = {
     },
     mobile: {
         label: "Mobile",
-        color: "hsl(var(--chart-2))",
+        color: "hsl(var(--chart-4))",
     },
 } satisfies ChartConfig;
 

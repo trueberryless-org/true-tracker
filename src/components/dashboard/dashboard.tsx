@@ -74,6 +74,7 @@ import { getMostRecentSessionDate } from "@/utils/taskUtils";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { Overview } from "./overview";
 import { RecentSales } from "./recent-sales";
+import { Component } from "./chart";
 
 export default function Dashboard() {
     const { user, setUser } = useUser();

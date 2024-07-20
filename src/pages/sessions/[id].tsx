@@ -34,7 +34,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import FlowIconLabel from "@/components/sessions/flow";
 import { calcFlowComparison, calcDurationComparison } from "@/utils/sessionUtils";
-import { msToShortTime } from "@/utils/dateUtils";
+import { msToShortTime, msToTimeFitting } from "@/utils/dateUtils";
 
 export default function SessionPage() {
     const { user, setUser } = useUser();
@@ -141,9 +141,14 @@ export default function SessionPage() {
                             <span className="sr-only">Back</span>
                         </Button>
                     </Link>
-                    {/* <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                        {project.name}
-                    </h1> */}
+                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                        {msToTimeFitting(
+                            session.end
+                                ? new Date(session.end!).getTime() -
+                                      new Date(session.start).getTime()
+                                : Date.now() - new Date(session.start).getTime()
+                        ) + " session"}
+                    </h1>
                     <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
                         <FlowIconLabel flowValue={session.flow} className="text-muted-foreground" />
                     </Badge>
@@ -205,8 +210,10 @@ export default function SessionPage() {
                         <CardContent>
                             <div className="text-2xl font-bold">
                                 {msToShortTime(
-                                    new Date(session.end!).getTime() ??
-                                        Date.now() - new Date(session.start).getTime()
+                                    session.end
+                                        ? new Date(session.end!).getTime() -
+                                              new Date(session.start).getTime()
+                                        : Date.now() - new Date(session.start).getTime()
                                 )}
                             </div>
                             <p className="text-xs text-muted-foreground">

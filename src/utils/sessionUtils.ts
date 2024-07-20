@@ -56,41 +56,44 @@ export function calcFlowComparison(user: User | null | undefined, flow: string):
 export function calcDurationComparison(user: User, session: Session) {
     // Example logic: compare current session duration to average of other sessions
     const avgDurationOfOtherSessions = calculateAverageDurationOfOtherSessions(user);
-    const currentSessionDuration =
-        new Date(session.end!).getTime() ?? Date.now() - new Date(session.start).getTime();
+
+    console.log("Average duration of other sessions:", avgDurationOfOtherSessions);
+
+    const currentSessionDuration = session.end
+        ? new Date(session.end!).getTime() - new Date(session.start).getTime()
+        : Date.now() - new Date(session.start).getTime();
+
+    console.log("Current session duration:", currentSessionDuration);
 
     const sessions =
         user.projects.flatMap((project) => project.tasks.flatMap((task) => task.sessions)) || [];
 
     const shorterSessionCount = sessions.filter((s) => {
-        return (
-            s.id !== session.id &&
-            (new Date(s.end!).getTime() ??
-                Date.now() - new Date(s.start).getTime() < currentSessionDuration)
-        );
+        const sessionDuration = s.end
+            ? new Date(s.end).getTime() - new Date(s.start).getTime()
+            : Date.now() - new Date(s.start).getTime();
+
+        return s.id !== session.id && sessionDuration < currentSessionDuration;
     }).length;
 
     const longerSessionCount = sessions.filter((s) => {
-        return (
-            s.id !== session.id &&
-            (new Date(s.end!).getTime() ??
-                Date.now() - new Date(s.start).getTime() > currentSessionDuration)
-        );
+        const sessionDuration = s.end
+            ? new Date(s.end).getTime() - new Date(s.start).getTime()
+            : Date.now() - new Date(s.start).getTime();
+
+        return s.id !== session.id && sessionDuration > currentSessionDuration;
     }).length;
 
-    if (currentSessionDuration < avgDurationOfOtherSessions) {
+    if (currentSessionDuration > avgDurationOfOtherSessions) {
         // Shorter than average
-        return `Shorter than ${shorterSessionCount} other session${
+        return `Longer than ${shorterSessionCount} other session${
             shorterSessionCount !== 1 ? "s" : ""
         }`;
-    } else if (currentSessionDuration > avgDurationOfOtherSessions) {
+    } else {
         // Longer than average
-        return `Longer than ${longerSessionCount} other session${
+        return `Shorter than ${longerSessionCount} other session${
             longerSessionCount !== 1 ? "s" : ""
         }`;
-    } else {
-        // Same as average
-        return `Same duration as other sessions`;
     }
 }
 
@@ -104,8 +107,9 @@ function calculateAverageDurationOfOtherSessions(user: User) {
         project.tasks.forEach((task) => {
             task.sessions.forEach((session) => {
                 const sessionStart = new Date(session.start);
-                const sessionEnd = new Date(session.end!) ?? new Date();
-                if (sessionEnd && sessionStart) {
+                const sessionEnd = session.end ? new Date(session.end) : new Date();
+
+                if (sessionStart) {
                     const sessionDuration = sessionEnd.getTime() - sessionStart.getTime();
                     totalDuration += sessionDuration;
                     sessionCount++;

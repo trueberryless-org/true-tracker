@@ -40,14 +40,14 @@
         --chart-4: 215 20.2% 65.1%;
         --chart-5: 212.7 26.8% 83.9%;
 
-        --color-1: hsl(var(--chart-1));
-        --color-2: hsl(var(--chart-2));
-        --color-3: hsl(var(--chart-3));
-        --color-4: hsl(var(--chart-4));
-        --color-5: hsl(var(--chart-5));
+        --color-1: var(--color-1-default);
+        --color-2: var(--color-2-default);
+        --color-3: var(--color-3-default);
+        --color-4: var(--color-4-default);
+        --color-5: var(--color-5-default);
 
-        --color-1-default: hsl(217.2 32.6% 17.5%);
-        --color-2-default: hsl(217.2 26.8% 23.5%);
+        --color-1-default: hsl(217.2 32.6% 23.5%);
+        --color-2-default: hsl(217.2 26.8% 35.5%);
         --color-3-default: hsl(224.8 22.5% 49.3%);
         --color-4-default: hsl(215 20.2% 65.1%);
         --color-5-default: hsl(212.7 26.8% 83.9%);
@@ -57,30 +57,45 @@
         --color-4-palette: hsl(43 74% 66%);
         --color-5-palette: hsl(27 87% 67%);
         --color-1-sapphire: hsl(221.2 83.2% 53.3%);
-        --color-2-sapphire: hsl(212 95% 68%);
-        --color-3-sapphire: hsl(216 92% 60%);
+        --color-2-sapphire: hsl(216 92% 60%);
+        --color-3-sapphire: hsl(212 95% 68%);
         --color-4-sapphire: hsl(210 98% 78%);
         --color-5-sapphire: hsl(212 97% 87%);
         --color-1-ruby: hsl(347 77% 50%);
-        --color-2-ruby: hsl(352 83% 91%);
+        --color-2-ruby: hsl(349 77% 62%);
         --color-3-ruby: hsl(350 80% 72%);
         --color-4-ruby: hsl(351 83% 82%);
-        --color-5-ruby: hsl(349 77% 62%);
-        --color-1-emerald: hsl(139 65% 20%);
-        --color-2-emerald: hsl(140 74% 44%);
-        --color-3-emerald: hsl(142 88% 28%);
-        --color-4-emerald: hsl(137 55% 15%);
-        --color-5-emerald: hsl(141 40% 9%);
+        --color-5-ruby: hsl(352 83% 91%);
+        --color-1-emerald: hsl(140 58% 40%);
+        --color-2-emerald: hsl(140 56% 51%);
+        --color-3-emerald: hsl(140 57% 65%);
+        --color-4-emerald: hsl(140 83% 80%);
+        --color-5-emerald: hsl(140 83% 91%);
         --color-1-daylight: hsl(25 34% 28%);
         --color-2-daylight: hsl(26 36% 34%);
         --color-3-daylight: hsl(28 40% 40%);
         --color-4-daylight: hsl(31 41% 48%);
         --color-5-daylight: hsl(35 43% 53%);
-        --color-1-midnight: hsl(359 2% 90%);
-        --color-2-midnight: hsl(240 1% 74%);
+        --color-1-midnight: hsl(240 2% 26%);
+        --color-2-midnight: hsl(240 1% 42%);
         --color-3-midnight: hsl(240 1% 58%);
-        --color-4-midnight: hsl(240 1% 42%);
-        --color-5-midnight: hsl(240 2% 26%);
+        --color-4-midnight: hsl(240 1% 74%);
+        --color-5-midnight: hsl(359 2% 90%);
+        --color-1-coral: hsl(24 77% 50%);
+        --color-2-coral: hsl(24 77% 62%);
+        --color-3-coral: hsl(24 80% 72%);
+        --color-4-coral: hsl(24 83% 82%);
+        --color-5-coral: hsl(24 83% 91%);
+        --color-1-amber: hsl(41 77% 50%);
+        --color-2-amber: hsl(43 77% 62%);
+        --color-3-amber: hsl(42 80% 72%);
+        --color-4-amber: hsl(38 83% 82%);
+        --color-5-amber: hsl(41 83% 91%);
+        --color-1-amethyst: hsl(273 77% 50%);
+        --color-2-amethyst: hsl(273 77% 62%);
+        --color-3-amethyst: hsl(273 80% 72%);
+        --color-4-amethyst: hsl(273 83% 82%);
+        --color-5-amethyst: hsl(273 83% 91%);
     }
 
     .dark {
@@ -138,11 +153,11 @@
         --color-3-ruby: hsl(350 80% 72%);
         --color-4-ruby: hsl(351 83% 82%);
         --color-5-ruby: hsl(352 83% 91%);
-        --color-1-emerald: hsl(142 88% 28%);
-        --color-2-emerald: hsl(139 65% 20%);
-        --color-3-emerald: hsl(140 74% 24%);
-        --color-4-emerald: hsl(137 55% 15%);
-        --color-5-emerald: hsl(141 40% 9%);
+        --color-1-emerald: hsl(140 58% 40%);
+        --color-2-emerald: hsl(140 56% 51%);
+        --color-3-emerald: hsl(140 57% 65%);
+        --color-4-emerald: hsl(140 83% 80%);
+        --color-5-emerald: hsl(140 83% 91%);
         --color-1-daylight: hsl(25 34% 28%);
         --color-2-daylight: hsl(26 36% 34%);
         --color-3-daylight: hsl(28 40% 40%);
@@ -153,6 +168,21 @@
         --color-3-midnight: hsl(240 1% 58%);
         --color-4-midnight: hsl(240 1% 42%);
         --color-5-midnight: hsl(240 2% 26%);
+        --color-1-coral: hsl(24 77% 50%);
+        --color-2-coral: hsl(24 77% 62%);
+        --color-3-coral: hsl(24 80% 72%);
+        --color-4-coral: hsl(24 83% 82%);
+        --color-5-coral: hsl(24 83% 91%);
+        --color-1-amber: hsl(41 77% 50%);
+        --color-2-amber: hsl(43 77% 62%);
+        --color-3-amber: hsl(42 80% 72%);
+        --color-4-amber: hsl(38 83% 82%);
+        --color-5-amber: hsl(41 83% 91%);
+        --color-1-amethyst: hsl(273 77% 50%);
+        --color-2-amethyst: hsl(273 77% 62%);
+        --color-3-amethyst: hsl(273 80% 72%);
+        --color-4-amethyst: hsl(273 83% 82%);
+        --color-5-amethyst: hsl(273 83% 91%);
     }
 
     .palette {
@@ -180,6 +210,12 @@
         --chart-3: 197 37% 24%;
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
+
+        --color-1: var(--color-1-palette);
+        --color-2: var(--color-2-palette);
+        --color-3: var(--color-3-palette);
+        --color-4: var(--color-4-palette);
+        --color-5: var(--color-5-palette);
     }
     .palette.dark {
         --background: 240 10% 3.9%;
@@ -229,10 +265,16 @@
         --input: 214.3 31.8% 91.4%;
         --ring: 221.2 83.2% 53.3%;
         --chart-1: 221.2 83.2% 53.3%;
-        --chart-2: 212 95% 68%;
-        --chart-3: 216 92% 60%;
+        --chart-2: 216 92% 60%;
+        --chart-3: 212 95% 68%;
         --chart-4: 210 98% 78%;
         --chart-5: 212 97% 87%;
+
+        --color-1: var(--color-1-sapphire);
+        --color-2: var(--color-2-sapphire);
+        --color-3: var(--color-3-sapphire);
+        --color-4: var(--color-4-sapphire);
+        --color-5: var(--color-5-sapphire);
     }
     .sapphire.dark {
         --background: 240 10% 3.9%;
@@ -255,8 +297,8 @@
         --input: 240 3.7% 15.9%;
         --ring: 221.2 83.2% 53.3%;
         --chart-1: 221.2 83.2% 53.3%;
-        --chart-2: 212 95% 68%;
-        --chart-3: 216 92% 60%;
+        --chart-2: 216 92% 60%;
+        --chart-3: 212 95% 68%;
         --chart-4: 210 98% 78%;
         --chart-5: 212 97% 87%;
     }
@@ -282,10 +324,16 @@
         --input: 240 5.9% 90%;
         --ring: 346.8 77.2% 49.8%;
         --chart-1: 347 77% 50%;
-        --chart-2: 352 83% 91%;
+        --chart-2: 349 77% 62%;
         --chart-3: 350 80% 72%;
         --chart-4: 351 83% 82%;
-        --chart-5: 349 77% 62%;
+        --chart-5: 352 83% 91%;
+
+        --color-1: var(--color-1-ruby);
+        --color-2: var(--color-2-ruby);
+        --color-3: var(--color-3-ruby);
+        --color-4: var(--color-4-ruby);
+        --color-5: var(--color-5-ruby);
     }
     .ruby.dark {
         --background: 240 10% 3.9%;
@@ -334,11 +382,17 @@
         --border: 240 5.9% 90%;
         --input: 240 5.9% 90%;
         --ring: 142 86% 28%;
-        --chart-1: 139 65% 20%;
-        --chart-2: 140 74% 44%;
-        --chart-3: 142 88% 28%;
-        --chart-4: 137 55% 15%;
-        --chart-5: 141 40% 9%;
+        --chart-1: 142 88% 28%;
+        --chart-2: 140 58% 40%;
+        --chart-3: 140 56% 51%;
+        --chart-4: 140 83% 80%;
+        --chart-5: 140 83% 91%;
+
+        --color-1: var(--color-1-emerald);
+        --color-2: var(--color-2-emerald);
+        --color-3: var(--color-3-emerald);
+        --color-4: var(--color-4-emerald);
+        --color-5: var(--color-5-emerald);
     }
     .emerald.dark {
         --background: 240 10% 3.9%;
@@ -361,10 +415,10 @@
         --input: 240 3.7% 15.9%;
         --ring: 142 86% 28%;
         --chart-1: 142 88% 28%;
-        --chart-2: 139 65% 20%;
-        --chart-3: 140 74% 24%;
-        --chart-4: 137 55% 15%;
-        --chart-5: 141 40% 9%;
+        --chart-2: 140 58% 40%;
+        --chart-3: 140 56% 51%;
+        --chart-4: 140 83% 80%;
+        --chart-5: 140 83% 91%;
     }
 
     .daylight {
@@ -392,6 +446,12 @@
         --chart-3: 28 40% 40%;
         --chart-4: 31 41% 48%;
         --chart-5: 35 43% 53%;
+
+        --color-1: var(--color-1-daylight);
+        --color-2: var(--color-2-daylight);
+        --color-3: var(--color-3-daylight);
+        --color-4: var(--color-4-daylight);
+        --color-5: var(--color-5-daylight);
     }
     .daylight.dark {
         --background: 36 39% 12%;
@@ -445,6 +505,12 @@
         --chart-3: 240 1% 42%;
         --chart-4: 240 1% 58%;
         --chart-5: 240 2% 74%;
+
+        --color-1: var(--color-1-midnight);
+        --color-2: var(--color-2-midnight);
+        --color-3: var(--color-3-midnight);
+        --color-4: var(--color-4-midnight);
+        --color-5: var(--color-5-midnight);
     }
     .midnight.dark {
         --background: 240 5% 6%;
@@ -471,6 +537,186 @@
         --chart-3: 240 1% 58%;
         --chart-4: 240 1% 42%;
         --chart-5: 240 2% 26%;
+    }
+
+    .coral {
+        --background: 0 0% 100%;
+        --foreground: 20 14.3% 4.1%;
+        --card: 0 0% 100%;
+        --card-foreground: 20 14.3% 4.1%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 20 14.3% 4.1%;
+        --primary: 24.6 95% 53.1%;
+        --primary-foreground: 60 9.1% 97.8%;
+        --secondary: 60 4.8% 95.9%;
+        --secondary-foreground: 24 9.8% 10%;
+        --muted: 60 4.8% 95.9%;
+        --muted-foreground: 25 5.3% 44.7%;
+        --accent: 60 4.8% 95.9%;
+        --accent-foreground: 24 9.8% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 60 9.1% 97.8%;
+        --border: 20 5.9% 90%;
+        --input: 20 5.9% 90%;
+        --ring: 24.6 95% 53.1%;
+        --radius: 0.5rem;
+        --chart-1: 24 77% 50%;
+        --chart-2: 24 77% 62%;
+        --chart-3: 24 80% 72%;
+        --chart-4: 24 83% 82%;
+        --chart-5: 24 83% 91%;
+
+        --color-1: var(--color-1-coral);
+        --color-2: var(--color-2-coral);
+        --color-3: var(--color-3-coral);
+        --color-4: var(--color-4-coral);
+        --color-5: var(--color-5-coral);
+    }
+    .coral.dark {
+        --background: 20 14.3% 4.1%;
+        --foreground: 60 9.1% 97.8%;
+        --card: 20 14.3% 4.1%;
+        --card-foreground: 60 9.1% 97.8%;
+        --popover: 20 14.3% 4.1%;
+        --popover-foreground: 60 9.1% 97.8%;
+        --primary: 20.5 90.2% 48.2%;
+        --primary-foreground: 60 9.1% 97.8%;
+        --secondary: 12 6.5% 15.1%;
+        --secondary-foreground: 60 9.1% 97.8%;
+        --muted: 12 6.5% 15.1%;
+        --muted-foreground: 24 5.4% 63.9%;
+        --accent: 12 6.5% 15.1%;
+        --accent-foreground: 60 9.1% 97.8%;
+        --destructive: 0 72.2% 50.6%;
+        --destructive-foreground: 60 9.1% 97.8%;
+        --border: 12 6.5% 15.1%;
+        --input: 12 6.5% 15.1%;
+        --ring: 20.5 90.2% 48.2%;
+        --chart-1: 24 77% 50%;
+        --chart-2: 24 77% 62%;
+        --chart-3: 24 80% 72%;
+        --chart-4: 24 83% 82%;
+        --chart-5: 24 83% 91%;
+    }
+
+    .amber {
+        --background: 0 0% 100%;
+        --foreground: 20 14.3% 4.1%;
+        --card: 0 0% 100%;
+        --card-foreground: 20 14.3% 4.1%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 20 14.3% 4.1%;
+        --primary: 47.9 95.8% 53.1%;
+        --primary-foreground: 26 83.3% 14.1%;
+        --secondary: 60 4.8% 95.9%;
+        --secondary-foreground: 24 9.8% 10%;
+        --muted: 60 4.8% 95.9%;
+        --muted-foreground: 25 5.3% 44.7%;
+        --accent: 60 4.8% 95.9%;
+        --accent-foreground: 24 9.8% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 60 9.1% 97.8%;
+        --border: 20 5.9% 90%;
+        --input: 20 5.9% 90%;
+        --ring: 20 14.3% 4.1%;
+        --radius: 0.5rem;
+        --chart-1: 41 77% 50%;
+        --chart-2: 43 77% 62%;
+        --chart-3: 42 80% 72%;
+        --chart-4: 38 83% 82%;
+        --chart-5: 41 83% 91%;
+
+        --color-1: var(--color-1-amber);
+        --color-2: var(--color-2-amber);
+        --color-3: var(--color-3-amber);
+        --color-4: var(--color-4-amber);
+        --color-5: var(--color-5-amber);
+    }
+    .amber.dark {
+        --background: 20 14.3% 4.1%;
+        --foreground: 60 9.1% 97.8%;
+        --card: 20 14.3% 4.1%;
+        --card-foreground: 60 9.1% 97.8%;
+        --popover: 20 14.3% 4.1%;
+        --popover-foreground: 60 9.1% 97.8%;
+        --primary: 47.9 95.8% 53.1%;
+        --primary-foreground: 26 83.3% 14.1%;
+        --secondary: 12 6.5% 15.1%;
+        --secondary-foreground: 60 9.1% 97.8%;
+        --muted: 12 6.5% 15.1%;
+        --muted-foreground: 24 5.4% 63.9%;
+        --accent: 12 6.5% 15.1%;
+        --accent-foreground: 60 9.1% 97.8%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 60 9.1% 97.8%;
+        --border: 12 6.5% 15.1%;
+        --input: 12 6.5% 15.1%;
+        --ring: 35.5 91.7% 32.9%;
+        --chart-1: 41 77% 50%;
+        --chart-2: 43 77% 62%;
+        --chart-3: 42 80% 72%;
+        --chart-4: 38 83% 82%;
+        --chart-5: 41 83% 91%;
+    }
+
+    .amethyst {
+        --background: 0 0% 100%;
+        --foreground: 224 71.4% 4.1%;
+        --card: 0 0% 100%;
+        --card-foreground: 224 71.4% 4.1%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 224 71.4% 4.1%;
+        --primary: 262.1 83.3% 57.8%;
+        --primary-foreground: 210 20% 98%;
+        --secondary: 220 14.3% 95.9%;
+        --secondary-foreground: 220.9 39.3% 11%;
+        --muted: 220 14.3% 95.9%;
+        --muted-foreground: 220 8.9% 46.1%;
+        --accent: 220 14.3% 95.9%;
+        --accent-foreground: 220.9 39.3% 11%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 20% 98%;
+        --border: 220 13% 91%;
+        --input: 220 13% 91%;
+        --ring: 262.1 83.3% 57.8%;
+        --radius: 0.5rem;
+        --chart-1: 273 77% 50%;
+        --chart-2: 273 77% 62%;
+        --chart-3: 273 80% 72%;
+        --chart-4: 273 83% 82%;
+        --chart-5: 273 83% 91%;
+
+        --color-1: var(--color-1-amethyst);
+        --color-2: var(--color-2-amethyst);
+        --color-3: var(--color-3-amethyst);
+        --color-4: var(--color-4-amethyst);
+        --color-5: var(--color-5-amethyst);
+    }
+    .amethyst.dark {
+        --background: 224 71.4% 4.1%;
+        --foreground: 210 20% 98%;
+        --card: 224 71.4% 4.1%;
+        --card-foreground: 210 20% 98%;
+        --popover: 224 71.4% 4.1%;
+        --popover-foreground: 210 20% 98%;
+        --primary: 263.4 70% 50.4%;
+        --primary-foreground: 210 20% 98%;
+        --secondary: 215 27.9% 16.9%;
+        --secondary-foreground: 210 20% 98%;
+        --muted: 215 27.9% 16.9%;
+        --muted-foreground: 217.9 10.6% 64.9%;
+        --accent: 215 27.9% 16.9%;
+        --accent-foreground: 210 20% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 20% 98%;
+        --border: 215 27.9% 16.9%;
+        --input: 215 27.9% 16.9%;
+        --ring: 263.4 70% 50.4%;
+        --chart-1: 273 77% 50%;
+        --chart-2: 273 77% 62%;
+        --chart-3: 273 80% 72%;
+        --chart-4: 273 83% 82%;
+        --chart-5: 273 83% 91%;
     }
 }
 

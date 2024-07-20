@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { initializeSession } from "@/utils/sessionUtils";
 import FlowIconLabel from "@/components/sessions/flow";
 import { flows } from "@/models/session";
+import { TimePicker12 } from "@/components/time-picker/time-picker-12h";
 
 export default function NewSession() {
     const { user, setUser } = useUser();
@@ -36,6 +37,8 @@ export default function NewSession() {
     const taskInputRef = useRef<HTMLButtonElement>(null);
 
     const [sessionFlow, setSessionFlow] = useState<string>("");
+    const [start, setStart] = useState<Date>();
+    const [end, setEnd] = useState<Date>();
 
     const tasks =
         user?.projects
@@ -46,6 +49,8 @@ export default function NewSession() {
         const newSession = initializeSession();
         setSession(newSession);
         setSessionFlow(newSession.flow);
+        setStart(newSession.start);
+        setEnd(newSession.end!);
         const taskId = router.query.taskId as string;
         if (taskId) {
             const task =
@@ -97,6 +102,16 @@ export default function NewSession() {
                 </main>
             </div>
         );
+    }
+
+    function handleStartChange(date: Date | undefined): void {
+        setStart(date);
+        handleInputChange("start", date);
+    }
+
+    function handleEndChange(date: Date | undefined): void {
+        setEnd(date);
+        handleInputChange("end", date);
     }
 
     return (
@@ -258,6 +273,86 @@ export default function NewSession() {
                                                     ))}
                                                 </SelectContent>
                                             </Select>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card x-chunk="dashboard-07-chunk-3">
+                                <CardHeader>
+                                    <CardTitle>
+                                        <div className="flex items-center justify-between">
+                                            <div>Session Start Time</div>
+                                            <HoverCard>
+                                                <HoverCardTrigger asChild>
+                                                    <BadgeInfo className="h-5 w-5 text-primary" />
+                                                </HoverCardTrigger>
+                                                <HoverCardContent className="w-80" align="end">
+                                                    <div className="flex justify-between space-x-4">
+                                                        <Avatar>
+                                                            <AvatarImage src="https://github.com/trueberryless.png" />
+                                                            <AvatarFallback>T</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className="space-y-1">
+                                                            <h4 className="text-sm font-semibold">
+                                                                @trueberryless
+                                                            </h4>
+                                                            <p className="text-sm">
+                                                                We automatically assume that the
+                                                                session lasted for three hours.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </HoverCardContent>
+                                            </HoverCard>
+                                        </div>
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="grid gap-6">
+                                        <div className="grid gap-3">
+                                            <TimePicker12
+                                                date={start}
+                                                setDate={handleStartChange}
+                                            />
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card x-chunk="dashboard-07-chunk-3">
+                                <CardHeader>
+                                    <CardTitle>
+                                        <div className="flex items-center justify-between">
+                                            <div>Session End Time</div>
+                                            <HoverCard>
+                                                <HoverCardTrigger asChild>
+                                                    <BadgeInfo className="h-5 w-5 text-primary" />
+                                                </HoverCardTrigger>
+                                                <HoverCardContent className="w-80" align="end">
+                                                    <div className="flex justify-between space-x-4">
+                                                        <Avatar>
+                                                            <AvatarImage src="https://github.com/trueberryless.png" />
+                                                            <AvatarFallback>T</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className="space-y-1">
+                                                            <h4 className="text-sm font-semibold">
+                                                                @trueberryless
+                                                            </h4>
+                                                            <p className="text-sm">
+                                                                We automatically assume that
+                                                                manually added sessions ended right
+                                                                now.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </HoverCardContent>
+                                            </HoverCard>
+                                        </div>
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="grid gap-6">
+                                        <div className="grid gap-3">
+                                            <TimePicker12 date={end} setDate={handleEndChange} />
                                         </div>
                                     </div>
                                 </CardContent>

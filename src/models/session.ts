@@ -21,22 +21,22 @@ export interface ExtendedSession extends Session {
 export const flows = [
     {
         value: "smooth",
-        label: "Smooth Flow",
+        label: "Smooth",
         icon: Rabbit,
     },
     {
         value: "good",
-        label: "Good Flow",
+        label: "Good",
         icon: PawPrint,
     },
     {
         value: "neutral",
-        label: "Neutral Flow",
+        label: "Neutral",
         icon: Fish,
     },
     {
         value: "disrupted",
-        label: "Disrupted Flow",
+        label: "Disrupted",
         icon: Snail,
     },
 ];
