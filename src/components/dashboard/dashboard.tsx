@@ -2,6 +2,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
+    Bell,
     ChevronLeft,
     ChevronRight,
     Copy,
@@ -75,14 +76,31 @@ import { CalendarDateRangePicker } from "./date-range-picker";
 import { Overview } from "./overview";
 import { RecentSales } from "./recent-sales";
 import { Component } from "./chart";
+import { addMonths } from "date-fns";
+import { DateRange } from "react-day-picker";
+import { downloadData } from "@/utils/export";
+import { toast } from "sonner";
+import { getSessionStorageItem, setSessionStorageItem } from "@/utils/sessionStorage";
 
 export default function Dashboard() {
     const { user, setUser } = useUser();
+
+    const [date, setDate] = React.useState<DateRange | undefined>({
+        from: addMonths(new Date(), -6),
+        to: new Date(),
+    });
+    const rangePickerInputRef = React.useRef<HTMLButtonElement>(null);
+
+    const [notificationsRead, setNotificationsRead] = React.useState<boolean>(false);
 
     useEffect(() => {
         const data = loadData();
         if (data) {
             setUser(data);
+        }
+
+        if (getSessionStorageItem("notificationsRead")) {
+            setNotificationsRead(true);
         }
     }, [setUser]);
 
@@ -97,6 +115,10 @@ export default function Dashboard() {
             (user.settings.exportReminder === "weekly" && lastExportedTime <= oneWeekAgo) ||
             (user.settings.exportReminder === "monthly" && lastExportedTime <= oneMonthAgo)
         );
+    };
+
+    const hasNotifications = (user: User) => {
+        return shouldShowExportNotification(user);
     };
 
     if (!user) {
@@ -115,28 +137,49 @@ export default function Dashboard() {
         )
         .slice(0, 5);
 
+    function handleDownload(event: any): void {
+        if (!date) {
+            toast("Please select a date range first");
+            console.log(rangePickerInputRef.current);
+            if (rangePickerInputRef.current) {
+                rangePickerInputRef.current.focus();
+            }
+            return;
+        }
+
+        downloadData(date);
+    }
+
+    function handleTabChange(value: string): void {
+        if (value === "notifications") {
+            setNotificationsRead(true);
+            setSessionStorageItem("notificationsRead", true);
+        }
+    }
+
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="flex-1 space-y-4 px-8">
-                    {shouldShowExportNotification(user) && (
-                        <Alert className="mb-12">
-                            <Terminal className="h-4 w-4" />
-                            <AlertTitle>Notification!</AlertTitle>
-                            <AlertDescription>
-                                We recommend exporting your data regularly. Head to Settings → Data
-                                Management to export your data now. Stay safe!
-                            </AlertDescription>
-                        </Alert>
-                    )}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
                         <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
                         <div className="flex items-center space-x-2">
-                            <CalendarDateRangePicker />
-                            <Button>Download</Button>
+                            <CalendarDateRangePicker
+                                date={date}
+                                setDate={setDate}
+                                ref={rangePickerInputRef}
+                            />
+                            {date == undefined && <Button disabled>Download</Button>}
+                            {date != undefined && (
+                                <Button onClick={handleDownload}>Download</Button>
+                            )}{" "}
                         </div>
                     </div>
-                    <Tabs defaultValue="overview" className="space-y-4">
+                    <Tabs
+                        defaultValue="overview"
+                        className="space-y-4"
+                        onValueChange={handleTabChange}
+                    >
                         <TabsList>
                             <TabsTrigger value="overview">Overview</TabsTrigger>
                             <TabsTrigger value="analytics" disabled>
@@ -145,8 +188,17 @@ export default function Dashboard() {
                             <TabsTrigger value="reports" disabled>
                                 Reports
                             </TabsTrigger>
-                            <TabsTrigger value="notifications" disabled>
-                                Notifications
+                            <TabsTrigger value="notifications">
+                                <div className="flex items-center space-x-2">
+                                    <span>Notifications</span>
+                                    {hasNotifications(user) && (
+                                        <Bell
+                                            className={`h-4 w-4 ${
+                                                !notificationsRead ? "text-primary" : ""
+                                            }`}
+                                        />
+                                    )}
+                                </div>
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview" className="space-y-4">
@@ -276,6 +328,28 @@ export default function Dashboard() {
                                     </CardContent>
                                 </Card>
                             </div>
+                        </TabsContent>
+                        <TabsContent value="notifications" className="space-y-4">
+                            {!hasNotifications(user) && (
+                                <Card className="col-span-4 lg:col-span-3">
+                                    <CardHeader>
+                                        <CardTitle>Feels lonely here</CardTitle>
+                                        <CardDescription>
+                                            You have no notifications.
+                                        </CardDescription>
+                                    </CardHeader>
+                                </Card>
+                            )}
+                            {shouldShowExportNotification(user) && (
+                                <Alert className="mb-12">
+                                    <Terminal className="h-4 w-4" />
+                                    <AlertTitle>Notification!</AlertTitle>
+                                    <AlertDescription>
+                                        We recommend exporting your data regularly. Head to Settings
+                                        → Data Management to export your data now. Stay safe!
+                                    </AlertDescription>
+                                </Alert>
+                            )}
                         </TabsContent>
                     </Tabs>
                 </div>

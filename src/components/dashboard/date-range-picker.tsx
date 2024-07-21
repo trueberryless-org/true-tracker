@@ -10,22 +10,27 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-export function CalendarDateRangePicker({ className }: React.HTMLAttributes<HTMLDivElement>) {
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: addMonths(new Date(), -6),
-        to: new Date(),
-    });
+interface CalendarDateRangePickerProps {
+    date: DateRange | undefined;
+    setDate: (date: DateRange | undefined) => void;
+}
 
+export const CalendarDateRangePicker = React.forwardRef<
+    HTMLButtonElement,
+    CalendarDateRangePickerProps
+>(({ date, setDate }, ref) => {
     return (
-        <div className={cn("grid gap-2", className)}>
+        <div className={cn("grid gap-2")}>
             <Popover>
                 <PopoverTrigger asChild>
                     <Button
                         id="date"
+                        ref={ref}
                         variant={"outline"}
                         className={cn(
                             "w-[260px] justify-start text-left font-normal",
-                            !date && "text-muted-foreground"
+                            !date && "text-muted-foreground",
+                            "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -56,4 +61,6 @@ export function CalendarDateRangePicker({ className }: React.HTMLAttributes<HTML
             </Popover>
         </div>
     );
-}
+});
+
+CalendarDateRangePicker.displayName = "CalendarDateRangePicker";

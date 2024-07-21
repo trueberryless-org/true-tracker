@@ -22,15 +22,23 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import ModeToggle from "./themes/mode-switch";
 import { useUser } from "./UserContext";
 import ThemeSwitcher from "./themes/theme-switcher";
+import { exportData } from "@/utils/export";
 
 export default function Navbar() {
-    const { user } = useUser();
+    const { user, setUser } = useUser();
     const router = useRouter();
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     if (!user) {
         return <div>Loading...</div>;
     }
+
+    const exportNow = () => {
+        user.settings.lastExported = new Date();
+        setUser(user);
+        saveData(user);
+        exportData();
+    };
 
     return (
         <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-10 z-50">
@@ -236,6 +244,7 @@ export default function Navbar() {
                         <DropdownMenuItem>
                             <Link href={"/settings"}>Settings</Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem onClick={exportNow}>Export data</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>

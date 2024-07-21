@@ -62,6 +62,7 @@ import { setTheme as setColorTheme, getCurrentTheme } from "@/utils/themes";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@radix-ui/react-separator";
 import { AutomationSettings, automationSettings } from "@/models/settings";
+import { formatDateTime } from "@/utils/dateUtils";
 
 const FormSchemaUsername = z.object({
     username: z.string().min(2, {
@@ -83,6 +84,8 @@ export default function Settings() {
     const [fileData, setFileData] = useState<any>(null);
     const [pictureData, setPictureData] = useState<any>(null);
     const [activeTab, setActiveTab] = useState("General");
+
+    const [exportedNow, setExportedNow] = React.useState<boolean>(false);
 
     useEffect(() => {
         const storedTab = getSessionStorageItem("activeTab");
@@ -262,6 +265,7 @@ export default function Settings() {
         setUser(user);
         saveData(user);
         exportData();
+        setExportedNow(true);
     };
 
     const groupedSettings = automationSettings.reduce(
@@ -572,6 +576,24 @@ export default function Settings() {
                                     <CardDescription>
                                         This will generate a JSON with your data, so you can import
                                         it again later.
+                                        <br />
+                                        {user.settings.lastExported !== null && (
+                                            <div>
+                                                The last time you exported your data was{" "}
+                                                {exportedNow
+                                                    ? "now"
+                                                    : new Date(
+                                                          user.settings.lastExported
+                                                      ).getDay() === new Date().getDay()
+                                                    ? "at "
+                                                    : "on "}
+                                                {!exportedNow &&
+                                                    formatDateTime(
+                                                        new Date(user.settings.lastExported)
+                                                    )}
+                                                .
+                                            </div>
+                                        )}
                                     </CardDescription>
                                 </CardHeader>
                                 <CardFooter className="border-t px-6 py-4">
