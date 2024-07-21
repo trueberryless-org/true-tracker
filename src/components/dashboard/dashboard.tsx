@@ -21,6 +21,7 @@ import {
     Terminal,
     Truck,
     Users2,
+    Workflow,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -81,6 +82,8 @@ import { DateRange } from "react-day-picker";
 import { downloadData } from "@/utils/export";
 import { toast } from "sonner";
 import { getSessionStorageItem, setSessionStorageItem } from "@/utils/sessionStorage";
+import { msToShortTime } from "@/utils/dateUtils";
+import { SessionsChart } from "./sessions-chart";
 
 export default function Dashboard() {
     const { user, setUser } = useUser();
@@ -182,12 +185,7 @@ export default function Dashboard() {
                     >
                         <TabsList>
                             <TabsTrigger value="overview">Overview</TabsTrigger>
-                            <TabsTrigger value="analytics" disabled>
-                                Analytics
-                            </TabsTrigger>
-                            <TabsTrigger value="reports" disabled>
-                                Reports
-                            </TabsTrigger>
+                            <TabsTrigger value="analytics">Analytics</TabsTrigger>
                             <TabsTrigger value="notifications">
                                 <div className="flex items-center space-x-2">
                                     <span>Notifications</span>
@@ -202,132 +200,259 @@ export default function Dashboard() {
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview" className="space-y-4">
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium text-primary">
-                                            Total Revenue
-                                        </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                        </svg>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-2xl font-bold">$45,231.89</div>
-                                        <p className="text-xs text-muted-foreground">
-                                            +20.1% from last month
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium text-primary">
-                                            Subscriptions
-                                        </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                            <circle cx="9" cy="7" r="4" />
-                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                                        </svg>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-2xl font-bold">+2350</div>
-                                        <p className="text-xs text-muted-foreground">
-                                            +180.1% from last month
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium text-primary">
-                                            Sales
-                                        </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <rect width="20" height="14" x="2" y="5" rx="2" />
-                                            <path d="M2 10h20" />
-                                        </svg>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-2xl font-bold">+12,234</div>
-                                        <p className="text-xs text-muted-foreground">
-                                            +19% from last month
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                                <Card>
-                                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                        <CardTitle className="text-sm font-medium text-primary">
-                                            Active Now
-                                        </CardTitle>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            className="h-4 w-4 text-muted-foreground"
-                                        >
-                                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                                        </svg>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div className="text-2xl font-bold">+573</div>
-                                        <p className="text-xs text-muted-foreground">
-                                            +201 since last hour
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                <Card className="col-span-4">
-                                    <CardHeader>
-                                        <CardTitle>Overview</CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="pl-2">
-                                        <Overview />
-                                    </CardContent>
-                                </Card>
+                            {date != undefined && (
+                                <div className="space-y-4">
+                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                        <Card>
+                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                <CardTitle className="text-sm font-medium text-primary">
+                                                    Working Time
+                                                </CardTitle>
+                                                <Workflow className="h-4 w-4 text-muted-foreground" />
+                                            </CardHeader>
+                                            <CardContent>
+                                                <div className="text-2xl font-bold">
+                                                    {msToShortTime(
+                                                        user.projects
+                                                            .flatMap((project) => project.tasks)
+                                                            .flatMap((task) => task.sessions)
+                                                            .filter((session) => {
+                                                                const sessionStart = new Date(
+                                                                    session.start
+                                                                ).getTime();
+                                                                const sessionEnd = session.end
+                                                                    ? new Date(
+                                                                          session.end
+                                                                      ).getTime()
+                                                                    : new Date().getTime();
+                                                                const isWithinDateRange = (
+                                                                    dateRange: DateRange
+                                                                ) => {
+                                                                    const from = dateRange.from
+                                                                        ? new Date(
+                                                                              dateRange.from
+                                                                          ).getTime()
+                                                                        : -Infinity;
+                                                                    const to = dateRange.to
+                                                                        ? new Date(
+                                                                              dateRange.to
+                                                                          ).setHours(
+                                                                              23,
+                                                                              59,
+                                                                              59,
+                                                                              999
+                                                                          )
+                                                                        : Infinity;
+                                                                    return (
+                                                                        sessionStart >= from &&
+                                                                        sessionEnd <= to
+                                                                    );
+                                                                };
+
+                                                                return isWithinDateRange(date!);
+                                                            })
+                                                            .reduce((acc, session) => {
+                                                                const sessionStart = new Date(
+                                                                    session.start
+                                                                ).getTime();
+                                                                const sessionEnd = session.end
+                                                                    ? new Date(
+                                                                          session.end
+                                                                      ).getTime()
+                                                                    : new Date().getTime();
+                                                                return (
+                                                                    acc +
+                                                                    (sessionEnd - sessionStart)
+                                                                );
+                                                            }, 0)
+                                                    )}
+                                                </div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {msToShortTime(
+                                                        user.projects
+                                                            .flatMap((project) => project.tasks)
+                                                            .flatMap((task) => task.sessions)
+                                                            .filter((session) => {
+                                                                const isWithinDateRange = (
+                                                                    date: string | number | Date,
+                                                                    dateRange: DateRange
+                                                                ) => {
+                                                                    const from = dateRange.from
+                                                                        ? new Date(
+                                                                              dateRange.from
+                                                                          ).getTime()
+                                                                        : -Infinity;
+                                                                    const to = dateRange.to
+                                                                        ? new Date(
+                                                                              new Date(
+                                                                                  dateRange.to
+                                                                              ).setHours(
+                                                                                  23,
+                                                                                  59,
+                                                                                  59,
+                                                                                  999
+                                                                              )
+                                                                          ).getTime()
+                                                                        : Infinity;
+                                                                    const sessionDate = new Date(
+                                                                        date
+                                                                    ).getTime();
+                                                                    return (
+                                                                        sessionDate >= from &&
+                                                                        sessionDate <= to
+                                                                    );
+                                                                };
+
+                                                                return (
+                                                                    isWithinDateRange(
+                                                                        session.start,
+                                                                        date
+                                                                    ) && session.flow == "smooth"
+                                                                );
+                                                            })
+                                                            .reduce((acc, session) => {
+                                                                if (!session.end) {
+                                                                    return (
+                                                                        acc +
+                                                                        new Date().getTime() -
+                                                                        new Date(
+                                                                            session.start
+                                                                        ).getTime()
+                                                                    );
+                                                                }
+                                                                return (
+                                                                    acc +
+                                                                    (new Date(
+                                                                        session.end
+                                                                    ).getTime() -
+                                                                        new Date(
+                                                                            session.start
+                                                                        ).getTime())
+                                                                );
+                                                            }, 0)
+                                                    )}{" "}
+                                                    working really smooth
+                                                </p>
+                                            </CardContent>
+                                        </Card>
+                                        <Card>
+                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                <CardTitle className="text-sm font-medium text-primary">
+                                                    Subscriptions
+                                                </CardTitle>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    className="h-4 w-4 text-muted-foreground"
+                                                >
+                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                                    <circle cx="9" cy="7" r="4" />
+                                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                                                </svg>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <div className="text-2xl font-bold">+2350</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    +180.1% from last month
+                                                </p>
+                                            </CardContent>
+                                        </Card>
+                                        <Card>
+                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                <CardTitle className="text-sm font-medium text-primary">
+                                                    Sales
+                                                </CardTitle>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    className="h-4 w-4 text-muted-foreground"
+                                                >
+                                                    <rect
+                                                        width="20"
+                                                        height="14"
+                                                        x="2"
+                                                        y="5"
+                                                        rx="2"
+                                                    />
+                                                    <path d="M2 10h20" />
+                                                </svg>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <div className="text-2xl font-bold">+12,234</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    +19% from last month
+                                                </p>
+                                            </CardContent>
+                                        </Card>
+                                        <Card>
+                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                <CardTitle className="text-sm font-medium text-primary">
+                                                    Active Now
+                                                </CardTitle>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    className="h-4 w-4 text-muted-foreground"
+                                                >
+                                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                                                </svg>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <div className="text-2xl font-bold">+573</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    +201 since last hour
+                                                </p>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                                        <Card className="col-span-4">
+                                            <CardHeader>
+                                                <CardTitle>Overview</CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="pl-2">
+                                                <Overview />
+                                            </CardContent>
+                                        </Card>
+                                        <Card className="col-span-4 lg:col-span-3">
+                                            <CardHeader>
+                                                <CardTitle>Recent Sales</CardTitle>
+                                                <CardDescription>
+                                                    You made 265 sales this month.
+                                                </CardDescription>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <RecentSales />
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </div>
+                            )}
+                            {date == undefined && (
                                 <Card className="col-span-4 lg:col-span-3">
                                     <CardHeader>
-                                        <CardTitle>Recent Sales</CardTitle>
+                                        <CardTitle>Life is short</CardTitle>
                                         <CardDescription>
-                                            You made 265 sales this month.
+                                            Please select a date range first.
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent>
-                                        <RecentSales />
-                                    </CardContent>
                                 </Card>
-                            </div>
+                            )}
                         </TabsContent>
                         <TabsContent value="notifications" className="space-y-4">
                             {!hasNotifications(user) && (
@@ -335,7 +460,10 @@ export default function Dashboard() {
                                     <CardHeader>
                                         <CardTitle>Feels lonely here</CardTitle>
                                         <CardDescription>
-                                            You have no notifications.
+                                            You have no notifications. If you had notifications,
+                                            there would be a{" "}
+                                            <Bell className="h-4 w-4 inline-block" /> icon right
+                                            next to the &quot;Notifications&quot; tab.
                                         </CardDescription>
                                     </CardHeader>
                                 </Card>
