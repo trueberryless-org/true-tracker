@@ -1,7 +1,7 @@
 import Project from "./project";
 import Settings from "./settings";
 import Version from "./version";
-import Visit from "./visits";
+import Visit from "./visit";
 
 export default interface User {
     id: string;

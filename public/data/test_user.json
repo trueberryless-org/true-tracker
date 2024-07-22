@@ -1,0 +1,400 @@
+{
+    "id": "4555085f-8389-4b24-b449-a3d7159d77b9",
+    "username": "trueberryless",
+    "projects": [
+        {
+            "id": "20f28c0c-f564-4789-be8e-132449e7712f",
+            "name": "Time Tracking Tool",
+            "createdAt": "2024-07-22T20:21:15.094Z",
+            "lastUpdatedAt": "2024-07-22T20:22:38.669Z",
+            "archivedAt": null,
+            "status": "in progress",
+            "priority": "high",
+            "tasks": [
+                {
+                    "id": "7ee7cccc-0739-4926-9e97-cc3f008d9631",
+                    "name": "Setup Next.js",
+                    "status": "done",
+                    "priority": "high",
+                    "sessions": [
+                        {
+                            "id": "a327e336-b213-468d-9dfa-f2e739bb73a4",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:26:13.618Z",
+                            "end": "2024-07-22T20:27:17.213Z"
+                        },
+                        {
+                            "id": "261ecf9d-16eb-4c38-a910-3951be3ec06f",
+                            "flow": "good",
+                            "start": "2024-07-22T20:26:13.289Z",
+                            "end": "2024-07-22T20:26:13.457Z"
+                        },
+                        {
+                            "id": "3e35f4ee-a320-459b-a8a0-42c6aca39321",
+                            "flow": "good",
+                            "start": "2024-07-22T20:26:12.959Z",
+                            "end": "2024-07-22T20:26:13.117Z"
+                        },
+                        {
+                            "id": "6a13f9e6-7c76-47f5-b31c-58f14ebeba22",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:26:12.613Z",
+                            "end": "2024-07-22T20:26:12.794Z"
+                        },
+                        {
+                            "id": "bac1f9b7-2336-4d55-b48e-71c95dca182d",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:26:12.209Z",
+                            "end": "2024-07-22T20:26:12.412Z"
+                        },
+                        {
+                            "id": "48fc6fd8-cfaa-40dc-ab76-1308fb4f861d",
+                            "flow": "good",
+                            "start": "2024-07-22T20:26:11.653Z",
+                            "end": "2024-07-22T20:26:11.961Z"
+                        },
+                        {
+                            "id": "d9184505-7e60-4bf7-b794-be1c4c92b622",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:26:10.972Z",
+                            "end": "2024-07-22T20:26:11.348Z"
+                        },
+                        {
+                            "id": "943f5589-85b2-4a7d-88c3-c496f895c2e9",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:26:09.870Z",
+                            "end": "2024-07-22T20:26:10.565Z"
+                        },
+                        {
+                            "id": "7702d125-2620-483e-8152-69104a7ddcd8",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:24:21.067Z",
+                            "end": "2024-07-22T20:24:26.910Z"
+                        }
+                    ]
+                },
+                {
+                    "id": "f099f549-fc14-4168-8e23-ad69b774e0cc",
+                    "name": "Implement backend",
+                    "status": "done",
+                    "priority": "medium",
+                    "sessions": [
+                        {
+                            "id": "20f4ed3a-26d3-4274-89aa-9fd70fc953b4",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:27:29.999Z",
+                            "end": "2024-07-22T20:27:30.959Z"
+                        },
+                        {
+                            "id": "12630d9f-c21f-4a41-91bc-115d153a38f5",
+                            "flow": "good",
+                            "start": "2024-07-22T20:27:29.691Z",
+                            "end": "2024-07-22T20:27:29.850Z"
+                        },
+                        {
+                            "id": "e351de51-0987-455d-9ae4-5b8ac34dd184",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:27:29.399Z",
+                            "end": "2024-07-22T20:27:29.549Z"
+                        },
+                        {
+                            "id": "3012659d-1166-4b76-9c3a-4eefbeb848d9",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:27:29.084Z",
+                            "end": "2024-07-22T20:27:29.241Z"
+                        },
+                        {
+                            "id": "a73073bc-68e7-497b-9f67-ff6c84541307",
+                            "flow": "good",
+                            "start": "2024-07-22T20:27:28.770Z",
+                            "end": "2024-07-22T20:27:28.926Z"
+                        },
+                        {
+                            "id": "dda19338-c33f-4b60-9622-bf7c9ac8e7c4",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:27:28.469Z",
+                            "end": "2024-07-22T20:27:28.621Z"
+                        },
+                        {
+                            "id": "70c684eb-bf33-4715-b97b-e29850c9cf5b",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:27:28.146Z",
+                            "end": "2024-07-22T20:27:28.305Z"
+                        },
+                        {
+                            "id": "684fbeb3-4837-42d2-ad52-d09dda41afcb",
+                            "flow": "good",
+                            "start": "2024-07-22T20:27:27.839Z",
+                            "end": "2024-07-22T20:27:27.997Z"
+                        },
+                        {
+                            "id": "a06de21d-b2b9-48ca-bd40-947a17faea31",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:27:27.539Z",
+                            "end": "2024-07-22T20:27:27.689Z"
+                        }
+                    ]
+                },
+                {
+                    "id": "394281ee-804c-4c9c-9305-4ca3939bfeb8",
+                    "name": "Implement website",
+                    "status": "in progress",
+                    "priority": "low",
+                    "sessions": [
+                        {
+                            "id": "9c9d23a4-431c-486e-a599-66c432dd1a98",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:28:20.391Z",
+                            "end": "2024-07-22T20:28:20.781Z"
+                        },
+                        {
+                            "id": "aa976a93-2aa3-4f3f-a4fc-b38d636644c0",
+                            "flow": "good",
+                            "start": "2024-07-22T20:28:20.082Z",
+                            "end": "2024-07-22T20:28:20.249Z"
+                        },
+                        {
+                            "id": "b30ccd7a-e308-4bfe-a5df-83078058f411",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:28:19.776Z",
+                            "end": "2024-07-22T20:28:19.925Z"
+                        },
+                        {
+                            "id": "5ad67622-7315-4448-bd05-2bd8b48b8ce8",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:28:19.470Z",
+                            "end": "2024-07-22T20:28:19.618Z"
+                        },
+                        {
+                            "id": "71767183-6bfe-487a-814b-a8487eb9d242",
+                            "flow": "good",
+                            "start": "2024-07-22T20:28:19.160Z",
+                            "end": "2024-07-22T20:28:19.311Z"
+                        },
+                        {
+                            "id": "f1e40fe9-eb14-4c9d-8b45-7f94ed2c36a3",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:28:18.868Z",
+                            "end": "2024-07-22T20:28:19.003Z"
+                        },
+                        {
+                            "id": "c9864edf-dacf-4453-bfda-8c78fc1f99bb",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:28:18.568Z",
+                            "end": "2024-07-22T20:28:18.712Z"
+                        }
+                    ]
+                }
+            ],
+            "description": "A website which allows users to track their time for projects."
+        },
+        {
+            "id": "71c44307-5751-4e74-aee8-544a0d1968da",
+            "name": "Garden House",
+            "createdAt": "2024-07-22T20:29:09.260Z",
+            "lastUpdatedAt": "2024-07-22T20:29:55.222Z",
+            "archivedAt": null,
+            "status": "on hold",
+            "priority": "low",
+            "tasks": [
+                {
+                    "id": "d0991c9c-5669-4a5e-a62a-5435d205d367",
+                    "name": "Buy items",
+                    "status": "done",
+                    "priority": "high",
+                    "sessions": [
+                        {
+                            "id": "5b5c0075-37e2-4014-8d1b-d3ac2899286a",
+                            "flow": "good",
+                            "start": "2024-07-22T20:31:24.141Z",
+                            "end": "2024-07-22T20:31:49.808Z"
+                        },
+                        {
+                            "id": "c81ca47d-405c-476a-a156-85b4daedfe6c",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:31:23.856Z",
+                            "end": "2024-07-22T20:31:23.992Z"
+                        },
+                        {
+                            "id": "f566119e-ee11-4216-80ce-4a5174bca968",
+                            "flow": "good",
+                            "start": "2024-07-22T20:31:23.572Z",
+                            "end": "2024-07-22T20:31:23.706Z"
+                        },
+                        {
+                            "id": "7d9817bb-f35a-4ea9-bf02-c9023663d586",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:31:23.279Z",
+                            "end": "2024-07-22T20:31:23.414Z"
+                        }
+                    ]
+                },
+                {
+                    "id": "dc0e9618-1494-48cf-bc90-8abbe28b5b60",
+                    "name": "Organize machines",
+                    "status": "in progress",
+                    "priority": "low",
+                    "sessions": [
+                        {
+                            "id": "d64b6e77-7968-4f2c-bdf0-c4340eea21e1",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:31:58.191Z",
+                            "end": "2024-07-22T20:31:58.980Z"
+                        },
+                        {
+                            "id": "13af678f-0aef-480f-bf9e-1eed137da6f7",
+                            "flow": "good",
+                            "start": "2024-07-22T20:31:57.914Z",
+                            "end": "2024-07-22T20:31:58.049Z"
+                        },
+                        {
+                            "id": "74398a9d-bf1a-43b4-948d-88f0d9a2e446",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:31:57.622Z",
+                            "end": "2024-07-22T20:31:57.763Z"
+                        },
+                        {
+                            "id": "321b8b5c-f13c-441b-911c-0988a77dd91f",
+                            "flow": "good",
+                            "start": "2024-07-22T20:31:57.322Z",
+                            "end": "2024-07-22T20:31:57.471Z"
+                        },
+                        {
+                            "id": "97db135b-3b02-4609-b15d-2901fae63d3d",
+                            "flow": "good",
+                            "start": "2024-07-22T20:31:56.136Z",
+                            "end": "2024-07-22T20:31:57.171Z"
+                        }
+                    ]
+                },
+                {
+                    "id": "9301a37c-3af4-4a45-b546-35a607365bec",
+                    "name": "Assemble house",
+                    "status": "todo",
+                    "priority": "medium",
+                    "sessions": []
+                }
+            ],
+            "description": "Build a new garden house."
+        },
+        {
+            "id": "a14a6eed-d437-40ce-8dcd-6a8e4ae405e8",
+            "name": "Gym",
+            "createdAt": "2024-07-22T20:32:18.918Z",
+            "lastUpdatedAt": "2024-07-22T20:32:59.677Z",
+            "archivedAt": null,
+            "status": "planned",
+            "priority": "medium",
+            "tasks": [
+                {
+                    "id": "174d7c10-a225-4a57-a92e-e9cf4fd09cbf",
+                    "name": "Choose gym",
+                    "status": "canceled",
+                    "priority": "medium",
+                    "sessions": [
+                        {
+                            "id": "98d2b170-7acf-4341-a396-aaff2fef423d",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:35:25.388Z",
+                            "end": "2024-07-22T20:35:25.687Z"
+                        },
+                        {
+                            "id": "a7cd79ff-f40c-4b77-99a8-f3a1ab1c3889",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:35:24.886Z",
+                            "end": "2024-07-22T20:35:25.185Z"
+                        }
+                    ]
+                },
+                {
+                    "id": "e287daad-ef4b-46c0-ab68-5ba7257cabec",
+                    "name": "Subscribe to StayFit",
+                    "status": "done",
+                    "priority": "high",
+                    "sessions": [
+                        {
+                            "id": "116cbe51-2a7c-4e24-92fb-aef28b90baf7",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:35:47.632Z",
+                            "end": "2024-07-22T20:35:47.783Z"
+                        }
+                    ]
+                },
+                {
+                    "id": "70f72ac6-2e12-4a64-ba46-cd07370ad29c",
+                    "name": "Go on thursday morning",
+                    "status": "in progress",
+                    "priority": "high",
+                    "sessions": [
+                        {
+                            "id": "e95123c2-3ce5-459a-ba8a-7ddc1a67ae94",
+                            "flow": "disrupted",
+                            "start": "2024-07-22T20:34:34.357Z",
+                            "end": "2024-07-22T20:34:34.500Z"
+                        },
+                        {
+                            "id": "c1593753-5bd2-4702-b03b-44ef6d5285a6",
+                            "flow": "neutral",
+                            "start": "2024-07-22T20:34:34.080Z",
+                            "end": "2024-07-22T20:34:34.230Z"
+                        },
+                        {
+                            "id": "a5aa6cb4-96f8-44f6-942c-09e9ba0c1b0f",
+                            "flow": "good",
+                            "start": "2024-07-22T20:34:33.706Z",
+                            "end": "2024-07-22T20:34:33.931Z"
+                        },
+                        {
+                            "id": "82bc3ca3-a735-4227-a829-41bde82f2f31",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:34:33.263Z",
+                            "end": "2024-07-22T20:34:33.465Z"
+                        },
+                        {
+                            "id": "06c3842d-2884-4c81-a686-83cc3cddcb6f",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:34:32.933Z",
+                            "end": "2024-07-22T20:34:33.106Z"
+                        },
+                        {
+                            "id": "d391d55b-7d93-4afe-8857-98b870faee21",
+                            "flow": "smooth",
+                            "start": "2024-07-22T20:34:32.625Z",
+                            "end": "2024-07-22T20:34:32.782Z"
+                        },
+                        {
+                            "id": "4a53b3db-1789-44cc-a4cf-da7210599b36",
+                            "flow": "good",
+                            "start": "2024-07-22T20:34:32.108Z",
+                            "end": "2024-07-22T20:34:32.475Z"
+                        }
+                    ]
+                }
+            ],
+            "description": "Start working out in the gym regularly."
+        }
+    ],
+    "settings": {
+        "lastExported": "2024-07-22T20:35:59.505Z",
+        "exportReminder": "weekly",
+        "theme": "default",
+        "automation": {
+            "projectStatusKickoff": true
+        }
+    },
+    "visits": [
+        {
+            "id": "b34c55d6-17dc-4df0-b432-b181e9be0935",
+            "time": "2024-07-22T20:32:55.660Z"
+        },
+        {
+            "id": "462f68e2-eec7-4383-a669-f6dc353b390b",
+            "time": "2024-07-22T20:24:02.846Z"
+        }
+    ],
+    "version": {
+        "major": 0,
+        "minor": 3,
+        "patch": 0
+    }
+}

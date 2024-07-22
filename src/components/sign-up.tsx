@@ -31,6 +31,7 @@ import { saveData } from "@/utils/save";
 import { useState } from "react";
 import { importData } from "@/utils/import";
 import version from "@/constants/version";
+import { parseUser } from "@/utils/parseUtils";
 
 const FormSchema = z.object({
     username: z.string().min(2, {
@@ -92,6 +93,49 @@ export function SignUp() {
         setUser(newUser);
         saveData(newUser);
         toast('You sign up with the username "' + data.username + '".');
+    }
+
+    function getRandomDateWithinLast6Months() {
+        const now = new Date();
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(now.getMonth() - 6);
+        return new Date(
+            sixMonthsAgo.getTime() + Math.random() * (now.getTime() - sixMonthsAgo.getTime())
+        );
+    }
+
+    function getRandomSessionDuration() {
+        const minDuration = 5 * 60 * 1000; // 5 Minuten in Millisekunden
+        const maxDuration = 5 * 60 * 60 * 1000; // 5 Stunden in Millisekunden
+        return minDuration + Math.random() * (maxDuration - minDuration);
+    }
+
+    function tryTestData(event: any): void {
+        fetch("./data/test_user.json")
+            .then((res) => res.json())
+            .then((data) => {
+                var user = parseUser(data);
+
+                user.projects.forEach((project) => {
+                    project.createdAt = getRandomDateWithinLast6Months();
+                    project.lastUpdatedAt = getRandomDateWithinLast6Months();
+                });
+
+                user.projects.forEach((project) => {
+                    project.tasks.forEach((task) => {
+                        task.sessions.forEach((session) => {
+                            session.start = getRandomDateWithinLast6Months();
+                            session.end = new Date(
+                                session.start.getTime() + getRandomSessionDuration()
+                            );
+                        });
+                    });
+                });
+
+                setUser(user);
+                saveData(user);
+                toast('You can now test the application with the user "' + user.username + '".');
+            });
     }
 
     return (
@@ -159,9 +203,18 @@ export function SignUp() {
                                         onChange={saveFileTemp}
                                     />
                                 </div>
-                                <Button onClick={importNow} className="w-full">
-                                    Import user data
-                                </Button>
+                                <div className="grid gap-2 grid-cols-3">
+                                    <Button onClick={importNow} className="w-full col-span-2">
+                                        Import user data
+                                    </Button>
+                                    <Button
+                                        onClick={tryTestData}
+                                        className="w-full"
+                                        variant={"outline"}
+                                    >
+                                        Try test data
+                                    </Button>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

@@ -68,7 +68,7 @@ function formatDateToDate(date: Date): string {
 export const msToTime = (duration: number) => {
     let seconds = Math.floor((duration / 1000) % 60),
         minutes = Math.floor((duration / (1000 * 60)) % 60),
-        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+        hours = Math.floor(duration / (1000 * 60 * 60));
 
     // Initialize an array to store non-zero time components
     let timeComponents: string[] = [];
@@ -88,9 +88,10 @@ export const msToTime = (duration: number) => {
 };
 
 export const msToShortTime = (duration: number) => {
+    console.log(duration);
     let seconds = Math.floor((duration / 1000) % 60),
         minutes = Math.floor((duration / (1000 * 60)) % 60),
-        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+        hours = Math.floor(duration / (1000 * 60 * 60));
 
     // Initialize an array to store non-zero time components
     let timeComponents: string[] = [];
@@ -110,25 +111,29 @@ export const msToShortTime = (duration: number) => {
 };
 
 export const msToTimeHours = (duration: number) => {
-    let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+    let hours = Math.floor(duration / (1000 * 60 * 60));
     return `${hours}h`;
 };
 
 export const msToTimeMinutes = (duration: number) => {
-    let minutes = Math.floor((duration / (1000 * 60)) % 60);
+    let minutes = Math.floor(duration / (1000 * 60));
     return `${minutes}m`;
 };
 
 export const msToTimeSeconds = (duration: number) => {
-    let seconds = Math.floor((duration / 1000) % 60);
+    let seconds = Math.floor(duration / 1000);
     return `${seconds}s`;
 };
 
 export const msToTimeFitting = (duration: number) => {
-    let seconds = Math.floor((duration / 1000) % 60),
-        minutes = Math.floor((duration / (1000 * 60)) % 60),
-        hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+    let seconds = Math.floor(duration / 1000),
+        minutes = Math.floor(duration / (1000 * 60)),
+        hours = Math.floor(duration / (1000 * 60 * 60)),
+        days = Math.floor(duration / (1000 * 60 * 60 * 24));
 
+    if (days > 0) {
+        return `${days}d`;
+    }
     if (hours > 0) {
         return `${hours}h`;
     }
