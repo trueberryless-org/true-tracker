@@ -11,7 +11,6 @@ export function registerUpgradeFunction(
     fn: UpgradeFunction
 ) {
     const key = `${fromVersion.major}.${fromVersion.minor}.${fromVersion.patch}->${toVersion.major}.${toVersion.minor}.${toVersion.patch}`;
-    console.log(`Registering upgrade function: ${key}`);
     upgradeFunctions.set(key, fn);
 }
 
@@ -24,11 +23,9 @@ export function upgradeData(data: any, targetVersion: Version): User {
             throw new Error(`Keine nächste Version gefunden`);
             break;
         }
-        console.log("Upgrade functions:", Array.from(upgradeFunctions.entries()));
 
         const key = `${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch}->${nextVersion.major}.${nextVersion.minor}.${nextVersion.patch}`;
         const upgradeFunction = upgradeFunctions.get(key);
-        console.log(upgradeFunction);
         if (!upgradeFunction) {
             throw new Error(
                 `Keine Upgrade-Funktion gefunden für Version ${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch} -> ${nextVersion.major}.${nextVersion.minor}.${nextVersion.patch}`

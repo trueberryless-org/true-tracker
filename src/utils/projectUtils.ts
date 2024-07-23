@@ -65,7 +65,7 @@ export function calcStatusComparison(user: User | null | undefined, status: stri
     }
 }
 
-export const getMostRecentSessionDate = (project: Project) => {
+export const getMostRecentSessionDateOfProject = (project: Project) => {
     const dates = project.tasks.flatMap((task) =>
         task.sessions.map((session) => new Date(session.end ?? session.start).getTime())
     );

@@ -132,6 +132,18 @@ export function SignUp() {
                     });
                 });
 
+                // Random theme
+                const themes: (
+                    | "default"
+                    | "sapphire"
+                    | "ruby"
+                    | "emerald"
+                    | "coral"
+                    | "amber"
+                    | "amethyst"
+                )[] = ["default", "sapphire", "ruby", "emerald", "coral", "amber", "amethyst"];
+                user.settings.theme = themes[Math.floor(Math.random() * themes.length)];
+
                 setUser(user);
                 saveData(user);
                 toast('You can now test the application with the user "' + user.username + '".');

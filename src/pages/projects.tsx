@@ -51,7 +51,7 @@ import {
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { getMostRecentSessionDate } from "@/utils/projectUtils";
+import { getMostRecentSessionDateOfProject } from "@/utils/projectUtils";
 import router from "next/router";
 import { ExtendedProject } from "@/models/project";
 
@@ -79,7 +79,7 @@ export default function Projects() {
             return {
                 ...project,
                 projectIsArchived: project.archivedAt ? true : false,
-                mostRecentDate: getMostRecentSessionDate(project),
+                mostRecentDate: getMostRecentSessionDateOfProject(project),
                 someSessionIsRunning: project.tasks.some((task) =>
                     task.sessions.some((s) => s.end === null)
                 ),

@@ -91,7 +91,6 @@ function getAllIntervals(start: Date, end: Date, interval: "month" | "week" | "d
             intervals = eachDayOfInterval({ start, end }).map((date) => format(date, "yyyy-MM-dd"));
             break;
     }
-    console.log(intervals);
     return intervals;
 }
 

@@ -31,8 +31,12 @@ export default function Home() {
     return (
         <div>
             <Dashboard />
-            <h1>User Data</h1>
-            <pre>{JSON.stringify(user, null, 2)}</pre>
+            {process.env.NODE_ENV === "development" && (
+                <>
+                    <h1>User Data</h1>
+                    <pre>{JSON.stringify(user, null, 2)}</pre>
+                </>
+            )}
         </div>
     );
 }

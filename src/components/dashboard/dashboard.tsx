@@ -8,6 +8,7 @@ import {
     Copy,
     CreditCard,
     File,
+    History,
     Home,
     LineChart,
     ListFilter,
@@ -72,18 +73,20 @@ import { useUser } from "../UserContext";
 import { loadData } from "@/utils/load";
 import { useEffect } from "react";
 import { Task, User } from "@/models";
-import { getMostRecentSessionDate } from "@/utils/taskUtils";
+import { getMostRecentSessionDateOfTask } from "@/utils/taskUtils";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { Overview } from "./overview";
-import { RecentSales } from "./recent-sales";
+import { RecentSessions } from "./recent-sessions";
 import { Component } from "./chart";
-import { addWeeks, addMonths } from "date-fns";
+import { addWeeks, addMonths, isToday, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { downloadData } from "@/utils/export";
 import { toast } from "sonner";
 import { getSessionStorageItem, setSessionStorageItem } from "@/utils/sessionStorage";
-import { msToShortTime } from "@/utils/dateUtils";
+import { formatDateToDistanceFromNow, msToShortTime } from "@/utils/dateUtils";
 import { SessionsChart } from "./sessions-chart";
+import { RecentTasks } from "./recent-tasks";
+import { getMostRecentSessionDateOfUser } from "@/utils/userUtils";
 
 export default function Dashboard() {
     const { user, setUser } = useUser();
@@ -107,6 +110,14 @@ export default function Dashboard() {
         }
     }, [setUser]);
 
+    const niceFormattedDate = (date: Date) => {
+        const formattedDate = isToday(date)
+            ? format(date, "hh:mm aa") // 08:15 PM
+            : format(date, "MMMM d"); // July 4
+
+        return <div>{formattedDate}</div>;
+    };
+
     const shouldShowExportNotification = (user: User) => {
         const oneDayAgo = new Date(new Date().setDate(new Date().getDate() - 1)).getTime();
         const oneWeekAgo = new Date(new Date().setDate(new Date().getDate() - 7)).getTime();
@@ -128,10 +139,15 @@ export default function Dashboard() {
         return;
     }
 
+    console.log(getMostRecentSessionDateOfUser(user));
+
     const recentTasks: Task[] = user.projects
         .flatMap((project: any) =>
             project.tasks
-                .map((task: any) => ({ ...task, mostRecentDate: getMostRecentSessionDate(task) }))
+                .map((task: any) => ({
+                    ...task,
+                    mostRecentDate: getMostRecentSessionDateOfTask(task),
+                }))
                 .sort(
                     (task1: { mostRecentDate: Date }, task2: { mostRecentDate: Date }) =>
                         new Date(task2.mostRecentDate).valueOf() -
@@ -143,7 +159,6 @@ export default function Dashboard() {
     function handleDownload(event: any): void {
         if (!date) {
             toast("Please select a date range first");
-            console.log(rangePickerInputRef.current);
             if (rangePickerInputRef.current) {
                 rangePickerInputRef.current.focus();
             }
@@ -431,27 +446,20 @@ export default function Dashboard() {
                                         <Card>
                                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                                 <CardTitle className="text-sm font-medium text-primary">
-                                                    Subscriptions
+                                                    Last time working
                                                 </CardTitle>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    className="h-4 w-4 text-muted-foreground"
-                                                >
-                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                                    <circle cx="9" cy="7" r="4" />
-                                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                                                </svg>
+                                                <History className="h-4 w-4" />
                                             </CardHeader>
                                             <CardContent>
-                                                <div className="text-2xl font-bold">+2350</div>
+                                                <div className="text-2xl font-bold">
+                                                    {niceFormattedDate(
+                                                        getMostRecentSessionDateOfUser(user)
+                                                    )}
+                                                </div>
                                                 <p className="text-xs text-muted-foreground">
-                                                    +180.1% from last month
+                                                    {formatDateToDistanceFromNow(
+                                                        getMostRecentSessionDateOfUser(user)
+                                                    )}
                                                 </p>
                                             </CardContent>
                                         </Card>
@@ -524,15 +532,149 @@ export default function Dashboard() {
                                         </Card>
                                         <Card className="col-span-4 lg:col-span-3">
                                             <CardHeader>
-                                                <CardTitle>Recent Sales</CardTitle>
+                                                <CardTitle>Recent Tasks</CardTitle>
                                                 <CardDescription>
-                                                    You made 265 sales this month.
+                                                    You worked on{" "}
+                                                    {
+                                                        user.projects
+                                                            .flatMap((project) => project.tasks)
+                                                            .filter((task) =>
+                                                                task.sessions.some((session) => {
+                                                                    return (
+                                                                        new Date(
+                                                                            session.end ??
+                                                                                session.start
+                                                                        ).getTime() >=
+                                                                            new Date(
+                                                                                date.from!
+                                                                            ).getTime() &&
+                                                                        new Date(
+                                                                            session.end ??
+                                                                                session.start
+                                                                        ).getTime() <=
+                                                                            new Date(
+                                                                                date.to!
+                                                                            ).setHours(
+                                                                                23,
+                                                                                59,
+                                                                                59,
+                                                                                999
+                                                                            )
+                                                                    );
+                                                                })
+                                                            ).length
+                                                    }{" "}
+                                                    task
+                                                    {user.projects
+                                                        .flatMap((project) => project.tasks)
+                                                        .filter((task) =>
+                                                            task.sessions.some((session) => {
+                                                                return (
+                                                                    new Date(
+                                                                        session.end ?? session.start
+                                                                    ).getTime() >=
+                                                                        new Date(
+                                                                            date.from!
+                                                                        ).getTime() &&
+                                                                    new Date(
+                                                                        session.end ?? session.start
+                                                                    ).getTime() <=
+                                                                        new Date(date.to!).setHours(
+                                                                            23,
+                                                                            59,
+                                                                            59,
+                                                                            999
+                                                                        )
+                                                                );
+                                                            })
+                                                        ).length == 1
+                                                        ? ""
+                                                        : "s"}{" "}
+                                                    between {format(date.from!, "MMMM d")} and{" "}
+                                                    {format(
+                                                        date.to ??
+                                                            new Date(
+                                                                date.from!.setHours(23, 59, 59, 999)
+                                                            ),
+                                                        "MMMM d"
+                                                    )}
+                                                    .
                                                 </CardDescription>
                                             </CardHeader>
                                             <CardContent>
-                                                <RecentSales />
+                                                <RecentTasks dateRange={date} limit={6} />
                                             </CardContent>
-                                            .
+                                        </Card>
+                                    </div>
+                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                                        <Card className="col-span-4 lg:col-span-3">
+                                            <CardHeader>
+                                                <CardTitle>Recent Sessions</CardTitle>
+                                                <CardDescription>
+                                                    You started{" "}
+                                                    {
+                                                        user.projects
+                                                            .flatMap((project) =>
+                                                                project.tasks.flatMap(
+                                                                    (task) => task.sessions
+                                                                )
+                                                            )
+                                                            .filter((session) => {
+                                                                const monthStart = new Date(
+                                                                    new Date().getFullYear(),
+                                                                    new Date().getMonth(),
+                                                                    1,
+                                                                    0,
+                                                                    0,
+                                                                    0
+                                                                );
+
+                                                                return (
+                                                                    new Date(
+                                                                        session.start
+                                                                    ).getTime() >
+                                                                    monthStart.getTime()
+                                                                );
+                                                            }).length
+                                                    }{" "}
+                                                    session
+                                                    {user.projects
+                                                        .flatMap((project) =>
+                                                            project.tasks.flatMap(
+                                                                (task) => task.sessions
+                                                            )
+                                                        )
+                                                        .filter((session) => {
+                                                            const monthStart = new Date(
+                                                                new Date().getFullYear(),
+                                                                new Date().getMonth(),
+                                                                1,
+                                                                0,
+                                                                0,
+                                                                0
+                                                            );
+
+                                                            return (
+                                                                new Date(session.start).getTime() >
+                                                                monthStart.getTime()
+                                                            );
+                                                        }).length == 1
+                                                        ? ""
+                                                        : "s"}{" "}
+                                                    this month.
+                                                </CardDescription>
+                                            </CardHeader>
+                                            <CardContent>
+                                                <RecentSessions dateRange={date} />
+                                            </CardContent>
+                                        </Card>
+                                        <Card className="col-span-4">
+                                            <CardHeader>
+                                                <CardTitle>Overview</CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="pl-2">
+                                                <Overview />
+                                            </CardContent>
                                         </Card>
                                     </div>
                                 </div>

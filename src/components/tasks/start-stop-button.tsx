@@ -56,7 +56,9 @@ const StartStopButton: React.FC<TaskCardProps> = ({
         }
     }, [task]);
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (event: any) => {
+        event.preventDefault();
+        event.stopPropagation();
         if (isRunning) {
             // Stop the current Session
             if (currentSession) {

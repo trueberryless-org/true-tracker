@@ -51,7 +51,7 @@ import { saveData } from "@/utils/save";
 import Task from "@/models/task";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { getMostRecentSessionDate } from "@/utils/taskUtils";
+import { getMostRecentSessionDateOfProject } from "@/utils/taskUtils";
 import { Project } from "@/models";
 
 export default function ProjectPage() {
@@ -92,7 +92,7 @@ export default function ProjectPage() {
     const recentTasks: any[] = project.tasks
         .map((task: any) => ({
             ...task,
-            mostRecentDate: getMostRecentSessionDate(task),
+            mostRecentDate: getMostRecentSessionDateOfProject(task),
             isRunning: task.sessions.find((session: any) => session.end === null),
         }))
         .sort(

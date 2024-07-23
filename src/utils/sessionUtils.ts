@@ -1,4 +1,5 @@
-import { Session, User } from "@/models";
+import { Project, Session, Task, User } from "@/models";
+import { DateRange } from "react-day-picker";
 
 export const initializeSession = (): Session => {
     return {
@@ -8,6 +9,41 @@ export const initializeSession = (): Session => {
         end: new Date(),
     };
 };
+
+export function getProjectOfSession(session: Session, user: User): Project | undefined {
+    return user.projects.find((project) => {
+        return project.tasks.find((task) => {
+            return task.sessions.find((s) => {
+                return s.id === session.id;
+            });
+        });
+    });
+}
+
+export function getTaskOfSession(session: Session, user: User): Task | undefined {
+    return user.projects
+        .flatMap((project) => project.tasks)
+        .find((task) => {
+            return task.sessions.find((s) => {
+                return s.id === session.id;
+            });
+        });
+}
+
+export function getSessionDuration(session: Session): number {
+    if (session.end) {
+        return new Date(session.end).getTime() - new Date(session.start).getTime();
+    } else {
+        return Date.now() - new Date(session.start).getTime();
+    }
+}
+
+export function isSessionInDateRange(session: Session, dateRange: DateRange): boolean {
+    return (
+        session.start >= dateRange.from! &&
+        (session.end ?? session.start) <= new Date(dateRange.to?.setHours(23, 59, 59, 999)!)
+    );
+}
 
 export function calcFlowComparison(user: User | null | undefined, flow: string): string {
     if (!user || !flow) {
@@ -57,13 +93,9 @@ export function calcDurationComparison(user: User, session: Session) {
     // Example logic: compare current session duration to average of other sessions
     const avgDurationOfOtherSessions = calculateAverageDurationOfOtherSessions(user);
 
-    console.log("Average duration of other sessions:", avgDurationOfOtherSessions);
-
     const currentSessionDuration = session.end
         ? new Date(session.end!).getTime() - new Date(session.start).getTime()
         : Date.now() - new Date(session.start).getTime();
-
-    console.log("Current session duration:", currentSessionDuration);
 
     const sessions =
         user.projects.flatMap((project) => project.tasks.flatMap((task) => task.sessions)) || [];
@@ -122,14 +154,4 @@ function calculateAverageDurationOfOtherSessions(user: User) {
     const avgDuration = sessionCount > 0 ? totalDuration / sessionCount : 0;
 
     return avgDuration;
-}
-
-function calculateNumberOfShorterSessions(user: User, currentDuration: number) {
-    // Logic to count sessions shorter than current duration
-    return 3; // Example number of sessions shorter than current duration
-}
-
-function calculateNumberOfLongerSessions(user: User, currentDuration: number) {
-    // Logic to count sessions longer than current duration
-    return 1; // Example number of sessions longer than current duration
 }

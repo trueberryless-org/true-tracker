@@ -23,7 +23,7 @@ import { Task } from "@/models";
 import { priorities, statuses } from "@/models/task";
 import PriorityIconLabel from "@/components/tasks/priority";
 import StatusIconLabel from "@/components/tasks/status";
-import { getProject, initializeTask } from "@/utils/taskUtils";
+import { initializeTask } from "@/utils/taskUtils";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";

@@ -2,7 +2,17 @@ export type AutomationKeys = (typeof automationSettings)[number]["key"];
 export type AutomationValueTypes = boolean | string | number;
 
 export default interface Settings {
-    theme: "default" | "palette" | "sapphire" | "ruby" | "emerald" | "daylight" | "midnight";
+    theme:
+        | "default"
+        | "palette"
+        | "amethyst"
+        | "sapphire"
+        | "emerald"
+        | "ruby"
+        | "coral"
+        | "amber"
+        | "daylight"
+        | "midnight";
     exportReminder: "daily" | "weekly" | "monthly";
     lastExported: Date;
 
