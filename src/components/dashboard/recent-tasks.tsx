@@ -125,11 +125,11 @@ export const RecentTasks: React.FC<RecentTasksProps> = ({ dateRange, limit = 7 }
                                 {task.priority === "high" && <ArrowUp className="h-4 w-4" />}
                             </AvatarFallback>
                         </Avatar>
-                        <div className="ml-4 space-y-1">
-                            <p className="text-sm font-medium leading-none">
+                        <div className="ml-4 space-y-1 max-w-[60%]">
+                            <p className="text-sm font-medium leading-none truncate">
                                 {getProjectOfTask(task, user)?.name} - {task.name}
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-muted-foreground truncate">
                                 <StatusIconLabel statusValue={task.status} />
                             </p>
                         </div>

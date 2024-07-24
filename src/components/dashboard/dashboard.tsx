@@ -1,7 +1,8 @@
-import { Task, User } from "@/models";
+import { Project, Task, User } from "@/models";
 import { addMonths, addWeeks, format, isToday } from "date-fns";
 import {
     Bell,
+    Book,
     ChevronLeft,
     ChevronRight,
     Copy,
@@ -33,10 +34,11 @@ import { toast } from "sonner";
 import { formatDateToDistanceFromNow, msToShortTime } from "@/utils/dateUtils";
 import { downloadData } from "@/utils/export";
 import { loadData } from "@/utils/load";
+import { getProjectWithMostSessionDurationInInterval } from "@/utils/projectUtils";
 import { getSessionStorageItem, setSessionStorageItem } from "@/utils/sessionStorage";
-import { isSessionInDateRange } from "@/utils/sessionUtils";
+import { getSessionDuration, isSessionInDateRange } from "@/utils/sessionUtils";
 import { getMostRecentSessionDateOfTask } from "@/utils/taskUtils";
-import { getMostRecentSessionDateOfUser } from "@/utils/userUtils";
+import { getMostRecentSessionDateInIntervalOfUser, getMostRecentSessionDateOfUser } from "@/utils/userUtils";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -181,6 +183,42 @@ export default function Dashboard() {
             }, 0);
     }
 
+    function getProjectDurationInfoText(user: User, dateRange: DateRange): string {
+        let maxDuration = 0;
+        let secondMaxDuration = 0;
+        let projectWithMaxDuration: Project | null = null;
+
+        user.projects.forEach((project) => {
+            let projectDuration = 0;
+
+            project.tasks.forEach((task) => {
+                task.sessions.forEach((session) => {
+                    if (isSessionInDateRange(session, dateRange)) {
+                        projectDuration += getSessionDuration(session);
+                    }
+                });
+            });
+
+            if (projectDuration > maxDuration) {
+                secondMaxDuration = maxDuration;
+                maxDuration = projectDuration;
+                projectWithMaxDuration = project;
+            } else if (projectDuration > secondMaxDuration) {
+                secondMaxDuration = projectDuration;
+            }
+        });
+
+        let infoText = "";
+        if (maxDuration > 0 && secondMaxDuration > 0) {
+            const percentageIncrease = ((maxDuration - secondMaxDuration) / secondMaxDuration) * 100;
+            infoText = `${percentageIncrease.toFixed(2)}% more than second`;
+        } else {
+            infoText = "No other projects";
+        }
+
+        return infoText;
+    }
+
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -237,39 +275,35 @@ export default function Dashboard() {
                                                 <CardTitle className="text-sm font-medium text-primary">
                                                     Last time working
                                                 </CardTitle>
-                                                <History className="h-4 w-4" />
+                                                <History className="h-4 w-4 text-muted-foreground" />
                                             </CardHeader>
                                             <CardContent>
                                                 <div className="text-2xl font-bold">
-                                                    {niceFormattedDate(getMostRecentSessionDateOfUser(user))}
+                                                    {niceFormattedDate(
+                                                        getMostRecentSessionDateInIntervalOfUser(user, date),
+                                                    )}
                                                 </div>
                                                 <p className="text-xs text-muted-foreground">
-                                                    {formatDateToDistanceFromNow(getMostRecentSessionDateOfUser(user))}
+                                                    {formatDateToDistanceFromNow(
+                                                        getMostRecentSessionDateInIntervalOfUser(user, date),
+                                                    )}
                                                 </p>
                                             </CardContent>
                                         </Card>
                                         <Card>
                                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                                 <CardTitle className="text-sm font-medium text-primary">
-                                                    Sales
+                                                    Most common project
                                                 </CardTitle>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    className="h-4 w-4 text-muted-foreground"
-                                                >
-                                                    <rect width="20" height="14" x="2" y="5" rx="2" />
-                                                    <path d="M2 10h20" />
-                                                </svg>
+                                                <Book className="h-4 w-4 text-muted-foreground" />
                                             </CardHeader>
                                             <CardContent>
-                                                <div className="text-2xl font-bold">+12,234</div>
-                                                <p className="text-xs text-muted-foreground">+19% from last month</p>
+                                                <div className="text-2xl font-bold">
+                                                    {getProjectWithMostSessionDurationInInterval(user, date)?.name}
+                                                </div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {getProjectDurationInfoText(user, date)}
+                                                </p>
                                             </CardContent>
                                         </Card>
                                         <Card>

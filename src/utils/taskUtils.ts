@@ -2,7 +2,7 @@ import { Project, Task, User } from "@/models";
 import { DateRange } from "react-day-picker";
 
 import { loadData } from "./load";
-import { isSessionInDateRange } from "./sessionUtils";
+import { getSessionDuration, isSessionInDateRange } from "./sessionUtils";
 
 export const initializeTask = (): Task => {
     return {
@@ -36,6 +36,12 @@ export const getProjectValue = (task: Task): string => {
 export const getProjectOfTask = (task: Task, user: User): Project | undefined => {
     return user.projects.find((project) => project.tasks.some((t: Task) => t.id === task.id));
 };
+
+export function getTaskDuration(task: Task): number {
+    return task.sessions.reduce((acc, session) => {
+        return acc + getSessionDuration(session);
+    }, 0);
+}
 
 export const calculateTotalTime = (task: Task): number => {
     return task.sessions.reduce((total, session) => {

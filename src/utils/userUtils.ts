@@ -1,10 +1,12 @@
 import version from "@/constants/version";
 import { User } from "@/models";
+import { DateRange } from "react-day-picker";
 import { toast } from "sonner";
 
 import { exportData } from "./export";
 import { loadData } from "./load";
 import { saveData } from "./save";
+import { isSessionInDateRange } from "./sessionUtils";
 import { initializeUpgradeFunctions } from "./upgradeFunctions";
 import { upgradeData } from "./upgradeUtils";
 import { sameVersion } from "./versionUtils";
@@ -25,9 +27,17 @@ export function loadUserAndUpdateVersion(setUser: (user: User) => void) {
     }
 }
 
-export function getMostRecentSessionDateOfUser(user: User) {
+export function getMostRecentSessionDateOfUser(user: User): Date {
     const dates = user.projects
         .flatMap((project) => project.tasks.flatMap((task) => task.sessions))
+        .map((session) => new Date(session.end ?? session.start).getTime());
+    return new Date(Math.max(...dates));
+}
+
+export function getMostRecentSessionDateInIntervalOfUser(user: User, dateRange: DateRange): Date {
+    const dates = user.projects
+        .flatMap((project) => project.tasks.flatMap((task) => task.sessions))
+        .filter((session) => isSessionInDateRange(session, dateRange))
         .map((session) => new Date(session.end ?? session.start).getTime());
     return new Date(Math.max(...dates));
 }

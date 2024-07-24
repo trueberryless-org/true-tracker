@@ -1,4 +1,8 @@
 import { Project, User } from "@/models";
+import { DateRange } from "react-day-picker";
+
+import { getSessionDuration, isSessionInDateRange } from "./sessionUtils";
+import { getTaskDuration } from "./taskUtils";
 
 export const initializeProject = (): Project => {
     return {
@@ -69,3 +73,33 @@ export const getMostRecentSessionDateOfProject = (project: Project) => {
     );
     return new Date(Math.max(...dates));
 };
+
+export function getProjectWithMostSessionDurationInInterval(user: User, dateRange: DateRange): Project | null {
+    let maxDuration = 0;
+    let projectWithMaxDuration: Project | null = null;
+
+    user.projects.forEach((project) => {
+        let projectDuration = 0;
+
+        project.tasks.forEach((task) => {
+            task.sessions.forEach((session) => {
+                if (isSessionInDateRange(session, dateRange)) {
+                    projectDuration += getSessionDuration(session);
+                }
+            });
+        });
+
+        if (projectDuration > maxDuration) {
+            maxDuration = projectDuration;
+            projectWithMaxDuration = project;
+        }
+    });
+
+    return projectWithMaxDuration;
+}
+
+export function getProjectDuration(project: Project): number {
+    return project.tasks.reduce((acc, task) => {
+        return acc + getTaskDuration(task);
+    }, 0);
+}
