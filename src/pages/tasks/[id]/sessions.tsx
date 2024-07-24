@@ -1,53 +1,24 @@
-import { useState, useEffect, Key } from "react";
+import { Project, Session, Task } from "@/models";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import router from "next/router";
+import { Key, useEffect, useState } from "react";
+
+import { formatDateTime, formatDateToDistanceFromNow } from "@/utils/dateUtils";
+import { saveData } from "@/utils/save";
+
+import { useUser } from "@/components/UserContext";
+import { columnsLg, columnsMd, columnsMobile, columnsSm, columnsXl } from "@/components/tasks/columns";
+import { DataTable } from "@/components/tasks/data-table";
+import StartStopButton from "@/components/tasks/start-stop-button";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/components/UserContext";
-
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { DataTable } from "@/components/tasks/data-table";
-import {
-    columnsXl,
-    columnsLg,
-    columnsMd,
-    columnsSm,
-    columnsMobile,
-} from "@/components/tasks/columns";
-import router from "next/router";
-import { Project, Task, Session } from "@/models";
-import { formatDateTime, formatDateToDistanceFromNow } from "@/utils/dateUtils";
-import StartStopButton from "@/components/tasks/start-stop-button";
-import { saveData } from "@/utils/save";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function Tasks() {
     const { user, setUser } = useUser();
@@ -77,25 +48,20 @@ export default function Tasks() {
         );
     }
 
-    const foundTask = user?.projects
-        .flatMap((project) => project.tasks)
-        .find((task) => task.id === router.query.id);
+    const foundTask = user?.projects.flatMap((project) => project.tasks).find((task) => task.id === router.query.id);
 
     const task = foundTask
         ? {
               ...foundTask,
               projectName:
-                  user?.projects.find((project) =>
-                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
-                  )?.name || "Project Not Found",
+                  user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === foundTask.id))
+                      ?.name || "Project Not Found",
               projectId:
-                  user?.projects.find((project) =>
-                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
-                  )?.id || undefined,
+                  user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === foundTask.id))?.id ||
+                  undefined,
               projectIsArchived:
-                  user?.projects.find((project) =>
-                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
-                  )?.archivedAt !== null,
+                  user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === foundTask.id))
+                      ?.archivedAt !== null,
           }
         : undefined;
 
@@ -106,9 +72,7 @@ export default function Tasks() {
                     <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
                         <AlertTitle>Error</AlertTitle>
-                        <AlertDescription>
-                            Unfortunately, this task does not exist.
-                        </AlertDescription>
+                        <AlertDescription>Unfortunately, this task does not exist.</AlertDescription>
                     </Alert>
                 </main>
             </div>
@@ -129,7 +93,7 @@ export default function Tasks() {
                         } else {
                             // Stop the current Session
                             const updatedSessions = task.sessions.map((session) =>
-                                session.end ? session : { ...session, end: new Date() }
+                                session.end ? session : { ...session, end: new Date() },
                             );
                             return {
                                 ...task,
@@ -163,10 +127,7 @@ export default function Tasks() {
                     <CardHeader>
                         <div className="flex items-center justify-between">
                             <div>
-                                Sessions of{" "}
-                                {task.name.toLowerCase().includes("task")
-                                    ? task.name
-                                    : "Task " + task.name}
+                                Sessions of {task.name.toLowerCase().includes("task") ? task.name : "Task " + task.name}
                             </div>
                             {!task.projectIsArchived && (
                                 <StartStopButton
@@ -188,7 +149,7 @@ export default function Tasks() {
                             {task.sessions
                                 .sort(
                                     (a: Session, b: Session) =>
-                                        new Date(b.start).getTime() - new Date(a.start).getTime()
+                                        new Date(b.start).getTime() - new Date(a.start).getTime(),
                                 )
                                 .map((session: Session, i: Key | null | undefined) => {
                                     return (
@@ -202,22 +163,16 @@ export default function Tasks() {
                                                     {formatDateTime(new Date(session.start))}
                                                 </div>
                                                 <div className="hidden text-sm text-muted-foreground md:inline">
-                                                    {formatDateToDistanceFromNow(
-                                                        new Date(session.start)
-                                                    )}
+                                                    {formatDateToDistanceFromNow(new Date(session.start))}
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="font-medium">
-                                                    {session.end
-                                                        ? formatDateTime(new Date(session.end))
-                                                        : "Active"}
+                                                    {session.end ? formatDateTime(new Date(session.end)) : "Active"}
                                                 </div>
                                                 <div className="hidden text-sm text-muted-foreground md:inline">
                                                     {session.end
-                                                        ? formatDateToDistanceFromNow(
-                                                              new Date(session.end)
-                                                          )
+                                                        ? formatDateToDistanceFromNow(new Date(session.end))
                                                         : ""}
                                                 </div>
                                             </TableCell>

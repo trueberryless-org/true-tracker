@@ -1,4 +1,4 @@
-import { User, Settings, Version, Project, Task, Session, Visit } from "@/models";
+import { Project, Session, Settings, Task, User, Version, Visit } from "@/models";
 
 // Function to convert string dates to Date objects
 export const parseDate = (dateString: string | undefined | null): Date | null | undefined => {

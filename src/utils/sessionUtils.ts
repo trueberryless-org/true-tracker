@@ -40,8 +40,9 @@ export function getSessionDuration(session: Session): number {
 
 export function isSessionInDateRange(session: Session, dateRange: DateRange): boolean {
     return (
-        session.start >= dateRange.from! &&
-        (session.end ?? session.start) <= new Date(dateRange.to?.setHours(23, 59, 59, 999)!)
+        new Date(session.start).getTime() >= new Date(dateRange.from!).getTime() &&
+        new Date(session.end ?? session.start).getTime() <=
+            new Date(new Date(dateRange.to ?? dateRange.from!).setHours(23, 59, 59, 999)!).getTime()
     );
 }
 
@@ -50,8 +51,7 @@ export function calcFlowComparison(user: User | null | undefined, flow: string):
         return "";
     }
 
-    const sessions =
-        user.projects.flatMap((project) => project.tasks.flatMap((task) => task.sessions)) || [];
+    const sessions = user.projects.flatMap((project) => project.tasks.flatMap((task) => task.sessions)) || [];
 
     const higherFlowCount = sessions.filter((session) => {
         return session.flow === "smooth";
@@ -97,8 +97,7 @@ export function calcDurationComparison(user: User, session: Session) {
         ? new Date(session.end!).getTime() - new Date(session.start).getTime()
         : Date.now() - new Date(session.start).getTime();
 
-    const sessions =
-        user.projects.flatMap((project) => project.tasks.flatMap((task) => task.sessions)) || [];
+    const sessions = user.projects.flatMap((project) => project.tasks.flatMap((task) => task.sessions)) || [];
 
     const shorterSessionCount = sessions.filter((s) => {
         const sessionDuration = s.end
@@ -118,14 +117,10 @@ export function calcDurationComparison(user: User, session: Session) {
 
     if (currentSessionDuration > avgDurationOfOtherSessions) {
         // Shorter than average
-        return `Longer than ${shorterSessionCount} other session${
-            shorterSessionCount !== 1 ? "s" : ""
-        }`;
+        return `Longer than ${shorterSessionCount} other session${shorterSessionCount !== 1 ? "s" : ""}`;
     } else {
         // Longer than average
-        return `Shorter than ${longerSessionCount} other session${
-            longerSessionCount !== 1 ? "s" : ""
-        }`;
+        return `Shorter than ${longerSessionCount} other session${longerSessionCount !== 1 ? "s" : ""}`;
     }
 }
 

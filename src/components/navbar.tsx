@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
 import { User } from "@/models";
+import { CircleUser, Menu, Search, Timer } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+import { exportData } from "@/utils/export";
 import { loadData } from "@/utils/load";
 import { saveData } from "@/utils/save";
-
-import Link from "next/link";
-import Image from "next/image";
-import { CircleUser, Menu, Timer, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,10 +20,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import ModeToggle from "./themes/mode-switch";
+
 import { useUser } from "./UserContext";
+import ModeToggle from "./themes/mode-switch";
 import ThemeSwitcher from "./themes/theme-switcher";
-import { exportData } from "@/utils/export";
 
 export default function Navbar() {
     const { user, setUser } = useUser();
@@ -43,10 +44,7 @@ export default function Navbar() {
     return (
         <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-10 z-50">
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-                <Link
-                    href="/"
-                    className="flex items-center gap-2 text-lg font-semibold md:text-base"
-                >
+                <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base">
                     <Timer className="h-6 w-6" />
                     <span className="sr-only">True Tracker</span>
                 </Link>
@@ -61,9 +59,7 @@ export default function Navbar() {
                 <Link
                     href="/projects"
                     className={`${
-                        router.pathname.includes("project")
-                            ? "text-foreground"
-                            : "text-muted-foreground"
+                        router.pathname.includes("project") ? "text-foreground" : "text-muted-foreground"
                     } transition-colors hover:text-foreground`}
                 >
                     Projects
@@ -71,9 +67,7 @@ export default function Navbar() {
                 <Link
                     href="/tasks"
                     className={`${
-                        router.pathname.includes("task")
-                            ? "text-foreground"
-                            : "text-muted-foreground"
+                        router.pathname.includes("task") ? "text-foreground" : "text-muted-foreground"
                     } transition-colors hover:text-foreground`}
                 >
                     Tasks
@@ -81,9 +75,7 @@ export default function Navbar() {
                 <Link
                     href="/sessions"
                     className={`${
-                        router.pathname === "/sessions"
-                            ? "text-foreground"
-                            : "text-muted-foreground"
+                        router.pathname === "/sessions" ? "text-foreground" : "text-muted-foreground"
                     } transition-colors hover:text-foreground`}
                     onClick={() =>
                         setTimeout(() => {
@@ -96,9 +88,7 @@ export default function Navbar() {
                 <Link
                     href="/settings"
                     className={`${
-                        router.pathname.includes("settings")
-                            ? "text-foreground"
-                            : "text-muted-foreground"
+                        router.pathname.includes("settings") ? "text-foreground" : "text-muted-foreground"
                     } transition-colors hover:text-foreground`}
                 >
                     Settings
@@ -128,9 +118,7 @@ export default function Navbar() {
                         <Link
                             href="/"
                             className={`${
-                                router.pathname === "/"
-                                    ? "text-foreground"
-                                    : "text-muted-foreground"
+                                router.pathname === "/" ? "text-foreground" : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
                             onClick={() =>
                                 setTimeout(() => {
@@ -143,9 +131,7 @@ export default function Navbar() {
                         <Link
                             href="/projects"
                             className={`${
-                                router.pathname === "/projects"
-                                    ? "text-foreground"
-                                    : "text-muted-foreground"
+                                router.pathname === "/projects" ? "text-foreground" : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
                             onClick={() =>
                                 setTimeout(() => {
@@ -158,9 +144,7 @@ export default function Navbar() {
                         <Link
                             href="/tasks"
                             className={`${
-                                router.pathname === "/tasks"
-                                    ? "text-foreground"
-                                    : "text-muted-foreground"
+                                router.pathname === "/tasks" ? "text-foreground" : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
                             onClick={() =>
                                 setTimeout(() => {
@@ -173,9 +157,7 @@ export default function Navbar() {
                         <Link
                             href="/sessions"
                             className={`${
-                                router.pathname === "/sessions"
-                                    ? "text-foreground"
-                                    : "text-muted-foreground"
+                                router.pathname === "/sessions" ? "text-foreground" : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
                             onClick={() =>
                                 setTimeout(() => {
@@ -188,9 +170,7 @@ export default function Navbar() {
                         <Link
                             href="/settings"
                             className={`${
-                                router.pathname === "/settings"
-                                    ? "text-foreground"
-                                    : "text-muted-foreground"
+                                router.pathname === "/settings" ? "text-foreground" : "text-muted-foreground"
                             } transition-colors hover:text-foreground`}
                             onClick={() =>
                                 setTimeout(() => {

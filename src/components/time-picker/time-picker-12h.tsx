@@ -1,10 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Label } from "@/components/ui/label";
-import { TimePickerInput } from "./time-picker-input";
-import { TimePeriodSelect } from "./period-select";
+
 import { Period } from "@/utils/dateUtils";
+
+import { Label } from "@/components/ui/label";
+
+import { TimePeriodSelect } from "./period-select";
+import { TimePickerInput } from "./time-picker-input";
 
 interface TimePickerProps {
     date: Date | undefined;

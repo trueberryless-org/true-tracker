@@ -1,26 +1,25 @@
-import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Separator } from "@radix-ui/react-separator";
+import { AlertCircle } from "lucide-react";
+import { useTheme as useNextTheme } from "next-themes";
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
-import { User } from "../models";
-import { saveData } from "../utils/save";
-import { loadData } from "../utils/load";
-import { importData } from "../utils/import";
-import { exportData } from "../utils/export";
-import { setSessionStorageItem, getSessionStorageItem } from "../utils/sessionStorage";
+import { AutomationSettings, automationSettings } from "@/models/settings";
 
+import { formatDateTime } from "@/utils/dateUtils";
+import { clearLocalStorage } from "@/utils/localStorage";
+import { getCurrentTheme, setTheme as setColorTheme } from "@/utils/themes";
+
+import { useUser } from "@/components/UserContext";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Dialog,
     DialogContent,
@@ -30,39 +29,19 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useUser } from "@/components/UserContext";
-import { clearLocalStorage } from "@/utils/localStorage";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useTheme as useNextTheme } from "next-themes";
-import React from "react";
-import { setTheme as setColorTheme, getCurrentTheme } from "@/utils/themes";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import { Separator } from "@radix-ui/react-separator";
-import { AutomationSettings, automationSettings } from "@/models/settings";
-import { formatDateTime } from "@/utils/dateUtils";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+import { User } from "../models";
+import { exportData } from "../utils/export";
+import { importData } from "../utils/import";
+import { loadData } from "../utils/load";
+import { saveData } from "../utils/save";
+import { getSessionStorageItem, setSessionStorageItem } from "../utils/sessionStorage";
 
 const FormSchemaUsername = z.object({
     username: z.string().min(2, {
@@ -108,7 +87,7 @@ export default function Settings() {
                 saveData(user);
             }
         },
-        [user]
+        [user],
     );
 
     const handleTabClick = (tabName: string) => {
@@ -268,17 +247,14 @@ export default function Settings() {
         setExportedNow(true);
     };
 
-    const groupedSettings = automationSettings.reduce(
-        (groups: any, setting: AutomationSettings) => {
-            const group = setting.group;
-            if (!groups[group]) {
-                groups[group] = [];
-            }
-            groups[group].push(setting);
-            return groups;
-        },
-        {}
-    );
+    const groupedSettings = automationSettings.reduce((groups: any, setting: AutomationSettings) => {
+        const group = setting.group;
+        if (!groups[group]) {
+            groups[group] = [];
+        }
+        groups[group].push(setting);
+        return groups;
+    }, {});
 
     return (
         <div className="flex w-full flex-col">
@@ -287,46 +263,33 @@ export default function Settings() {
                     <h1 className="text-3xl font-semibold">Settings</h1>
                 </div>
                 <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-                    <nav
-                        className="grid gap-4 text-sm text-muted-foreground"
-                        x-chunk="dashboard-04-chunk-0"
-                    >
+                    <nav className="grid gap-4 text-sm text-muted-foreground" x-chunk="dashboard-04-chunk-0">
                         <a
-                            className={` ${
-                                activeTab === "General" ? "font-semibold text-primary" : ""
-                            }`}
+                            className={` ${activeTab === "General" ? "font-semibold text-primary" : ""}`}
                             onClick={() => handleTabClick("General")}
                         >
                             General
                         </a>
                         <a
-                            className={` ${
-                                activeTab === "Themes" ? "font-semibold text-primary" : ""
-                            }`}
+                            className={` ${activeTab === "Themes" ? "font-semibold text-primary" : ""}`}
                             onClick={() => handleTabClick("Themes")}
                         >
                             Themes
                         </a>
                         <a
-                            className={` ${
-                                activeTab === "Automation" ? "font-semibold text-primary" : ""
-                            }`}
+                            className={` ${activeTab === "Automation" ? "font-semibold text-primary" : ""}`}
                             onClick={() => handleTabClick("Automation")}
                         >
                             Automation
                         </a>
                         <a
-                            className={` ${
-                                activeTab === "Export / Import" ? "font-semibold text-primary" : ""
-                            }`}
+                            className={` ${activeTab === "Export / Import" ? "font-semibold text-primary" : ""}`}
                             onClick={() => handleTabClick("Export / Import")}
                         >
                             Export / Import
                         </a>
                         <a
-                            className={` ${
-                                activeTab === "Danger Zone" ? "font-semibold text-primary" : ""
-                            }`}
+                            className={` ${activeTab === "Danger Zone" ? "font-semibold text-primary" : ""}`}
                             onClick={() => handleTabClick("Danger Zone")}
                         >
                             Danger Zone
@@ -336,16 +299,11 @@ export default function Settings() {
                     {activeTab === "General" && (
                         <div className="grid gap-6">
                             <Form {...formUsername}>
-                                <form
-                                    onSubmit={formUsername.handleSubmit(onSubmitUsername)}
-                                    className="space-y-6"
-                                >
+                                <form onSubmit={formUsername.handleSubmit(onSubmitUsername)} className="space-y-6">
                                     <Card x-chunk="dashboard-04-chunk-1">
                                         <CardHeader>
                                             <CardTitle>Username</CardTitle>
-                                            <CardDescription>
-                                                This is your display name.
-                                            </CardDescription>
+                                            <CardDescription>This is your display name.</CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             <FormField
@@ -354,10 +312,7 @@ export default function Settings() {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormControl>
-                                                            <Input
-                                                                placeholder={user?.username}
-                                                                {...field}
-                                                            />
+                                                            <Input placeholder={user?.username} {...field} />
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
@@ -378,11 +333,7 @@ export default function Settings() {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <Input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={savePictureTemp}
-                                    />
+                                    <Input type="file" accept="image/*" onChange={savePictureTemp} />
                                 </CardContent>
                                 <CardFooter className="border-t px-6 py-4 flex gap-4">
                                     <Button onClick={setPictureNow}>Set Profile Picture</Button>
@@ -404,24 +355,15 @@ export default function Settings() {
                                 </CardHeader>
                                 <CardContent>
                                     <RadioGroup defaultValue={theme}>
-                                        <div
-                                            className="flex items-center space-x-2"
-                                            onClick={() => setTheme("light")}
-                                        >
+                                        <div className="flex items-center space-x-2" onClick={() => setTheme("light")}>
                                             <RadioGroupItem value="light" id="r1" />
                                             <Label htmlFor="r1">Light</Label>
                                         </div>
-                                        <div
-                                            className="flex items-center space-x-2"
-                                            onClick={() => setTheme("dark")}
-                                        >
+                                        <div className="flex items-center space-x-2" onClick={() => setTheme("dark")}>
                                             <RadioGroupItem value="dark" id="r2" />
                                             <Label htmlFor="r2">Dark</Label>
                                         </div>
-                                        <div
-                                            className="flex items-center space-x-2"
-                                            onClick={() => setTheme("system")}
-                                        >
+                                        <div className="flex items-center space-x-2" onClick={() => setTheme("system")}>
                                             <RadioGroupItem value="system" id="r3" />
                                             <Label htmlFor="r3">System</Label>
                                         </div>
@@ -431,9 +373,7 @@ export default function Settings() {
                             <Card x-chunk="dashboard-04-chunk-1">
                                 <CardHeader>
                                     <CardTitle>Color Modes</CardTitle>
-                                    <CardDescription>
-                                        Choose the color theme which you like most.
-                                    </CardDescription>
+                                    <CardDescription>Choose the color theme which you like most.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <RadioGroup defaultValue={currentTheme}>
@@ -519,48 +459,36 @@ export default function Settings() {
                                     <CardHeader>
                                         <CardTitle>{group}</CardTitle>
                                         <CardDescription>
-                                            Here you can see options for automating your workflow
-                                            within the app.
+                                            Here you can see options for automating your workflow within the app.
                                         </CardDescription>
                                     </CardHeader>
                                     <CardFooter className="border-t flex-col p-0">
                                         <Table>
                                             <TableBody>
-                                                {groupedSettings[group].map(
-                                                    (setting: AutomationSettings) => (
-                                                        <TableRow key={setting.key}>
-                                                            <TableCell className="font-medium px-6">
-                                                                <Label
-                                                                    htmlFor={`automation-${setting.key}`}
-                                                                    className="space-y-0"
-                                                                >
-                                                                    <div className="text-base">
-                                                                        {setting.label}
-                                                                    </div>
-                                                                    <div className="text-muted-foreground">
-                                                                        {setting.description}
-                                                                    </div>
-                                                                </Label>
-                                                            </TableCell>
-                                                            <TableCell className="text-right px-6">
-                                                                <Switch
-                                                                    id={`automation-${setting.key}`}
-                                                                    checked={
-                                                                        settingsState[setting.key]
-                                                                    }
-                                                                    onCheckedChange={(
-                                                                        checked: any
-                                                                    ) =>
-                                                                        handleChange(
-                                                                            setting.key,
-                                                                            checked
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                )}
+                                                {groupedSettings[group].map((setting: AutomationSettings) => (
+                                                    <TableRow key={setting.key}>
+                                                        <TableCell className="font-medium px-6">
+                                                            <Label
+                                                                htmlFor={`automation-${setting.key}`}
+                                                                className="space-y-0"
+                                                            >
+                                                                <div className="text-base">{setting.label}</div>
+                                                                <div className="text-muted-foreground">
+                                                                    {setting.description}
+                                                                </div>
+                                                            </Label>
+                                                        </TableCell>
+                                                        <TableCell className="text-right px-6">
+                                                            <Switch
+                                                                id={`automation-${setting.key}`}
+                                                                checked={settingsState[setting.key]}
+                                                                onCheckedChange={(checked: any) =>
+                                                                    handleChange(setting.key, checked)
+                                                                }
+                                                            />
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
                                             </TableBody>
                                         </Table>
                                     </CardFooter>
@@ -574,24 +502,18 @@ export default function Settings() {
                                 <CardHeader>
                                     <CardTitle>Export Data</CardTitle>
                                     <CardDescription>
-                                        This will generate a JSON with your data, so you can import
-                                        it again later.
+                                        This will generate a JSON with your data, so you can import it again later.
                                         <br />
                                         {user.settings.lastExported !== null && (
                                             <div>
                                                 The last time you exported your data was{" "}
                                                 {exportedNow
                                                     ? "now"
-                                                    : new Date(
-                                                          user.settings.lastExported
-                                                      ).getDay() === new Date().getDay()
-                                                    ? "at "
-                                                    : "on "}
-                                                {!exportedNow &&
-                                                    formatDateTime(
-                                                        new Date(user.settings.lastExported)
-                                                    )}
-                                                .
+                                                    : new Date(user.settings.lastExported).getDay() ===
+                                                        new Date().getDay()
+                                                      ? "at "
+                                                      : "on "}
+                                                {!exportedNow && formatDateTime(new Date(user.settings.lastExported))}.
                                             </div>
                                         )}
                                     </CardDescription>
@@ -603,16 +525,10 @@ export default function Settings() {
                             <Card x-chunk="dashboard-04-chunk-1">
                                 <CardHeader>
                                     <CardTitle>Import Data</CardTitle>
-                                    <CardDescription>
-                                        Import you recently exported data here.
-                                    </CardDescription>
+                                    <CardDescription>Import you recently exported data here.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <Input
-                                        type="file"
-                                        accept="application/json"
-                                        onChange={saveFileTemp}
-                                    />
+                                    <Input type="file" accept="application/json" onChange={saveFileTemp} />
                                 </CardContent>
                                 <CardFooter className="border-t px-6 py-4">
                                     <Button onClick={importNow}>Import</Button>
@@ -620,9 +536,7 @@ export default function Settings() {
                             </Card>
                             <Form {...formExportReminder}>
                                 <form
-                                    onSubmit={formExportReminder.handleSubmit(
-                                        onSubmitExportReminder
-                                    )}
+                                    onSubmit={formExportReminder.handleSubmit(onSubmitExportReminder)}
                                     className="space-y-6"
                                 >
                                     <Card x-chunk="dashboard-04-chunk-1">
@@ -649,9 +563,7 @@ export default function Settings() {
                                                                     <FormControl>
                                                                         <RadioGroupItem value="daily" />
                                                                     </FormControl>
-                                                                    <FormLabel className="font-normal">
-                                                                        Daily
-                                                                    </FormLabel>
+                                                                    <FormLabel className="font-normal">Daily</FormLabel>
                                                                 </FormItem>
                                                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                                                     <FormControl>
@@ -690,8 +602,7 @@ export default function Settings() {
                                 <CardHeader>
                                     <CardTitle>Delete All Projects</CardTitle>
                                     <CardDescription>
-                                        This will delete all projects with their time entries.{" "}
-                                        <br />
+                                        This will delete all projects with their time entries. <br />
                                         Please consider exporting before proceeding.
                                     </CardDescription>
                                 </CardHeader>
@@ -704,9 +615,8 @@ export default function Settings() {
                                             <DialogHeader>
                                                 <DialogTitle>Are you absolutely sure?</DialogTitle>
                                                 <DialogDescription>
-                                                    This action cannot be undone. This will
-                                                    permanently delete all your projects and remove
-                                                    this data from your local storage.
+                                                    This action cannot be undone. This will permanently delete all your
+                                                    projects and remove this data from your local storage.
                                                 </DialogDescription>
                                             </DialogHeader>
                                             <DialogFooter>
@@ -720,8 +630,8 @@ export default function Settings() {
                                 <CardHeader>
                                     <CardTitle>Delete All Data</CardTitle>
                                     <CardDescription>
-                                        All your projects, time entries and everything else will be
-                                        completely erased from existence. <br />
+                                        All your projects, time entries and everything else will be completely erased
+                                        from existence. <br />
                                         Please consider exporting before proceeding.
                                     </CardDescription>
                                 </CardHeader>
@@ -734,9 +644,8 @@ export default function Settings() {
                                             <DialogHeader>
                                                 <DialogTitle>Are you absolutely sure?</DialogTitle>
                                                 <DialogDescription>
-                                                    This action cannot be undone. This will
-                                                    permanently delete your account and remove your
-                                                    data from your local storage.
+                                                    This action cannot be undone. This will permanently delete your
+                                                    account and remove your data from your local storage.
                                                 </DialogDescription>
                                             </DialogHeader>
                                             <DialogFooter>

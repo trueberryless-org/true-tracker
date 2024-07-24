@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Session, Task } from "@/models";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import React, { useEffect, useRef, useState } from "react";
+
 import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 
 interface TaskCardProps {
     task: Task;
@@ -89,9 +90,7 @@ const StartStopButton: React.FC<TaskCardProps> = ({
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
         const remainingSeconds = seconds % 60;
-        return `${hours > 0 ? hours + "h " : ""}${
-            minutes > 0 ? minutes + "m " : ""
-        }${remainingSeconds}s`;
+        return `${hours > 0 ? hours + "h " : ""}${minutes > 0 ? minutes + "m " : ""}${remainingSeconds}s`;
     };
 
     return (

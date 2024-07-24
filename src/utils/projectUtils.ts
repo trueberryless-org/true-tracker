@@ -37,9 +37,7 @@ export function calcPriorityComparison(user: User | null | undefined, priority: 
             lowerPriorityCount + mediumPriorityCount !== 1 ? "s" : ""
         }`;
     } else if (priority === "medium") {
-        return `Higher priority than ${lowerPriorityCount} other project${
-            lowerPriorityCount !== 1 ? "s" : ""
-        }`;
+        return `Higher priority than ${lowerPriorityCount} other project${lowerPriorityCount !== 1 ? "s" : ""}`;
     } else {
         return `Lower priority than ${higherPriorityCount + mediumPriorityCount} other project${
             higherPriorityCount + mediumPriorityCount !== 1 ? "s" : ""
@@ -67,7 +65,7 @@ export function calcStatusComparison(user: User | null | undefined, status: stri
 
 export const getMostRecentSessionDateOfProject = (project: Project) => {
     const dates = project.tasks.flatMap((task) =>
-        task.sessions.map((session) => new Date(session.end ?? session.start).getTime())
+        task.sessions.map((session) => new Date(session.end ?? session.start).getTime()),
     );
     return new Date(Math.max(...dates));
 };

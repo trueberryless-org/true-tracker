@@ -1,9 +1,11 @@
 "use client";
 
-import { EllipsisIcon, Edit2Icon } from "lucide-react";
 import { Row } from "@tanstack/react-table";
-
+import { Edit2Icon, EllipsisIcon } from "lucide-react";
 import Link from "next/link";
+
+import { ExtendedTask } from "@/models/task";
+
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -11,8 +13,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { useUser } from "../UserContext";
-import { ExtendedTask } from "@/models/task";
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;

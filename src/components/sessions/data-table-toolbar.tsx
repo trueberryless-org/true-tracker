@@ -1,17 +1,18 @@
 "use client";
 
-import { XIcon } from "lucide-react";
+import { Project } from "@/models";
 import { Table } from "@tanstack/react-table";
+import { XIcon } from "lucide-react";
+
+import { flows } from "@/models/session";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { flows } from "@/models/session";
-import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { DataTableViewOptions } from "./data-table-view-options";
 import { useUser } from "../UserContext";
-import { Project } from "@/models";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { DataTableFacetedFilterSimple } from "./data-table-faceted-filter-simple";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
@@ -28,19 +29,11 @@ export function DataTableToolbar<TData>({
     const { user } = useUser();
 
     let projects: string[] =
-        user && user.projects
-            ? [...new Set(user.projects.map((project: Project) => project.name))]
-            : [];
+        user && user.projects ? [...new Set(user.projects.map((project: Project) => project.name))] : [];
 
     let tasks: string[] =
         user && user.projects
-            ? [
-                  ...new Set(
-                      user.projects
-                          .map((project: Project) => project.tasks.map((task) => task.name))
-                          .flat()
-                  ),
-              ]
+            ? [...new Set(user.projects.map((project: Project) => project.tasks.map((task) => task.name)).flat())]
             : [];
 
     const handleFilterChange = (filterValues: string[]) => {
@@ -51,10 +44,7 @@ export function DataTableToolbar<TData>({
                 .find((task) => task.name === filterValues[0]);
             if (task) {
                 setNewQueryParams(`?taskId=${task.id}`);
-                if (
-                    user?.projects.find((project) => project.tasks.some((t) => t.id === task.id))
-                        ?.archivedAt
-                ) {
+                if (user?.projects.find((project) => project.tasks.some((t) => t.id === task.id))?.archivedAt) {
                     setOnlyArchivedTasks(true);
                 }
             } else {
@@ -92,9 +82,7 @@ export function DataTableToolbar<TData>({
                 <Input
                     placeholder="Filter sessions..."
                     value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
+                    onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
                 {table.getColumn("projectName") && (
@@ -114,11 +102,7 @@ export function DataTableToolbar<TData>({
                     />
                 )}
                 {table.getColumn("flow") && (
-                    <DataTableFacetedFilter
-                        column={table.getColumn("flow")}
-                        title="Flow"
-                        options={flows}
-                    />
+                    <DataTableFacetedFilter column={table.getColumn("flow")} title="Flow" options={flows} />
                 )}
                 {isFiltered && (
                     <Button

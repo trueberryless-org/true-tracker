@@ -1,12 +1,8 @@
-import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    ArrowLeftToLineIcon,
-    ArrowRightToLineIcon,
-} from "lucide-react";
 import { Table } from "@tanstack/react-table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
 import { Button } from "../ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface DataTablePaginationProps<TData> {
     table: Table<TData>;
@@ -16,12 +12,11 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
     return (
         <div className="flex items-center justify-between px-2">
             <div className="flex-1 text-sm text-muted-foreground">
-                Showing{" "}
-                {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} -{" "}
+                Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} -{" "}
                 {Math.min(
                     table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
                         table.getState().pagination.pageSize,
-                    table.getFilteredRowModel().rows.length
+                    table.getFilteredRowModel().rows.length,
                 )}{" "}
                 of {table.getFilteredRowModel().rows.length}
             </div>

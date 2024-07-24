@@ -39,7 +39,7 @@ export function getCurrentTheme() {
         "midnight",
     ];
 
-    for (let theme of themes) {
+    for (const theme of themes) {
         if (htmlElement.classList.contains(theme)) {
             return theme;
         }

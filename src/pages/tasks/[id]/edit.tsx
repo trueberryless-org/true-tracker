@@ -1,30 +1,28 @@
+import { Task } from "@/models";
+import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+import Project from "@/models/project";
+import { priorities, statuses } from "@/models/task";
+
+import { saveData } from "@/utils/save";
+
+import { useUser } from "@/components/UserContext";
+import PriorityIconLabel from "@/components/tasks/priority";
+import StatusIconLabel from "@/components/tasks/status";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/components/UserContext";
-import Project from "@/models/project";
-import { useEffect, useState } from "react";
-import { saveData } from "@/utils/save";
-import Link from "next/link";
-import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
-import { Task } from "@/models";
-import { priorities, statuses } from "@/models/task";
-import PriorityIconLabel from "@/components/tasks/priority";
-import StatusIconLabel from "@/components/tasks/status";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function EditTask() {
     const { user, setUser } = useUser();
@@ -37,9 +35,7 @@ export default function EditTask() {
 
     useEffect(() => {
         if (user) {
-            const foundTask = user?.projects
-                .flatMap((project) => project.tasks)
-                .find((task) => task.id === taskId);
+            const foundTask = user?.projects.flatMap((project) => project.tasks).find((task) => task.id === taskId);
             setTask(foundTask || null);
             setTaskStatus(foundTask?.status || "");
             setTaskPriority(foundTask?.priority || "");
@@ -83,8 +79,7 @@ export default function EditTask() {
     }
 
     if (
-        user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === task.id))
-            ?.archivedAt !== null
+        user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === task.id))?.archivedAt !== null
     ) {
         return (
             <div className="flex w-full flex-col">
@@ -93,9 +88,8 @@ export default function EditTask() {
                         <AlertCircle className="h-4 w-4" />
                         <AlertTitle>Error</AlertTitle>
                         <AlertDescription>
-                            This task belongs to a project that has been archived. Please unarchive
-                            the project again, by clicking the button in the top right of the
-                            project view!
+                            This task belongs to a project that has been archived. Please unarchive the project again,
+                            by clicking the button in the top right of the project view!
                         </AlertDescription>
                     </Alert>
                 </main>
@@ -119,18 +113,12 @@ export default function EditTask() {
                         </h1>
                         {task.priority && (
                             <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                                <PriorityIconLabel
-                                    priorityValue={task.priority}
-                                    className="text-muted-foreground"
-                                />
+                                <PriorityIconLabel priorityValue={task.priority} className="text-muted-foreground" />
                             </Badge>
                         )}
                         {task.status && (
                             <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                                <StatusIconLabel
-                                    statusValue={task.status}
-                                    className="text-muted-foreground"
-                                />
+                                <StatusIconLabel statusValue={task.status} className="text-muted-foreground" />
                             </Badge>
                         )}
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
@@ -149,21 +137,13 @@ export default function EditTask() {
                             <Card x-chunk="dashboard-07-chunk-0">
                                 <CardHeader>
                                     <CardTitle>Task Details</CardTitle>
-                                    <CardDescription>
-                                        Edit the name and description of the task.
-                                    </CardDescription>
+                                    <CardDescription>Edit the name and description of the task.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-6">
                                         <div className="grid gap-3">
                                             <Label htmlFor="name">Identifier</Label>
-                                            <Input
-                                                id="id"
-                                                type="text"
-                                                className="w-full"
-                                                value={task.id}
-                                                disabled
-                                            />
+                                            <Input id="id" type="text" className="w-full" value={task.id} disabled />
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="name">Name</Label>
@@ -172,9 +152,7 @@ export default function EditTask() {
                                                 type="text"
                                                 className="w-full"
                                                 value={task.name}
-                                                onChange={(e) =>
-                                                    handleInputChange("name", e.target.value)
-                                                }
+                                                onChange={(e) => handleInputChange("name", e.target.value)}
                                             />
                                         </div>
                                         <div className="grid gap-3">
@@ -182,9 +160,7 @@ export default function EditTask() {
                                             <Textarea
                                                 id="description"
                                                 value={task.description}
-                                                onChange={(e) =>
-                                                    handleInputChange("description", e.target.value)
-                                                }
+                                                onChange={(e) => handleInputChange("description", e.target.value)}
                                                 className="min-h-36"
                                             />
                                         </div>
@@ -209,22 +185,16 @@ export default function EditTask() {
                                                             <AvatarFallback>T</AvatarFallback>
                                                         </Avatar>
                                                         <div className="space-y-1">
-                                                            <h4 className="text-sm font-semibold">
-                                                                @trueberryless
-                                                            </h4>
+                                                            <h4 className="text-sm font-semibold">@trueberryless</h4>
                                                             <p className="text-sm">
-                                                                We try to automate this status in
-                                                                order to help you focus on your
-                                                                projects, not this app.
+                                                                We try to automate this status in order to help you
+                                                                focus on your projects, not this app.
                                                             </p>
                                                             <div className="flex items-center pt-2">
                                                                 <span className="text-xs text-muted-foreground">
-                                                                    For example we will
-                                                                    automatically move this task
-                                                                    from “Backlog” to “In Progress”,
-                                                                    when you start working on it -
-                                                                    when the first session is
-                                                                    started.
+                                                                    For example we will automatically move this task
+                                                                    from “Backlog” to “In Progress”, when you start
+                                                                    working on it - when the first session is started.
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -245,21 +215,13 @@ export default function EditTask() {
                                                     handleInputChange("status", value);
                                                 }}
                                             >
-                                                <SelectTrigger
-                                                    id="status"
-                                                    aria-label="Select status"
-                                                >
+                                                <SelectTrigger id="status" aria-label="Select status">
                                                     <SelectValue placeholder="Select status" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {statuses.map((status) => (
-                                                        <SelectItem
-                                                            key={status.value}
-                                                            value={status.value}
-                                                        >
-                                                            <StatusIconLabel
-                                                                statusValue={status.value}
-                                                            />
+                                                        <SelectItem key={status.value} value={status.value}>
+                                                            <StatusIconLabel statusValue={status.value} />
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>
@@ -283,21 +245,13 @@ export default function EditTask() {
                                                     handleInputChange("priority", value);
                                                 }}
                                             >
-                                                <SelectTrigger
-                                                    id="priority"
-                                                    aria-label="Select priority"
-                                                >
+                                                <SelectTrigger id="priority" aria-label="Select priority">
                                                     <SelectValue placeholder="Select priority" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {priorities.map((priority) => (
-                                                        <SelectItem
-                                                            key={priority.value}
-                                                            value={priority.value}
-                                                        >
-                                                            <PriorityIconLabel
-                                                                priorityValue={priority.value}
-                                                            />
+                                                        <SelectItem key={priority.value} value={priority.value}>
+                                                            <PriorityIconLabel priorityValue={priority.value} />
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>

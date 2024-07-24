@@ -1,12 +1,11 @@
-import * as React from "react";
-import { CheckIcon, CirclePlusIcon } from "lucide-react";
-import { Column } from "@tanstack/react-table";
-
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { Separator } from "../ui/separator";
+import { Project } from "@/models";
+import { Column } from "@tanstack/react-table";
+import { CheckIcon, CirclePlusIcon } from "lucide-react";
+import * as React from "react";
+
 import { Badge } from "../ui/badge";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
 import {
     Command,
     CommandEmpty,
@@ -16,7 +15,8 @@ import {
     CommandList,
     CommandSeparator,
 } from "../ui/command";
-import { Project } from "@/models";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Separator } from "../ui/separator";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
     column?: Column<TData, TValue>;
@@ -43,18 +43,12 @@ export function DataTableFacetedFilterSimple<TData, TValue>({
                     {selectedValues?.size > 0 && (
                         <>
                             <Separator orientation="vertical" className="mx-2 h-4" />
-                            <Badge
-                                variant="secondary"
-                                className="rounded-sm px-1 font-normal lg:hidden"
-                            >
+                            <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
                                 {selectedValues.size}
                             </Badge>
                             <div className="hidden space-x-1 lg:flex">
                                 {selectedValues.size > 2 ? (
-                                    <Badge
-                                        variant="secondary"
-                                        className="rounded-sm px-1 font-normal"
-                                    >
+                                    <Badge variant="secondary" className="rounded-sm px-1 font-normal">
                                         {selectedValues.size} selected
                                     </Badge>
                                 ) : (
@@ -93,9 +87,7 @@ export function DataTableFacetedFilterSimple<TData, TValue>({
                                                 selectedValues.add(option);
                                             }
                                             const filterValues = Array.from(selectedValues);
-                                            column?.setFilterValue(
-                                                filterValues.length ? filterValues : undefined
-                                            );
+                                            column?.setFilterValue(filterValues.length ? filterValues : undefined);
                                             onFilterChange(filterValues);
                                         }}
                                     >
@@ -104,7 +96,7 @@ export function DataTableFacetedFilterSimple<TData, TValue>({
                                                 "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                                                 isSelected
                                                     ? "bg-primary text-primary-foreground"
-                                                    : "opacity-50 [&_svg]:invisible"
+                                                    : "opacity-50 [&_svg]:invisible",
                                             )}
                                         >
                                             <CheckIcon className={cn("h-4 w-4")} />

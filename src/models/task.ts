@@ -1,15 +1,6 @@
-import Session from "./session";
+import { ArrowDown, ArrowRight, ArrowUp, Circle, CircleCheck, CircleHelp, CircleX, Timer } from "lucide-react";
 
-import {
-    ArrowDown,
-    ArrowRight,
-    ArrowUp,
-    CircleCheck,
-    Circle,
-    CircleX,
-    CircleHelp,
-    Timer,
-} from "lucide-react";
+import Session from "./session";
 
 export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];

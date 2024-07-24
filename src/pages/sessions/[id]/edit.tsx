@@ -1,29 +1,27 @@
+import { Session } from "@/models";
+import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+import Project from "@/models/project";
+import { flows } from "@/models/session";
+
+import { saveData } from "@/utils/save";
+
+import { useUser } from "@/components/UserContext";
+import FlowIconLabel from "@/components/sessions/flow";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/components/UserContext";
-import Project from "@/models/project";
-import { useEffect, useState } from "react";
-import { saveData } from "@/utils/save";
-import Link from "next/link";
-import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
-import { Session } from "@/models";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import FlowIconLabel from "@/components/sessions/flow";
-import { flows } from "@/models/session";
 
 export default function EditSession() {
     const { user, setUser } = useUser();
@@ -52,9 +50,7 @@ export default function EditSession() {
             const updatedUser = { ...user };
             updatedUser.projects = updatedUser.projects.map((project) => {
                 const updatedTasks = project.tasks.map((task) => {
-                    const updatedSessions = task.sessions.map((s) =>
-                        s.id === session.id ? session : s
-                    );
+                    const updatedSessions = task.sessions.map((s) => (s.id === session.id ? session : s));
                     return { ...task, sessions: updatedSessions };
                 });
                 return { ...project, tasks: updatedTasks };
@@ -84,9 +80,7 @@ export default function EditSession() {
 
     if (
         user?.projects.find((project) =>
-            project.tasks.some((task) =>
-                task.sessions.some((session) => session.id === router.query.id)
-            )
+            project.tasks.some((task) => task.sessions.some((session) => session.id === router.query.id)),
         )?.archivedAt !== null
     ) {
         return (
@@ -96,9 +90,8 @@ export default function EditSession() {
                         <AlertCircle className="h-4 w-4" />
                         <AlertTitle>Error</AlertTitle>
                         <AlertDescription>
-                            This task belongs to a project that has been archived. Please unarchive
-                            the project again, by clicking the button in the top right of the
-                            project view!
+                            This task belongs to a project that has been archived. Please unarchive the project again,
+                            by clicking the button in the top right of the project view!
                         </AlertDescription>
                     </Alert>
                 </main>
@@ -119,17 +112,11 @@ export default function EditSession() {
                         </Link>
                         {session.flow && (
                             <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                                <FlowIconLabel
-                                    flowValue={session.flow}
-                                    className="text-muted-foreground"
-                                />
+                                <FlowIconLabel flowValue={session.flow} className="text-muted-foreground" />
                             </Badge>
                         )}
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                            <Link
-                                href={`/sessions/${session.id}`}
-                                className="text-muted-foreground"
-                            >
+                            <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
                                 <Button variant="outline" size="sm">
                                     Discard
                                 </Button>
@@ -144,30 +131,20 @@ export default function EditSession() {
                             <Card x-chunk="dashboard-07-chunk-0">
                                 <CardHeader>
                                     <CardTitle>Session Details</CardTitle>
-                                    <CardDescription>
-                                        Edit the description of the session.
-                                    </CardDescription>
+                                    <CardDescription>Edit the description of the session.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-6">
                                         <div className="grid gap-3">
                                             <Label htmlFor="name">Identifier</Label>
-                                            <Input
-                                                id="id"
-                                                type="text"
-                                                className="w-full"
-                                                value={session.id}
-                                                disabled
-                                            />
+                                            <Input id="id" type="text" className="w-full" value={session.id} disabled />
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="description">Description</Label>
                                             <Textarea
                                                 id="description"
                                                 value={session.description}
-                                                onChange={(e) =>
-                                                    handleInputChange("description", e.target.value)
-                                                }
+                                                onChange={(e) => handleInputChange("description", e.target.value)}
                                                 className="min-h-36"
                                             />
                                         </div>
@@ -233,10 +210,7 @@ export default function EditSession() {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {flows.map((flow) => (
-                                                        <SelectItem
-                                                            key={flow.value}
-                                                            value={flow.value}
-                                                        >
+                                                        <SelectItem key={flow.value} value={flow.value}>
                                                             <FlowIconLabel flowValue={flow.value} />
                                                         </SelectItem>
                                                     ))}

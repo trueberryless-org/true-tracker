@@ -1,21 +1,22 @@
 "use client";
 
-import { XIcon } from "lucide-react";
+import { Task } from "@/models";
 import { Table } from "@tanstack/react-table";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { XIcon } from "lucide-react";
+import { useEffect } from "react";
 
 import Project from "@/models/project";
 import { priorities, statuses } from "@/models/task";
 
-import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-import { DataTableViewOptions } from "./data-table-view-options";
 import { loadData } from "@/utils/load";
-import { DataTableFacetedFilterSimple } from "./data-table-faceted-filter-simple";
-import { Task } from "@/models";
-import { useEffect } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 import { useUser } from "../UserContext";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
+import { DataTableFacetedFilterSimple } from "./data-table-faceted-filter-simple";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;
@@ -66,9 +67,7 @@ export function DataTableToolbar<TData>({
                 <Input
                     placeholder="Filter tasks..."
                     value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
+                    onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
                 {table.getColumn("projectName") && (
@@ -80,11 +79,7 @@ export function DataTableToolbar<TData>({
                     />
                 )}
                 {table.getColumn("status") && (
-                    <DataTableFacetedFilter
-                        column={table.getColumn("status")}
-                        title="Status"
-                        options={statuses}
-                    />
+                    <DataTableFacetedFilter column={table.getColumn("status")} title="Status" options={statuses} />
                 )}
                 {table.getColumn("priority") && (
                     <DataTableFacetedFilter

@@ -1,5 +1,8 @@
 import React from "react";
-import { statuses } from "@/models/project"; // Adjust the import path as needed
+
+import { statuses } from "@/models/project";
+
+// Adjust the import path as needed
 
 interface StatusIconLabelProps {
     statusValue: string;

@@ -1,14 +1,10 @@
 "use client";
 
 import * as React from "react";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+
 import { Period, display12HourValue, setDateByType } from "@/utils/dateUtils";
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export interface PeriodSelectorProps {
     period: Period;
@@ -36,23 +32,13 @@ export const TimePeriodSelect = React.forwardRef<HTMLButtonElement, PeriodSelect
             if (date) {
                 const tempDate = new Date(date);
                 const hours = display12HourValue(date.getHours());
-                setDate(
-                    setDateByType(
-                        tempDate,
-                        hours.toString(),
-                        "12hours",
-                        period === "AM" ? "PM" : "AM"
-                    )
-                );
+                setDate(setDateByType(tempDate, hours.toString(), "12hours", period === "AM" ? "PM" : "AM"));
             }
         };
 
         return (
             <div className="flex h-10 items-center">
-                <Select
-                    defaultValue={period}
-                    onValueChange={(value: Period) => handleValueChange(value)}
-                >
+                <Select defaultValue={period} onValueChange={(value: Period) => handleValueChange(value)}>
                     <SelectTrigger
                         ref={ref}
                         className="w-[65px] focus:bg-accent focus:text-accent-foreground"
@@ -67,7 +53,7 @@ export const TimePeriodSelect = React.forwardRef<HTMLButtonElement, PeriodSelect
                 </Select>
             </div>
         );
-    }
+    },
 );
 
 TimePeriodSelect.displayName = "TimePeriodSelect";

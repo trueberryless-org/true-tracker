@@ -35,8 +35,7 @@ export const automationSettings: AutomationSettings[] = [
         label: "Archive Stop Sessions",
         description: "Automatically stop all running sessions when a project gets archived.",
         toastActivate: "Sessions will now automatically be stopped when the project gets archived.",
-        toastDeactivate:
-            "Sessions will no longer automatically be stopped when the project gets archived.",
+        toastDeactivate: "Sessions will no longer automatically be stopped when the project gets archived.",
         type: "boolean",
         group: "Archive",
     },
@@ -44,10 +43,8 @@ export const automationSettings: AutomationSettings[] = [
         key: "archiveProjectStatusRetirement",
         label: "Archive Project Status Retirement",
         description: "Move project status to “Completed” when it gets archived.",
-        toastActivate:
-            "Projects will now automatically be marked as “Completed” when they get archived.",
-        toastDeactivate:
-            "Projects will no longer automatically be marked as “Completed” when they get archived.",
+        toastActivate: "Projects will now automatically be marked as “Completed” when they get archived.",
+        toastDeactivate: "Projects will no longer automatically be marked as “Completed” when they get archived.",
         type: "boolean",
         group: "Archive",
     },
@@ -55,8 +52,7 @@ export const automationSettings: AutomationSettings[] = [
         key: "archiveTaskStatusRetirement",
         label: "Archive Task Status Retirement",
         description: "Move task status to “Completed” when their project gets archived.",
-        toastActivate:
-            "Tasks will now automatically be marked as “Completed” when their project gets archived.",
+        toastActivate: "Tasks will now automatically be marked as “Completed” when their project gets archived.",
         toastDeactivate:
             "Tasks will no longer automatically be marked as “Completed” when their project gets archived.",
         type: "boolean",
@@ -66,10 +62,8 @@ export const automationSettings: AutomationSettings[] = [
         key: "projectStatusKickoff",
         label: "Project Status Kickoff",
         description: "Mark projects as “In Progress” when a session is started.",
-        toastActivate:
-            "Projects will now automatically be marked as “In Progress” when a session is started.",
-        toastDeactivate:
-            "Projects will no longer automatically be marked as “In Progress” when a session is started.",
+        toastActivate: "Projects will now automatically be marked as “In Progress” when a session is started.",
+        toastDeactivate: "Projects will no longer automatically be marked as “In Progress” when a session is started.",
         type: "boolean",
         group: "Project",
     },
@@ -88,10 +82,8 @@ export const automationSettings: AutomationSettings[] = [
         key: "taskStatusKickoff",
         label: "Task Status Kickoff",
         description: "Mark tasks as “In Progress” when a session is started.",
-        toastActivate:
-            "Tasks will now automatically be marked as “In Progress” when a session is started.",
-        toastDeactivate:
-            "Tasks will no longer automatically be marked as “In Progress” when a session is started.",
+        toastActivate: "Tasks will now automatically be marked as “In Progress” when a session is started.",
+        toastDeactivate: "Tasks will no longer automatically be marked as “In Progress” when a session is started.",
         type: "boolean",
         group: "Task",
     },

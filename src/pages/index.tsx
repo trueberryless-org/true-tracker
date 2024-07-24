@@ -1,13 +1,10 @@
-import { useState, useEffect } from "react";
-import { User, Project, Task } from "../models";
-import { saveData } from "../utils/save";
-import { loadData } from "@/utils/load";
-import { importData } from "@/utils/import";
-import { exportData } from "@/utils/export";
-import Dashboard from "../components/dashboard/dashboard";
-import { useUser } from "@/components/UserContext";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+
+import { useUser } from "@/components/UserContext";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+import Dashboard from "../components/dashboard/dashboard";
 
 export default function Home() {
     const { user } = useUser();

@@ -1,8 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { useRouter } from "next/router";
-
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -17,24 +14,19 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import * as React from "react";
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
+import { useUser } from "../UserContext";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader } from "../ui/card";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-import { Card, CardContent, CardHeader } from "../ui/card";
 import { DataTableViewOptions } from "./data-table-view-options";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { Plus } from "lucide-react";
-import { useUser } from "../UserContext";
 
 interface TEntity {
     id: string;
@@ -94,17 +86,10 @@ export function DataTable<TData extends TEntity, TValue>({
     }
 
     const [newQueryParams, setNewQueryParams] = React.useState("");
-    const task = user?.projects
-        .flatMap((project) => project.tasks)
-        .find((task) => task.id === router.query.taskId);
+    const task = user?.projects.flatMap((project) => project.tasks).find((task) => task.id === router.query.taskId);
 
     React.useEffect(() => {
-        if (
-            task &&
-            user?.projects.some((project) =>
-                project.tasks.map((task) => task.name).includes(task.name)
-            )
-        ) {
+        if (task && user?.projects.some((project) => project.tasks.map((task) => task.name).includes(task.name))) {
             table.getColumn("taskName")?.setFilterValue([task.name]);
             setNewQueryParams(`?taskId=${task.id}`);
         }
@@ -149,7 +134,7 @@ export function DataTable<TData extends TEntity, TValue>({
                                                         ? null
                                                         : flexRender(
                                                               header.column.columnDef.header,
-                                                              header.getContext()
+                                                              header.getContext(),
                                                           )}
                                                 </TableHead>
                                             );
@@ -168,20 +153,14 @@ export function DataTable<TData extends TEntity, TValue>({
                                         >
                                             {row.getVisibleCells().map((cell) => (
                                                 <TableCell key={cell.id} className="truncate">
-                                                    {flexRender(
-                                                        cell.column.columnDef.cell,
-                                                        cell.getContext()
-                                                    )}
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                                 </TableCell>
                                             ))}
                                         </TableRow>
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell
-                                            colSpan={columns.length}
-                                            className="h-24 text-center"
-                                        >
+                                        <TableCell colSpan={columns.length} className="h-24 text-center">
                                             No results.
                                         </TableCell>
                                     </TableRow>

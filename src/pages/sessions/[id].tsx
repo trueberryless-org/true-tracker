@@ -1,40 +1,40 @@
-import { useRouter } from "next/router";
-import { useUser } from "@/components/UserContext";
-
-import Link from "next/link";
+import { format } from "date-fns";
 import {
     Activity,
+    Archive,
     ArrowUpRight,
+    Book,
+    CalendarCog,
+    CalendarMinus,
+    CalendarPlus,
+    ChevronLeft,
     CircleUser,
+    ClipboardCheck,
+    Clock9,
     CreditCard,
     DollarSign,
     Menu,
     Package2,
+    Plus,
     Search,
     Users,
-    ChevronLeft,
-    Archive,
-    CalendarPlus,
-    CalendarCog,
-    CalendarMinus,
     Workflow,
-    Plus,
-    Book,
-    ClipboardCheck,
-    Clock9,
 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { msToShortTime, msToTimeFitting } from "@/utils/dateUtils";
+import { saveData } from "@/utils/save";
+import { calcDurationComparison, calcFlowComparison } from "@/utils/sessionUtils";
+
+import { useUser } from "@/components/UserContext";
+import FlowIconLabel from "@/components/sessions/flow";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { format } from "date-fns";
-import { saveData } from "@/utils/save";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import FlowIconLabel from "@/components/sessions/flow";
-import { calcFlowComparison, calcDurationComparison } from "@/utils/sessionUtils";
-import { msToShortTime, msToTimeFitting } from "@/utils/dateUtils";
 
 export default function SessionPage() {
     const { user, setUser } = useUser();
@@ -66,32 +66,24 @@ export default function SessionPage() {
               ...foundSession,
               projectName:
                   user?.projects.find((project) =>
-                      project.tasks.some((task) =>
-                          task.sessions.some((s) => s.id === foundSession.id)
-                      )
+                      project.tasks.some((task) => task.sessions.some((s) => s.id === foundSession.id)),
                   )?.name || "Project Not Found",
               projectId:
                   user?.projects.find((project) =>
-                      project.tasks.some((task) =>
-                          task.sessions.some((s) => s.id === foundSession.id)
-                      )
+                      project.tasks.some((task) => task.sessions.some((s) => s.id === foundSession.id)),
                   )?.id || undefined,
               projectIsArchived:
                   user?.projects.find((project) =>
-                      project.tasks.some((task) =>
-                          task.sessions.some((s) => s.id === foundSession.id)
-                      )
+                      project.tasks.some((task) => task.sessions.some((s) => s.id === foundSession.id)),
                   )?.archivedAt !== null,
               taskName:
                   user?.projects
                       .flatMap((project) => project.tasks)
-                      .find((task) => task.sessions.some((s) => s.id === foundSession.id))?.name ||
-                  "Task Not Found",
+                      .find((task) => task.sessions.some((s) => s.id === foundSession.id))?.name || "Task Not Found",
               taskId:
                   user?.projects
                       .flatMap((project) => project.tasks)
-                      .find((task) => task.sessions.some((s) => s.id === foundSession.id))?.id ||
-                  undefined,
+                      .find((task) => task.sessions.some((s) => s.id === foundSession.id))?.id || undefined,
           }
         : undefined;
 
@@ -112,7 +104,7 @@ export default function SessionPage() {
     }
 
     const project = user?.projects.find((project) =>
-        project.tasks.some((task) => task.sessions.some((s) => s.id === session.id))
+        project.tasks.some((task) => task.sessions.some((s) => s.id === session.id)),
     );
 
     if (!project) {
@@ -144,9 +136,8 @@ export default function SessionPage() {
                     <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
                         {msToTimeFitting(
                             session.end
-                                ? new Date(session.end!).getTime() -
-                                      new Date(session.start).getTime()
-                                : Date.now() - new Date(session.start).getTime()
+                                ? new Date(session.end!).getTime() - new Date(session.start).getTime()
+                                : Date.now() - new Date(session.start).getTime(),
                         ) + " session"}
                     </h1>
                     <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
@@ -174,9 +165,7 @@ export default function SessionPage() {
                         }}
                     >
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Project
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Project</CardTitle>
                             <Book className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -202,23 +191,18 @@ export default function SessionPage() {
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-3">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Duration
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Duration</CardTitle>
                             <Clock9 className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
                                 {msToShortTime(
                                     session.end
-                                        ? new Date(session.end!).getTime() -
-                                              new Date(session.start).getTime()
-                                        : Date.now() - new Date(session.start).getTime()
+                                        ? new Date(session.end!).getTime() - new Date(session.start).getTime()
+                                        : Date.now() - new Date(session.start).getTime(),
                                 )}
                             </div>
-                            <p className="text-xs text-muted-foreground">
-                                {calcDurationComparison(user, session)}
-                            </p>
+                            <p className="text-xs text-muted-foreground">{calcDurationComparison(user, session)}</p>
                         </CardContent>
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-3">
@@ -230,9 +214,7 @@ export default function SessionPage() {
                             <div className="text-2xl font-bold">
                                 <FlowIconLabel flowValue={session.flow} />
                             </div>
-                            <p className="text-xs text-muted-foreground">
-                                {calcFlowComparison(user, session.flow)}
-                            </p>
+                            <p className="text-xs text-muted-foreground">{calcFlowComparison(user, session.flow)}</p>
                         </CardContent>
                     </Card>
                 </div>

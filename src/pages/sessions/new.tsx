@@ -1,32 +1,30 @@
+import { Session, Task } from "@/models";
+import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+
+import Project from "@/models/project";
+import { flows } from "@/models/session";
+
+import { saveData } from "@/utils/save";
+import { initializeSession } from "@/utils/sessionUtils";
+
+import { useUser } from "@/components/UserContext";
+import FlowIconLabel from "@/components/sessions/flow";
+import { TimePicker12 } from "@/components/time-picker/time-picker-12h";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/components/UserContext";
-import Project from "@/models/project";
-import { useEffect, useRef, useState } from "react";
-import { saveData } from "@/utils/save";
-import Link from "next/link";
-import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
-import { Session, Task } from "@/models";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from "sonner";
-import { initializeSession } from "@/utils/sessionUtils";
-import FlowIconLabel from "@/components/sessions/flow";
-import { flows } from "@/models/session";
-import { TimePicker12 } from "@/components/time-picker/time-picker-12h";
 
 export default function NewSession() {
     const { user, setUser } = useUser();
@@ -41,9 +39,7 @@ export default function NewSession() {
     const [end, setEnd] = useState<Date>();
 
     const tasks =
-        user?.projects
-            .filter((project) => project.archivedAt === null)
-            .flatMap((project) => project.tasks) || [];
+        user?.projects.filter((project) => project.archivedAt === null).flatMap((project) => project.tasks) || [];
 
     useEffect(() => {
         const newSession = initializeSession();
@@ -53,9 +49,7 @@ export default function NewSession() {
         setEnd(newSession.end!);
         const taskId = router.query.taskId as string;
         if (taskId) {
-            const task =
-                user?.projects.flatMap((project) => project.tasks).find((t) => t.id === taskId) ||
-                null;
+            const task = user?.projects.flatMap((project) => project.tasks).find((t) => t.id === taskId) || null;
             setTask(task);
         }
     }, [router.query.taskId, user?.projects]);
@@ -121,10 +115,7 @@ export default function NewSession() {
                     <div className="flex items-center gap-4">
                         {session.flow && (
                             <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                                <FlowIconLabel
-                                    flowValue={session.flow}
-                                    className="text-muted-foreground"
-                                />
+                                <FlowIconLabel flowValue={session.flow} className="text-muted-foreground" />
                             </Badge>
                         )}
                         <div className="hidden items-center gap-2 md:ml-auto md:flex">
@@ -146,38 +137,24 @@ export default function NewSession() {
                             <Card x-chunk="dashboard-07-chunk-0">
                                 <CardHeader>
                                     <CardTitle>Session Details</CardTitle>
-                                    <CardDescription>
-                                        Edit the description of the session.
-                                    </CardDescription>
+                                    <CardDescription>Edit the description of the session.</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid gap-6">
                                         <div className="grid gap-3">
                                             <Label htmlFor="name">Identifier</Label>
-                                            <Input
-                                                id="id"
-                                                type="text"
-                                                className="w-full"
-                                                value={session.id}
-                                                disabled
-                                            />
+                                            <Input id="id" type="text" className="w-full" value={session.id} disabled />
                                         </div>
                                         <div className="grid gap-3">
                                             <Label htmlFor="task">Task</Label>
                                             <Select
                                                 value={task?.id}
                                                 onValueChange={(value) => {
-                                                    const selectedTask = tasks.find(
-                                                        (t) => t.id === value
-                                                    );
+                                                    const selectedTask = tasks.find((t) => t.id === value);
                                                     setTask(selectedTask || null);
                                                 }}
                                             >
-                                                <SelectTrigger
-                                                    id="task"
-                                                    aria-label="Select task"
-                                                    ref={taskInputRef}
-                                                >
+                                                <SelectTrigger id="task" aria-label="Select task" ref={taskInputRef}>
                                                     <SelectValue placeholder="Select task">
                                                         {task ? task.name : "Select task"}
                                                     </SelectValue>
@@ -196,9 +173,7 @@ export default function NewSession() {
                                             <Textarea
                                                 id="description"
                                                 value={session.description}
-                                                onChange={(e) =>
-                                                    handleInputChange("description", e.target.value)
-                                                }
+                                                onChange={(e) => handleInputChange("description", e.target.value)}
                                                 className="min-h-36"
                                             />
                                         </div>
@@ -264,10 +239,7 @@ export default function NewSession() {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {flows.map((flow) => (
-                                                        <SelectItem
-                                                            key={flow.value}
-                                                            value={flow.value}
-                                                        >
+                                                        <SelectItem key={flow.value} value={flow.value}>
                                                             <FlowIconLabel flowValue={flow.value} />
                                                         </SelectItem>
                                                     ))}
@@ -293,12 +265,10 @@ export default function NewSession() {
                                                             <AvatarFallback>T</AvatarFallback>
                                                         </Avatar>
                                                         <div className="space-y-1">
-                                                            <h4 className="text-sm font-semibold">
-                                                                @trueberryless
-                                                            </h4>
+                                                            <h4 className="text-sm font-semibold">@trueberryless</h4>
                                                             <p className="text-sm">
-                                                                We automatically assume that the
-                                                                session lasted for three hours.
+                                                                We automatically assume that the session lasted for
+                                                                three hours.
                                                             </p>
                                                         </div>
                                                     </div>
@@ -310,10 +280,7 @@ export default function NewSession() {
                                 <CardContent>
                                     <div className="grid gap-6">
                                         <div className="grid gap-3">
-                                            <TimePicker12
-                                                date={start}
-                                                setDate={handleStartChange}
-                                            />
+                                            <TimePicker12 date={start} setDate={handleStartChange} />
                                         </div>
                                     </div>
                                 </CardContent>
@@ -334,13 +301,10 @@ export default function NewSession() {
                                                             <AvatarFallback>T</AvatarFallback>
                                                         </Avatar>
                                                         <div className="space-y-1">
-                                                            <h4 className="text-sm font-semibold">
-                                                                @trueberryless
-                                                            </h4>
+                                                            <h4 className="text-sm font-semibold">@trueberryless</h4>
                                                             <p className="text-sm">
-                                                                We automatically assume that
-                                                                manually added sessions ended right
-                                                                now.
+                                                                We automatically assume that manually added sessions
+                                                                ended right now.
                                                             </p>
                                                         </div>
                                                     </div>

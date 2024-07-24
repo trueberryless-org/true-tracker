@@ -1,7 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { Moon, Sun } from "lucide-react";
+import * as React from "react";
+
+import { saveData } from "@/utils/save";
+import { getCurrentTheme, setTheme } from "@/utils/themes";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,10 +14,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThemeDiamond } from "./theme-diamond";
+
 import { useUser } from "../UserContext";
-import { saveData } from "@/utils/save";
-import { getCurrentTheme, setTheme } from "@/utils/themes";
+import { ThemeDiamond } from "./theme-diamond";
 
 export default function ThemeSwitcher() {
     const { user } = useUser();
@@ -37,7 +39,7 @@ export default function ThemeSwitcher() {
                 saveData(user);
             }
         },
-        [user]
+        [user],
     );
 
     return (

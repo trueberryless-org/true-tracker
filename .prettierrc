@@ -1,0 +1,17 @@
+{
+    "printWidth": 120,
+    "tabWidth": 4,
+    "importOrder": [
+        "<THIRD_PARTY_MODULES>",
+        "^@internal/(.*)$",
+        "^@/models/(.*)$",
+        "^@/utils/(.*)$",
+        "^@/components/(?!ui/)(.*)$",
+        "^@/components/ui/(.*)$",
+        "^[./].*(?<!\\.(c|le|sc)ss)$",
+        "^[.]/[-a-zA-Z0-9_]+[.](module)[.](css|scss|less)$"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "plugins": ["@trivago/prettier-plugin-sort-imports"]
+}

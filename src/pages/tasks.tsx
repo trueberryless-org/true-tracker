@@ -1,26 +1,22 @@
-import { useState, useEffect } from "react";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { ExtendedTask } from "@/models/task";
+
+import { useUser } from "@/components/UserContext";
+import { columnsLg, columnsMd, columnsMobile, columnsSm, columnsXl } from "@/components/tasks/columns";
+import { DataTable } from "@/components/tasks/data-table";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { Project, User } from "../models";
-import { saveData } from "../utils/save";
-import { loadData } from "../utils/load";
-import { importData } from "../utils/import";
 import { exportData } from "../utils/export";
-import { setSessionStorageItem, getSessionStorageItem } from "../utils/sessionStorage";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { DataTable } from "@/components/tasks/data-table";
-import {
-    columnsXl,
-    columnsLg,
-    columnsMd,
-    columnsSm,
-    columnsMobile,
-} from "@/components/tasks/columns";
-import { useUser } from "@/components/UserContext";
-import { ExtendedTask } from "@/models/task";
+import { importData } from "../utils/import";
+import { loadData } from "../utils/load";
+import { saveData } from "../utils/save";
+import { getSessionStorageItem, setSessionStorageItem } from "../utils/sessionStorage";
 
 export default function Tasks() {
     const { user } = useUser();
@@ -44,9 +40,7 @@ export default function Tasks() {
     const data: ExtendedTask[] = user.projects
         .flatMap((project) => project.tasks)
         .map((task) => {
-            const project = user.projects.find((project) =>
-                project.tasks.some((t: { id: any }) => t.id === task.id)
-            );
+            const project = user.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === task.id));
             return {
                 ...task,
                 projectName: project ? project.name : "Project Not Found",

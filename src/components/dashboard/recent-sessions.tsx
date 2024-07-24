@@ -1,12 +1,15 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useUser } from "../UserContext";
-import { Fish, PawPrint, Rabbit, Snail } from "lucide-react";
-import { format, isToday } from "date-fns";
 import { Session } from "@/models";
-import { getProjectOfSession, getSessionDuration, getTaskOfSession } from "@/utils/sessionUtils";
-import { msToShortTime } from "@/utils/dateUtils";
+import { format, isToday } from "date-fns";
+import { Fish, PawPrint, Rabbit, Snail } from "lucide-react";
 import Link from "next/link";
 import { DateRange } from "react-day-picker";
+
+import { msToShortTime } from "@/utils/dateUtils";
+import { getProjectOfSession, getSessionDuration, getTaskOfSession } from "@/utils/sessionUtils";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+import { useUser } from "../UserContext";
 
 interface RecentSessionsProps {
     dateRange: DateRange | undefined;
@@ -20,7 +23,7 @@ export const RecentSessions: React.FC<RecentSessionsProps> = ({ dateRange, limit
         if (session.end) {
             return `${format(session.start, "MMMM d")}: ${format(
                 session.start,
-                "hh:mm aa"
+                "hh:mm aa",
             )} - ${format(session.end, "hh:mm aa")}`;
         }
 
@@ -37,16 +40,13 @@ export const RecentSessions: React.FC<RecentSessionsProps> = ({ dateRange, limit
                     }
 
                     return (
-                        new Date(session.end ?? session.start).getTime() >=
-                            new Date(dateRange.from!).getTime() &&
+                        new Date(session.end ?? session.start).getTime() >= new Date(dateRange.from!).getTime() &&
                         new Date(session.end ?? session.start).getTime() <=
                             new Date(dateRange.to!).setHours(23, 59, 59, 999)
                     );
                 })
                 .sort((a, b) => {
-                    return (
-                        new Date(b.end ?? b.start).getTime() - new Date(a.end ?? a.start).getTime()
-                    );
+                    return new Date(b.end ?? b.start).getTime() - new Date(a.end ?? a.start).getTime();
                 })
                 .slice(0, limit)
                 .map((session, index) => (
@@ -65,16 +65,11 @@ export const RecentSessions: React.FC<RecentSessionsProps> = ({ dateRange, limit
                         </Avatar>
                         <div className="ml-4 space-y-1">
                             <p className="text-sm font-medium leading-none">
-                                {getProjectOfSession(session, user)?.name} -{" "}
-                                {getTaskOfSession(session, user)?.name}
+                                {getProjectOfSession(session, user)?.name} - {getTaskOfSession(session, user)?.name}
                             </p>
-                            <p className="text-sm text-muted-foreground">
-                                {getTimeDescription(session)}
-                            </p>
+                            <p className="text-sm text-muted-foreground">{getTimeDescription(session)}</p>
                         </div>
-                        <div className="ml-auto font-medium">
-                            {msToShortTime(getSessionDuration(session))}
-                        </div>
+                        <div className="ml-auto font-medium">{msToShortTime(getSessionDuration(session))}</div>
                     </Link>
                 ))}
         </div>

@@ -1,35 +1,30 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { Fish, PawPrint, Rabbit, Snail } from "lucide-react";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart";
 import { Session } from "@/models";
 import {
+    addDays,
     addMonths,
     addWeeks,
-    addDays,
     differenceInDays,
-    startOfMonth,
-    startOfWeek,
-    startOfDay,
+    eachDayOfInterval,
+    eachMonthOfInterval,
+    eachWeekOfInterval,
+    endOfDay,
     endOfMonth,
     endOfWeek,
-    endOfDay,
-    eachDayOfInterval,
-    eachWeekOfInterval,
-    eachMonthOfInterval,
     format,
     getWeek,
     isValid,
+    startOfDay,
+    startOfMonth,
+    startOfWeek,
 } from "date-fns";
+import { Fish, PawPrint, Rabbit, Snail } from "lucide-react";
 import { DateRange } from "react-day-picker";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 interface FlowData {
     date: string;
@@ -94,20 +89,18 @@ function getAllIntervals(start: Date, end: Date, interval: "month" | "week" | "d
     return intervals;
 }
 
-function aggregateFlowData(
-    sessions: Session[],
-    dateRange: DateRange,
-    interval: "month" | "week" | "day"
-): FlowData[] {
-    const allIntervals = getAllIntervals(
-        new Date(dateRange.from!),
-        new Date(dateRange.to!),
-        interval
-    );
+function aggregateFlowData(sessions: Session[], dateRange: DateRange, interval: "month" | "week" | "day"): FlowData[] {
+    const allIntervals = getAllIntervals(new Date(dateRange.from!), new Date(dateRange.to!), interval);
     const data: any = {};
 
     allIntervals.forEach((intervalKey) => {
-        data[intervalKey] = { date: intervalKey, smooth: 0, good: 0, neutral: 0, disrupted: 0 };
+        data[intervalKey] = {
+            date: intervalKey,
+            smooth: 0,
+            good: 0,
+            neutral: 0,
+            disrupted: 0,
+        };
     });
 
     sessions.forEach((session) => {
@@ -146,7 +139,13 @@ function aggregateFlowData(
 
     return allIntervals.map(
         (intervalKey) =>
-            data[intervalKey] || { date: intervalKey, smooth: 0, good: 0, neutral: 0, disrupted: 0 }
+            data[intervalKey] || {
+                date: intervalKey,
+                smooth: 0,
+                good: 0,
+                neutral: 0,
+                disrupted: 0,
+            },
     );
 }
 
@@ -166,13 +165,7 @@ function formatDuration(seconds: number, interval: "month" | "week" | "day"): st
     }
 }
 
-export function SessionsChart({
-    sessions,
-    dateRange,
-}: {
-    sessions: Session[];
-    dateRange: DateRange;
-}) {
+export function SessionsChart({ sessions, dateRange }: { sessions: Session[]; dateRange: DateRange }) {
     const interval = getIntervalKey(dateRange);
     const flowData = aggregateFlowData(sessions, dateRange, interval);
 
@@ -198,7 +191,9 @@ export function SessionsChart({
                                 if (interval === "month") {
                                     return format(date, "yyyy-MM");
                                 } else if (interval === "week") {
-                                    const weekStart = startOfWeek(date, { weekStartsOn: 1 });
+                                    const weekStart = startOfWeek(date, {
+                                        weekStartsOn: 1,
+                                    });
                                     return `${weekStart.getFullYear()}-W${getWeek(weekStart, {
                                         weekStartsOn: 1,
                                     })}`;

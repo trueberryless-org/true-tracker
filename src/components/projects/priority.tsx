@@ -1,5 +1,8 @@
 import React from "react";
-import { priorities } from "@/models/project"; // Adjust the import path as needed
+
+import { priorities } from "@/models/project";
+
+// Adjust the import path as needed
 
 interface PriorityIconLabelProps {
     priorityValue: string;
@@ -7,11 +10,7 @@ interface PriorityIconLabelProps {
     className?: string;
 }
 
-const PriorityIconLabel: React.FC<PriorityIconLabelProps> = ({
-    priorityValue,
-    justify,
-    className,
-}) => {
+const PriorityIconLabel: React.FC<PriorityIconLabelProps> = ({ priorityValue, justify, className }) => {
     const priority = priorities.find((priority) => priority.value === priorityValue);
 
     if (!priority) {

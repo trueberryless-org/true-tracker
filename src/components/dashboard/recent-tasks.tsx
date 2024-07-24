@@ -1,21 +1,22 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useUser } from "../UserContext";
-import { format, isToday } from "date-fns";
 import { Session, Task } from "@/models";
 import { ArrowDown, ArrowRight, ArrowUp } from "lucide-react";
-import { getProjectOfSession, getSessionDuration, getTaskOfSession } from "@/utils/sessionUtils";
-import { msToShortTime } from "@/utils/dateUtils";
+import Link from "next/link";
+import { DateRange } from "react-day-picker";
+import { toast } from "sonner";
+
+import { saveData } from "@/utils/save";
+import { isSessionInDateRange } from "@/utils/sessionUtils";
 import {
     getMostRecentSessionDateInIntervalOfTask,
     getMostRecentSessionDateOfTask,
     getProjectOfTask,
 } from "@/utils/taskUtils";
-import StatusIconLabel from "../tasks/status";
-import { toast } from "sonner";
-import { saveData } from "@/utils/save";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+import { useUser } from "../UserContext";
 import StartStopButton from "../tasks/start-stop-button";
-import Link from "next/link";
-import { DateRange } from "react-day-picker";
+import StatusIconLabel from "../tasks/status";
 
 interface RecentTasksProps {
     dateRange: DateRange | undefined;
@@ -32,10 +33,7 @@ export const RecentTasks: React.FC<RecentTasksProps> = ({ dateRange, limit = 7 }
                     if (task.id === taskId) {
                         if (newSession.end === null) {
                             // Start a new Session
-                            if (
-                                task.sessions.length === 0 &&
-                                (task.status === "backlog" || task.status === "todo")
-                            ) {
+                            if (task.sessions.length === 0 && (task.status === "backlog" || task.status === "todo")) {
                                 let taskMoved = false;
                                 let projectMoved = false;
 
@@ -49,9 +47,7 @@ export const RecentTasks: React.FC<RecentTasksProps> = ({ dateRange, limit = 7 }
                                 }
 
                                 if (taskMoved && projectMoved) {
-                                    toast(
-                                        "We automatically moved your task and project to “In Progress”."
-                                    );
+                                    toast("We automatically moved your task and project to “In Progress”.");
                                 } else if (taskMoved) {
                                     toast("We automatically moved your task to “In Progress”.");
                                 } else if (projectMoved) {
@@ -66,7 +62,7 @@ export const RecentTasks: React.FC<RecentTasksProps> = ({ dateRange, limit = 7 }
                         } else {
                             // Stop the current Session
                             const updatedSessions = task.sessions.map((session) =>
-                                session.end ? session : { ...session, end: new Date() }
+                                session.end ? session : { ...session, end: new Date() },
                             );
                             return {
                                 ...task,
@@ -102,20 +98,12 @@ export const RecentTasks: React.FC<RecentTasksProps> = ({ dateRange, limit = 7 }
                         return true;
                     }
 
-                    return task.sessions.some((session) => {
-                        return (
-                            new Date(session.end ?? session.start).getTime() >=
-                                new Date(dateRange.from!).getTime() &&
-                            new Date(session.end ?? session.start).getTime() <=
-                                new Date(dateRange.to ?? dateRange.from!).setHours(23, 59, 59, 999)
-                        );
-                    });
+                    return task.sessions.some((session) => isSessionInDateRange(session, dateRange));
                 })
                 .sort((a, b) => {
                     if (!dateRange) {
                         return (
-                            getMostRecentSessionDateOfTask(b).getTime() -
-                            getMostRecentSessionDateOfTask(a).getTime()
+                            getMostRecentSessionDateOfTask(b).getTime() - getMostRecentSessionDateOfTask(a).getTime()
                         );
                     }
                     return (

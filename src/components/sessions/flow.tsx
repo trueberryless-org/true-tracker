@@ -1,5 +1,8 @@
 import React from "react";
-import { flows } from "@/models/session"; // Adjust the import path as needed
+
+import { flows } from "@/models/session";
+
+// Adjust the import path as needed
 
 interface FlowIconLabelProps {
     flowValue: string;

@@ -3,11 +3,7 @@ import { Version } from "@/models";
 export function sameVersion(version1: Version, version2: Version): boolean {
     if (!version1) return false;
     if (!version2) return false;
-    return (
-        version1.major === version2.major &&
-        version1.minor === version2.minor &&
-        version1.patch === version2.patch
-    );
+    return version1.major === version2.major && version1.minor === version2.minor && version1.patch === version2.patch;
 }
 
 export function compareVersion(version1: Version, version2: Version): number {

@@ -1,10 +1,15 @@
-import { useRouter } from "next/router";
-import { useUser } from "@/components/UserContext";
-
-import Link from "next/link";
+import { Session } from "@/models";
+import { format } from "date-fns";
 import {
     Activity,
+    Archive,
     ArrowUpRight,
+    BadgeInfo,
+    Book,
+    CalendarCog,
+    CalendarMinus,
+    CalendarPlus,
+    ChevronLeft,
     CircleUser,
     CreditCard,
     DollarSign,
@@ -12,16 +17,26 @@ import {
     Package2,
     Search,
     Users,
-    ChevronLeft,
-    Archive,
-    CalendarPlus,
-    CalendarCog,
-    CalendarMinus,
     Workflow,
-    BadgeInfo,
-    Book,
 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Key, useEffect, useState } from "react";
+import { toast } from "sonner";
 
+import Task from "@/models/task";
+
+import { formatDateTime, formatDateToDistanceFromNow } from "@/utils/dateUtils";
+import { saveData } from "@/utils/save";
+import { calcPriorityComparison, calcStatusComparison } from "@/utils/taskUtils";
+
+import { useUser } from "@/components/UserContext";
+import PriorityIconLabel from "@/components/tasks/priority";
+import StartStopButton from "@/components/tasks/start-stop-button";
+import StatusIconLabel from "@/components/tasks/status";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,28 +51,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import StatusIconLabel from "@/components/tasks/status";
-import PriorityIconLabel from "@/components/tasks/priority";
-import { calcPriorityComparison, calcStatusComparison } from "@/utils/taskUtils";
-import { format } from "date-fns";
-import { saveData } from "@/utils/save";
-import Task from "@/models/task";
-
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import StartStopButton from "@/components/tasks/start-stop-button";
-import { Session } from "@/models";
-import { Key, useEffect, useState } from "react";
-import { formatDateTime, formatDateToDistanceFromNow } from "@/utils/dateUtils";
-import { toast } from "sonner";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function TaskPage() {
     const { user, setUser } = useUser();
@@ -72,25 +66,20 @@ export default function TaskPage() {
         return () => clearInterval(interval);
     }, []);
 
-    const foundTask = user?.projects
-        .flatMap((project) => project.tasks)
-        .find((task) => task.id === router.query.id);
+    const foundTask = user?.projects.flatMap((project) => project.tasks).find((task) => task.id === router.query.id);
 
     const task = foundTask
         ? {
               ...foundTask,
               projectName:
-                  user?.projects.find((project) =>
-                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
-                  )?.name || "Project Not Found",
+                  user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === foundTask.id))
+                      ?.name || "Project Not Found",
               projectId:
-                  user?.projects.find((project) =>
-                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
-                  )?.id || undefined,
+                  user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === foundTask.id))?.id ||
+                  undefined,
               projectIsArchived:
-                  user?.projects.find((project) =>
-                      project.tasks.some((t: { id: any }) => t.id === foundTask.id)
-                  )?.archivedAt !== null,
+                  user?.projects.find((project) => project.tasks.some((t: { id: any }) => t.id === foundTask.id))
+                      ?.archivedAt !== null,
           }
         : undefined;
 
@@ -117,10 +106,7 @@ export default function TaskPage() {
                     if (task.id === taskId) {
                         if (newSession.end === null) {
                             // Start a new Session
-                            if (
-                                task.sessions.length === 0 &&
-                                (task.status === "backlog" || task.status === "todo")
-                            ) {
+                            if (task.sessions.length === 0 && (task.status === "backlog" || task.status === "todo")) {
                                 let taskMoved = false;
                                 let projectMoved = false;
 
@@ -134,9 +120,7 @@ export default function TaskPage() {
                                 }
 
                                 if (taskMoved && projectMoved) {
-                                    toast(
-                                        "We automatically moved your task and project to “In Progress”."
-                                    );
+                                    toast("We automatically moved your task and project to “In Progress”.");
                                 } else if (taskMoved) {
                                     toast("We automatically moved your task to “In Progress”.");
                                 } else if (projectMoved) {
@@ -151,7 +135,7 @@ export default function TaskPage() {
                         } else {
                             // Stop the current Session
                             const updatedSessions = task.sessions.map((session) =>
-                                session.end ? session : { ...session, end: new Date() }
+                                session.end ? session : { ...session, end: new Date() },
                             );
                             return {
                                 ...task,
@@ -195,25 +179,16 @@ export default function TaskPage() {
                     </h1>
                     {task.priority && (
                         <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                            <PriorityIconLabel
-                                priorityValue={task.priority}
-                                className="text-muted-foreground"
-                            />
+                            <PriorityIconLabel priorityValue={task.priority} className="text-muted-foreground" />
                         </Badge>
                     )}
                     {task.status && (
                         <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                            <StatusIconLabel
-                                statusValue={task.status}
-                                className="text-muted-foreground"
-                            />
+                            <StatusIconLabel statusValue={task.status} className="text-muted-foreground" />
                         </Badge>
                     )}
                     {task.projectIsArchived && (
-                        <Badge
-                            variant="destructive"
-                            className="hidden ml-auto sm:ml-0 py-2 md:block"
-                        >
+                        <Badge variant="destructive" className="hidden ml-auto sm:ml-0 py-2 md:block">
                             <div className="flex items-center">
                                 <Archive className="mr-2 h-4 w-4" />
                                 Archived by project
@@ -242,9 +217,7 @@ export default function TaskPage() {
                         }}
                     >
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Project
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Project</CardTitle>
                             <Book className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -255,40 +228,30 @@ export default function TaskPage() {
                     {task.description && (
                         <Card x-chunk="dashboard-01-chunk-2">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium text-primary">
-                                    Description
-                                </CardTitle>
+                                <CardTitle className="text-sm font-medium text-primary">Description</CardTitle>
                                 <BadgeInfo className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold truncate">
-                                    {task.description}
-                                </div>
+                                <div className="text-2xl font-bold truncate">{task.description}</div>
                                 <p className="text-xs text-muted-foreground">Now it makes sense!</p>
                             </CardContent>
                         </Card>
                     )}
                     <Card x-chunk="dashboard-01-chunk-2">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Status
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Status</CardTitle>
                             <Workflow className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
                                 <StatusIconLabel statusValue={task.status} />
                             </div>
-                            <p className="text-xs text-muted-foreground">
-                                {calcStatusComparison(user, task.status)}
-                            </p>
+                            <p className="text-xs text-muted-foreground">{calcStatusComparison(user, task.status)}</p>
                         </CardContent>
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-3">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Priority
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Priority</CardTitle>
                             <Activity className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -342,44 +305,33 @@ export default function TaskPage() {
                                     {task.sessions
                                         .sort(
                                             (a: Session, b: Session) =>
-                                                new Date(b.start).getTime() -
-                                                new Date(a.start).getTime()
+                                                new Date(b.start).getTime() - new Date(a.start).getTime(),
                                         )
                                         .slice(0, 3)
                                         .map((session: Session, i: Key | null | undefined) => {
                                             return (
                                                 <TableRow
                                                     key={i}
-                                                    onClick={() =>
-                                                        router.push(`/sessions/${session.id}`)
-                                                    }
+                                                    onClick={() => router.push(`/sessions/${session.id}`)}
                                                     className="cursor-pointer"
                                                 >
                                                     <TableCell>
                                                         <div className="font-medium">
-                                                            {formatDateTime(
-                                                                new Date(session.start)
-                                                            )}
+                                                            {formatDateTime(new Date(session.start))}
                                                         </div>
                                                         <div className="hidden text-sm text-muted-foreground md:inline">
-                                                            {formatDateToDistanceFromNow(
-                                                                new Date(session.start)
-                                                            )}
+                                                            {formatDateToDistanceFromNow(new Date(session.start))}
                                                         </div>
                                                     </TableCell>
                                                     <TableCell className="text-right">
                                                         <div className="font-medium">
                                                             {session.end
-                                                                ? formatDateTime(
-                                                                      new Date(session.end)
-                                                                  )
+                                                                ? formatDateTime(new Date(session.end))
                                                                 : "Active"}
                                                         </div>
                                                         <div className="hidden text-sm text-muted-foreground md:inline">
                                                             {session.end
-                                                                ? formatDateToDistanceFromNow(
-                                                                      new Date(session.end)
-                                                                  )
+                                                                ? formatDateToDistanceFromNow(new Date(session.end))
                                                                 : ""}
                                                         </div>
                                                     </TableCell>

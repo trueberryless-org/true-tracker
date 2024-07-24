@@ -1,15 +1,12 @@
 import { User, Version } from "@/models";
+
 import { sameVersion } from "./versionUtils";
 
 type UpgradeFunction = (data: any) => any;
 
-var upgradeFunctions: Map<string, UpgradeFunction> = new Map();
+const upgradeFunctions: Map<string, UpgradeFunction> = new Map();
 
-export function registerUpgradeFunction(
-    fromVersion: Version,
-    toVersion: Version,
-    fn: UpgradeFunction
-) {
+export function registerUpgradeFunction(fromVersion: Version, toVersion: Version, fn: UpgradeFunction) {
     const key = `${fromVersion.major}.${fromVersion.minor}.${fromVersion.patch}->${toVersion.major}.${toVersion.minor}.${toVersion.patch}`;
     upgradeFunctions.set(key, fn);
 }
@@ -28,7 +25,7 @@ export function upgradeData(data: any, targetVersion: Version): User {
         const upgradeFunction = upgradeFunctions.get(key);
         if (!upgradeFunction) {
             throw new Error(
-                `Keine Upgrade-Funktion gefunden für Version ${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch} -> ${nextVersion.major}.${nextVersion.minor}.${nextVersion.patch}`
+                `Keine Upgrade-Funktion gefunden für Version ${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch} -> ${nextVersion.major}.${nextVersion.minor}.${nextVersion.patch}`,
             );
         }
 

@@ -2,15 +2,18 @@
 
 import { Project, Task } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "../tasks/data-table-column-header";
-import { ExtendedTask, priorities, statuses } from "@/models/task";
-import { Badge } from "../ui/badge";
 import { format } from "date-fns";
-import { DataTableRowActions } from "../tasks/data-table-row-actions";
-import { calculateTotalTime } from "@/utils/taskUtils";
-import { msToTime } from "@/utils/dateUtils";
 import { useEffect } from "react";
+
+import { ExtendedTask, priorities, statuses } from "@/models/task";
+
+import { msToTime } from "@/utils/dateUtils";
 import { loadData } from "@/utils/load";
+import { calculateTotalTime } from "@/utils/taskUtils";
+
+import { DataTableColumnHeader } from "../tasks/data-table-column-header";
+import { DataTableRowActions } from "../tasks/data-table-row-actions";
+import { Badge } from "../ui/badge";
 
 export const columnsXl: ColumnDef<ExtendedTask>[] = [
     {
@@ -19,15 +22,9 @@ export const columnsXl: ColumnDef<ExtendedTask>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    {row.original.projectIsArchived && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    {row.original.someSessionIsRunning === true && (
-                        <Badge variant="default">Running</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {row.original.projectIsArchived && <Badge variant="destructive">Archived</Badge>}
+                    {row.original.someSessionIsRunning === true && <Badge variant="default">Running</Badge>}
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -38,9 +35,7 @@ export const columnsXl: ColumnDef<ExtendedTask>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("description")}</span>
                 </div>
             );
         },
@@ -106,9 +101,7 @@ export const columnsXl: ColumnDef<ExtendedTask>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -116,9 +109,7 @@ export const columnsXl: ColumnDef<ExtendedTask>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -144,15 +135,9 @@ export const columnsLg: ColumnDef<ExtendedTask>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    {row.original.projectIsArchived && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    {row.original.someSessionIsRunning === true && (
-                        <Badge variant="default">Running</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {row.original.projectIsArchived && <Badge variant="destructive">Archived</Badge>}
+                    {row.original.someSessionIsRunning === true && <Badge variant="default">Running</Badge>}
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -218,9 +203,7 @@ export const columnsLg: ColumnDef<ExtendedTask>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -228,9 +211,7 @@ export const columnsLg: ColumnDef<ExtendedTask>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -256,15 +237,9 @@ export const columnsMd: ColumnDef<ExtendedTask>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    {row.original.projectIsArchived && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    {row.original.someSessionIsRunning === true && (
-                        <Badge variant="default">Running</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {row.original.projectIsArchived && <Badge variant="destructive">Archived</Badge>}
+                    {row.original.someSessionIsRunning === true && <Badge variant="default">Running</Badge>}
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -319,9 +294,7 @@ export const columnsMd: ColumnDef<ExtendedTask>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -329,9 +302,7 @@ export const columnsMd: ColumnDef<ExtendedTask>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -360,9 +331,7 @@ export const columnsSm: ColumnDef<ExtendedTask>[] = [
             return (
                 <div className="flex space-x-2">
                     {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -433,9 +402,7 @@ export const columnsMobile: ColumnDef<ExtendedTask>[] = [
             return (
                 <div className="flex space-x-2">
                     {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },

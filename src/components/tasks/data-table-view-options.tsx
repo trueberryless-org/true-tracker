@@ -1,10 +1,10 @@
 "use client";
 
-import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { SlidersHorizontalIcon } from "lucide-react";
 import { Table } from "@tanstack/react-table";
+import { SlidersHorizontalIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -31,9 +31,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
                 <DropdownMenuSeparator />
                 {table
                     .getAllColumns()
-                    .filter(
-                        (column) => typeof column.accessorFn !== "undefined" && column.getCanHide()
-                    )
+                    .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide())
                     .map((column) => {
                         return (
                             <DropdownMenuCheckboxItem

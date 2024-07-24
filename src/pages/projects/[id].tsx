@@ -1,27 +1,38 @@
-import { useRouter } from "next/router";
-import { useUser } from "@/components/UserContext";
-
-import Link from "next/link";
+import { Project } from "@/models";
+import { format } from "date-fns";
 import {
     Activity,
+    Archive,
     ArrowUpRight,
+    CalendarCog,
+    CalendarMinus,
+    CalendarPlus,
+    ChevronLeft,
     CircleUser,
     CreditCard,
     DollarSign,
     Menu,
     Package2,
+    Plus,
     Search,
     Users,
-    ChevronLeft,
-    Archive,
-    CalendarPlus,
-    CalendarCog,
-    CalendarMinus,
     Workflow,
-    Plus,
 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Task from "@/models/task";
+
+import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUtils";
+import { saveData } from "@/utils/save";
+import { getMostRecentSessionDateOfTask } from "@/utils/taskUtils";
+
+import { useUser } from "@/components/UserContext";
+import PriorityIconLabel from "@/components/projects/priority";
+import StatusIconLabel from "@/components/projects/status";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,24 +46,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import StatusIconLabel from "@/components/projects/status";
-import PriorityIconLabel from "@/components/projects/priority";
-import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUtils";
-import { format } from "date-fns";
-import { saveData } from "@/utils/save";
-import Task from "@/models/task";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { getMostRecentSessionDateOfProject } from "@/utils/taskUtils";
-import { Project } from "@/models";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function ProjectPage() {
     const { user, setUser } = useUser();
@@ -64,9 +58,7 @@ export default function ProjectPage() {
     const unarchiveProject = () => {
         if (user && project) {
             project.archivedAt = null;
-            const updatedProjects = user.projects.map((proj) =>
-                proj.id === project.id ? project : proj
-            );
+            const updatedProjects = user.projects.map((proj) => (proj.id === project.id ? project : proj));
             const updatedUser = { ...user, projects: updatedProjects };
             setUser(updatedUser);
             saveData(updatedUser);
@@ -92,12 +84,12 @@ export default function ProjectPage() {
     const recentTasks: any[] = project.tasks
         .map((task: any) => ({
             ...task,
-            mostRecentDate: getMostRecentSessionDateOfProject(task),
+            mostRecentDate: getMostRecentSessionDateOfTask(task),
             isRunning: task.sessions.find((session: any) => session.end === null),
         }))
         .sort(
             (task1: { mostRecentDate: number }, task2: { mostRecentDate: number }) =>
-                task2.mostRecentDate - task1.mostRecentDate
+                task2.mostRecentDate - task1.mostRecentDate,
         )
         .slice(0, 5);
 
@@ -117,25 +109,13 @@ export default function ProjectPage() {
                         {project.name}
                     </h1>
                     <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                        <PriorityIconLabel
-                            priorityValue={project.priority}
-                            className="text-muted-foreground"
-                        />
+                        <PriorityIconLabel priorityValue={project.priority} className="text-muted-foreground" />
                     </Badge>
-                    <Badge
-                        variant="outline"
-                        className="hidden ml-auto sm:ml-0 py-2 sm:block bg-background"
-                    >
-                        <StatusIconLabel
-                            statusValue={project.status}
-                            className="text-muted-foreground"
-                        />
+                    <Badge variant="outline" className="hidden ml-auto sm:ml-0 py-2 sm:block bg-background">
+                        <StatusIconLabel statusValue={project.status} className="text-muted-foreground" />
                     </Badge>
                     {project.archivedAt && (
-                        <Badge
-                            variant="destructive"
-                            className="hidden ml-auto sm:ml-0 py-2 md:block"
-                        >
+                        <Badge variant="destructive" className="hidden ml-auto sm:ml-0 py-2 md:block">
                             <div className="flex items-center">
                                 <Archive className="mr-2 h-4 w-4" />
                                 Archived
@@ -155,14 +135,10 @@ export default function ProjectPage() {
                         )}
                     </div>
                 </div>
-                <div
-                    className={`grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 ${gridColsClass}`}
-                >
+                <div className={`grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 ${gridColsClass}`}>
                     <Card x-chunk="dashboard-01-chunk-0">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Creation
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Creation</CardTitle>
                             <CalendarPlus className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -176,15 +152,14 @@ export default function ProjectPage() {
                                     user?.projects.filter(
                                         (proj) =>
                                             proj.createdAt &&
-                                            Date.parse(String(proj.createdAt)) <
-                                                Date.parse(String(project.createdAt))
+                                            Date.parse(String(proj.createdAt)) < Date.parse(String(project.createdAt)),
                                     ).length +
                                         " project" +
                                         (user?.projects.filter(
                                             (proj) =>
                                                 proj.createdAt &&
                                                 Date.parse(String(proj.createdAt)) <
-                                                    Date.parse(String(project.createdAt))
+                                                    Date.parse(String(project.createdAt)),
                                         ).length > 1
                                             ? "s"
                                             : "") +
@@ -194,18 +169,13 @@ export default function ProjectPage() {
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-1">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Last Update
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Last Update</CardTitle>
                             <CalendarCog className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
                                 {!isNaN(Date.parse(String(project.lastUpdatedAt)))
-                                    ? format(
-                                          Date.parse(String(project.lastUpdatedAt)),
-                                          "MMMM dd, yyyy"
-                                      )
+                                    ? format(Date.parse(String(project.lastUpdatedAt)), "MMMM dd, yyyy")
                                     : "N/A"}
                             </div>
                             <p className="text-xs text-muted-foreground">
@@ -220,39 +190,28 @@ export default function ProjectPage() {
                     {project.archivedAt && (
                         <Card className="hidden xl:block" x-chunk="dashboard-01-chunk-1">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium text-primary">
-                                    Deletion
-                                </CardTitle>
+                                <CardTitle className="text-sm font-medium text-primary">Deletion</CardTitle>
                                 <CalendarMinus className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
                                 <div className="text-2xl font-bold">
                                     {!isNaN(Date.parse(String(project.archivedAt)))
-                                        ? format(
-                                              Date.parse(String(project.archivedAt)),
-                                              "MMMM dd, yyyy"
-                                          )
+                                        ? format(Date.parse(String(project.archivedAt)), "MMMM dd, yyyy")
                                         : "N/A"}
                                 </div>
                                 <p className="text-xs text-muted-foreground">
                                     {user &&
                                         "One of " +
-                                            user?.projects.filter((proj) => proj.archivedAt)
-                                                .length +
+                                            user?.projects.filter((proj) => proj.archivedAt).length +
                                             " archived project" +
-                                            (user?.projects.filter((proj) => proj.archivedAt)
-                                                .length > 1
-                                                ? "s"
-                                                : "")}
+                                            (user?.projects.filter((proj) => proj.archivedAt).length > 1 ? "s" : "")}
                                 </p>
                             </CardContent>
                         </Card>
                     )}
                     <Card x-chunk="dashboard-01-chunk-2">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Status
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Status</CardTitle>
                             <Workflow className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -266,9 +225,7 @@ export default function ProjectPage() {
                     </Card>
                     <Card x-chunk="dashboard-01-chunk-3">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-primary">
-                                Priority
-                            </CardTitle>
+                            <CardTitle className="text-sm font-medium text-primary">Priority</CardTitle>
                             <Activity className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -289,12 +246,7 @@ export default function ProjectPage() {
                                 <CardDescription>Recent tasks for this project.</CardDescription>
                             </div>
                             {project.archivedAt && (
-                                <Button
-                                    asChild
-                                    size="sm"
-                                    className="ml-auto gap-1"
-                                    variant={"outline"}
-                                >
+                                <Button asChild size="sm" className="ml-auto gap-1" variant={"outline"}>
                                     <Link href={`/tasks?projectId=${project.id}`}>
                                         View All
                                         <ArrowUpRight className="h-4 w-4" />
@@ -337,17 +289,12 @@ export default function ProjectPage() {
                                                 <TableCell>
                                                     <div className="flex items-center space-x-2">
                                                         {task.isRunning && (
-                                                            <Badge
-                                                                variant={"default"}
-                                                                className="px-3 py-1"
-                                                            >
+                                                            <Badge variant={"default"} className="px-3 py-1">
                                                                 Running
                                                             </Badge>
                                                         )}
                                                         <div>
-                                                            <div className="font-medium">
-                                                                {task.name}
-                                                            </div>
+                                                            <div className="font-medium">{task.name}</div>
                                                             <div className="hidden text-sm text-muted-foreground md:inline">
                                                                 {task.description}
                                                             </div>
@@ -355,10 +302,7 @@ export default function ProjectPage() {
                                                     </div>
                                                 </TableCell>
                                                 <TableCell className="text-right">
-                                                    <PriorityIconLabel
-                                                        priorityValue={task.priority}
-                                                        justify="right"
-                                                    />
+                                                    <PriorityIconLabel priorityValue={task.priority} justify="right" />
                                                 </TableCell>
                                             </TableRow>
                                         );

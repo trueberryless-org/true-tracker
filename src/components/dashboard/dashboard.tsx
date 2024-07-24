@@ -1,6 +1,5 @@
-import * as React from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { Task, User } from "@/models";
+import { addMonths, addWeeks, format, isToday } from "date-fns";
 import {
     Bell,
     ChevronLeft,
@@ -24,7 +23,22 @@ import {
     Users2,
     Workflow,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import * as React from "react";
+import { useEffect } from "react";
+import { DateRange } from "react-day-picker";
+import { toast } from "sonner";
 
+import { formatDateToDistanceFromNow, msToShortTime } from "@/utils/dateUtils";
+import { downloadData } from "@/utils/export";
+import { loadData } from "@/utils/load";
+import { getSessionStorageItem, setSessionStorageItem } from "@/utils/sessionStorage";
+import { isSessionInDateRange } from "@/utils/sessionUtils";
+import { getMostRecentSessionDateOfTask } from "@/utils/taskUtils";
+import { getMostRecentSessionDateOfUser } from "@/utils/userUtils";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import {
     Breadcrumb,
@@ -35,14 +49,7 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -57,36 +64,17 @@ import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/p
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { useUser } from "../UserContext";
-import { loadData } from "@/utils/load";
-import { useEffect } from "react";
-import { Task, User } from "@/models";
-import { getMostRecentSessionDateOfTask } from "@/utils/taskUtils";
+import { Component } from "./chart";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { Overview } from "./overview";
 import { RecentSessions } from "./recent-sessions";
-import { Component } from "./chart";
-import { addWeeks, addMonths, isToday, format } from "date-fns";
-import { DateRange } from "react-day-picker";
-import { downloadData } from "@/utils/export";
-import { toast } from "sonner";
-import { getSessionStorageItem, setSessionStorageItem } from "@/utils/sessionStorage";
-import { formatDateToDistanceFromNow, msToShortTime } from "@/utils/dateUtils";
-import { SessionsChart } from "./sessions-chart";
 import { RecentTasks } from "./recent-tasks";
-import { getMostRecentSessionDateOfUser } from "@/utils/userUtils";
+import { SessionsChart } from "./sessions-chart";
 
 export default function Dashboard() {
     const { user, setUser } = useUser();
@@ -150,9 +138,8 @@ export default function Dashboard() {
                 }))
                 .sort(
                     (task1: { mostRecentDate: Date }, task2: { mostRecentDate: Date }) =>
-                        new Date(task2.mostRecentDate).valueOf() -
-                        new Date(task1.mostRecentDate).valueOf()
-                )
+                        new Date(task2.mostRecentDate).valueOf() - new Date(task1.mostRecentDate).valueOf(),
+                ),
         )
         .slice(0, 5);
 
@@ -175,6 +162,25 @@ export default function Dashboard() {
         }
     }
 
+    function getWorkingTimeOfUser(user: User, flow: string[] = ["smooth", "good", "neutral", "disrupted"]): number {
+        console.log(date);
+        if (date == undefined) {
+            return 0;
+        }
+        return user.projects
+            .flatMap((project) => project.tasks)
+            .flatMap((task) => task.sessions)
+            .filter((session) => {
+                return isSessionInDateRange(session, date!) && flow.includes(session.flow);
+            })
+            .reduce((acc, session) => {
+                if (!session.end) {
+                    return acc + new Date().getTime() - new Date(session.start).getTime();
+                }
+                return acc + (new Date(session.end).getTime() - new Date(session.start).getTime());
+            }, 0);
+    }
+
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -182,22 +188,12 @@ export default function Dashboard() {
                     <div className="flex items-center justify-between flex-wrap gap-4">
                         <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
                         <div className="flex items-center space-x-2">
-                            <CalendarDateRangePicker
-                                date={date}
-                                setDate={setDate}
-                                ref={rangePickerInputRef}
-                            />
+                            <CalendarDateRangePicker date={date} setDate={setDate} ref={rangePickerInputRef} />
                             {date == undefined && <Button disabled>Download</Button>}
-                            {date != undefined && (
-                                <Button onClick={handleDownload}>Download</Button>
-                            )}{" "}
+                            {date != undefined && <Button onClick={handleDownload}>Download</Button>}{" "}
                         </div>
                     </div>
-                    <Tabs
-                        defaultValue="overview"
-                        className="space-y-4"
-                        onValueChange={handleTabChange}
-                    >
+                    <Tabs defaultValue="overview" className="space-y-4" onValueChange={handleTabChange}>
                         <TabsList>
                             <TabsTrigger value="overview">Overview</TabsTrigger>
                             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -205,11 +201,7 @@ export default function Dashboard() {
                                 <div className="flex items-center space-x-2">
                                     <span>Notifications</span>
                                     {hasNotifications(user) && (
-                                        <Bell
-                                            className={`h-4 w-4 ${
-                                                !notificationsRead ? "text-primary" : ""
-                                            }`}
-                                        />
+                                        <Bell className={`h-4 w-4 ${!notificationsRead ? "text-primary" : ""}`} />
                                     )}
                                 </div>
                             </TabsTrigger>
@@ -227,215 +219,12 @@ export default function Dashboard() {
                                             </CardHeader>
                                             <CardContent>
                                                 <div className="text-2xl font-bold">
-                                                    {msToShortTime(
-                                                        user.projects
-                                                            .flatMap((project) => project.tasks)
-                                                            .flatMap((task) => task.sessions)
-                                                            .filter((session) => {
-                                                                const isWithinDateRange = (
-                                                                    date: string | number | Date,
-                                                                    dateRange: DateRange
-                                                                ) => {
-                                                                    const from = new Date(
-                                                                        dateRange.from!
-                                                                    ).getTime();
-                                                                    const to = dateRange.to
-                                                                        ? new Date(
-                                                                              new Date(
-                                                                                  dateRange.to
-                                                                              ).setHours(
-                                                                                  23,
-                                                                                  59,
-                                                                                  59,
-                                                                                  999
-                                                                              )
-                                                                          ).getTime()
-                                                                        : new Date(
-                                                                              new Date(
-                                                                                  dateRange.from!
-                                                                              ).setHours(
-                                                                                  23,
-                                                                                  59,
-                                                                                  59,
-                                                                                  999
-                                                                              )
-                                                                          ).getTime();
-                                                                    const sessionDate = new Date(
-                                                                        date
-                                                                    ).getTime();
-                                                                    return (
-                                                                        sessionDate >= from &&
-                                                                        sessionDate <= to
-                                                                    );
-                                                                };
-
-                                                                return isWithinDateRange(
-                                                                    session.start,
-                                                                    date
-                                                                );
-                                                            })
-                                                            .reduce((acc, session) => {
-                                                                if (!session.end) {
-                                                                    return (
-                                                                        acc +
-                                                                        new Date().getTime() -
-                                                                        new Date(
-                                                                            session.start
-                                                                        ).getTime()
-                                                                    );
-                                                                }
-                                                                return (
-                                                                    acc +
-                                                                    (new Date(
-                                                                        session.end
-                                                                    ).getTime() -
-                                                                        new Date(
-                                                                            session.start
-                                                                        ).getTime())
-                                                                );
-                                                            }, 0)
-                                                    )}
+                                                    {msToShortTime(getWorkingTimeOfUser(user))}
                                                 </div>
                                                 <p className="text-xs text-muted-foreground">
                                                     {(
-                                                        (user.projects
-                                                            .flatMap((project) => project.tasks)
-                                                            .flatMap((task) => task.sessions)
-                                                            .filter((session) => {
-                                                                const isWithinDateRange = (
-                                                                    date: string | number | Date,
-                                                                    dateRange: DateRange
-                                                                ) => {
-                                                                    const from = new Date(
-                                                                        dateRange.from!
-                                                                    ).getTime();
-                                                                    const to = dateRange.to
-                                                                        ? new Date(
-                                                                              new Date(
-                                                                                  dateRange.to
-                                                                              ).setHours(
-                                                                                  23,
-                                                                                  59,
-                                                                                  59,
-                                                                                  999
-                                                                              )
-                                                                          ).getTime()
-                                                                        : new Date(
-                                                                              new Date(
-                                                                                  dateRange.from!
-                                                                              ).setHours(
-                                                                                  23,
-                                                                                  59,
-                                                                                  59,
-                                                                                  999
-                                                                              )
-                                                                          ).getTime();
-                                                                    const sessionDate = new Date(
-                                                                        date
-                                                                    ).getTime();
-                                                                    return (
-                                                                        sessionDate >= from &&
-                                                                        sessionDate <= to
-                                                                    );
-                                                                };
-
-                                                                return (
-                                                                    isWithinDateRange(
-                                                                        session.start,
-                                                                        date
-                                                                    ) && session.flow == "smooth"
-                                                                );
-                                                            })
-                                                            .reduce((acc, session) => {
-                                                                if (!session.end) {
-                                                                    return (
-                                                                        acc +
-                                                                        new Date().getTime() -
-                                                                        new Date(
-                                                                            session.start
-                                                                        ).getTime()
-                                                                    );
-                                                                }
-                                                                return (
-                                                                    acc +
-                                                                    (new Date(
-                                                                        session.end
-                                                                    ).getTime() -
-                                                                        new Date(
-                                                                            session.start
-                                                                        ).getTime())
-                                                                );
-                                                            }, 0) /
-                                                            user.projects
-                                                                .flatMap((project) => project.tasks)
-                                                                .flatMap((task) => task.sessions)
-                                                                .filter((session) => {
-                                                                    const isWithinDateRange = (
-                                                                        date:
-                                                                            | string
-                                                                            | number
-                                                                            | Date,
-                                                                        dateRange: DateRange
-                                                                    ) => {
-                                                                        const from = new Date(
-                                                                            dateRange.from!
-                                                                        ).getTime();
-                                                                        const to = dateRange.to
-                                                                            ? new Date(
-                                                                                  new Date(
-                                                                                      dateRange.to
-                                                                                  ).setHours(
-                                                                                      23,
-                                                                                      59,
-                                                                                      59,
-                                                                                      999
-                                                                                  )
-                                                                              ).getTime()
-                                                                            : new Date(
-                                                                                  new Date(
-                                                                                      dateRange.from!
-                                                                                  ).setHours(
-                                                                                      23,
-                                                                                      59,
-                                                                                      59,
-                                                                                      999
-                                                                                  )
-                                                                              ).getTime();
-                                                                        const sessionDate =
-                                                                            new Date(
-                                                                                date
-                                                                            ).getTime();
-                                                                        return (
-                                                                            sessionDate >= from &&
-                                                                            sessionDate <= to
-                                                                        );
-                                                                    };
-
-                                                                    return isWithinDateRange(
-                                                                        session.start,
-                                                                        date
-                                                                    );
-                                                                })
-                                                                .reduce((acc, session) => {
-                                                                    if (!session.end) {
-                                                                        return (
-                                                                            acc +
-                                                                            new Date().getTime() -
-                                                                            new Date(
-                                                                                session.start
-                                                                            ).getTime()
-                                                                        );
-                                                                    }
-                                                                    return (
-                                                                        acc +
-                                                                        (new Date(
-                                                                            session.end
-                                                                        ).getTime() -
-                                                                            new Date(
-                                                                                session.start
-                                                                            ).getTime())
-                                                                    );
-                                                                }, 0)) *
+                                                        (getWorkingTimeOfUser(user, ["smooth"]) /
+                                                            getWorkingTimeOfUser(user)) *
                                                         100
                                                     ).toFixed(2)}
                                                     {"% "}
@@ -452,14 +241,10 @@ export default function Dashboard() {
                                             </CardHeader>
                                             <CardContent>
                                                 <div className="text-2xl font-bold">
-                                                    {niceFormattedDate(
-                                                        getMostRecentSessionDateOfUser(user)
-                                                    )}
+                                                    {niceFormattedDate(getMostRecentSessionDateOfUser(user))}
                                                 </div>
                                                 <p className="text-xs text-muted-foreground">
-                                                    {formatDateToDistanceFromNow(
-                                                        getMostRecentSessionDateOfUser(user)
-                                                    )}
+                                                    {formatDateToDistanceFromNow(getMostRecentSessionDateOfUser(user))}
                                                 </p>
                                             </CardContent>
                                         </Card>
@@ -478,21 +263,13 @@ export default function Dashboard() {
                                                     strokeWidth="2"
                                                     className="h-4 w-4 text-muted-foreground"
                                                 >
-                                                    <rect
-                                                        width="20"
-                                                        height="14"
-                                                        x="2"
-                                                        y="5"
-                                                        rx="2"
-                                                    />
+                                                    <rect width="20" height="14" x="2" y="5" rx="2" />
                                                     <path d="M2 10h20" />
                                                 </svg>
                                             </CardHeader>
                                             <CardContent>
                                                 <div className="text-2xl font-bold">+12,234</div>
-                                                <p className="text-xs text-muted-foreground">
-                                                    +19% from last month
-                                                </p>
+                                                <p className="text-xs text-muted-foreground">+19% from last month</p>
                                             </CardContent>
                                         </Card>
                                         <Card>
@@ -515,9 +292,7 @@ export default function Dashboard() {
                                             </CardHeader>
                                             <CardContent>
                                                 <div className="text-2xl font-bold">+573</div>
-                                                <p className="text-xs text-muted-foreground">
-                                                    +201 since last hour
-                                                </p>
+                                                <p className="text-xs text-muted-foreground">+201 since last hour</p>
                                             </CardContent>
                                         </Card>
                                     </div>
@@ -539,64 +314,25 @@ export default function Dashboard() {
                                                         user.projects
                                                             .flatMap((project) => project.tasks)
                                                             .filter((task) =>
-                                                                task.sessions.some((session) => {
-                                                                    return (
-                                                                        new Date(
-                                                                            session.end ??
-                                                                                session.start
-                                                                        ).getTime() >=
-                                                                            new Date(
-                                                                                date.from!
-                                                                            ).getTime() &&
-                                                                        new Date(
-                                                                            session.end ??
-                                                                                session.start
-                                                                        ).getTime() <=
-                                                                            new Date(
-                                                                                date.to!
-                                                                            ).setHours(
-                                                                                23,
-                                                                                59,
-                                                                                59,
-                                                                                999
-                                                                            )
-                                                                    );
-                                                                })
+                                                                task.sessions.some((session) =>
+                                                                    isSessionInDateRange(session, date),
+                                                                ),
                                                             ).length
                                                     }{" "}
                                                     task
                                                     {user.projects
                                                         .flatMap((project) => project.tasks)
                                                         .filter((task) =>
-                                                            task.sessions.some((session) => {
-                                                                return (
-                                                                    new Date(
-                                                                        session.end ?? session.start
-                                                                    ).getTime() >=
-                                                                        new Date(
-                                                                            date.from!
-                                                                        ).getTime() &&
-                                                                    new Date(
-                                                                        session.end ?? session.start
-                                                                    ).getTime() <=
-                                                                        new Date(date.to!).setHours(
-                                                                            23,
-                                                                            59,
-                                                                            59,
-                                                                            999
-                                                                        )
-                                                                );
-                                                            })
+                                                            task.sessions.some((session) =>
+                                                                isSessionInDateRange(session, date),
+                                                            ),
                                                         ).length == 1
                                                         ? ""
                                                         : "s"}{" "}
                                                     between {format(date.from!, "MMMM d")} and{" "}
                                                     {format(
-                                                        date.to ??
-                                                            new Date(
-                                                                date.from!.setHours(23, 59, 59, 999)
-                                                            ),
-                                                        "MMMM d"
+                                                        date.to ?? new Date(date.from!.setHours(23, 59, 59, 999)),
+                                                        "MMMM d",
                                                     )}
                                                     .
                                                 </CardDescription>
@@ -615,9 +351,7 @@ export default function Dashboard() {
                                                     {
                                                         user.projects
                                                             .flatMap((project) =>
-                                                                project.tasks.flatMap(
-                                                                    (task) => task.sessions
-                                                                )
+                                                                project.tasks.flatMap((task) => task.sessions),
                                                             )
                                                             .filter((session) => {
                                                                 const monthStart = new Date(
@@ -626,13 +360,11 @@ export default function Dashboard() {
                                                                     1,
                                                                     0,
                                                                     0,
-                                                                    0
+                                                                    0,
                                                                 );
 
                                                                 return (
-                                                                    new Date(
-                                                                        session.start
-                                                                    ).getTime() >
+                                                                    new Date(session.start).getTime() >
                                                                     monthStart.getTime()
                                                                 );
                                                             }).length
@@ -640,9 +372,7 @@ export default function Dashboard() {
                                                     session
                                                     {user.projects
                                                         .flatMap((project) =>
-                                                            project.tasks.flatMap(
-                                                                (task) => task.sessions
-                                                            )
+                                                            project.tasks.flatMap((task) => task.sessions),
                                                         )
                                                         .filter((session) => {
                                                             const monthStart = new Date(
@@ -651,12 +381,11 @@ export default function Dashboard() {
                                                                 1,
                                                                 0,
                                                                 0,
-                                                                0
+                                                                0,
                                                             );
 
                                                             return (
-                                                                new Date(session.start).getTime() >
-                                                                monthStart.getTime()
+                                                                new Date(session.start).getTime() > monthStart.getTime()
                                                             );
                                                         }).length == 1
                                                         ? ""
@@ -683,9 +412,7 @@ export default function Dashboard() {
                                 <Card className="col-span-4 lg:col-span-3">
                                     <CardHeader>
                                         <CardTitle>Life is short</CardTitle>
-                                        <CardDescription>
-                                            Please select a date range first.
-                                        </CardDescription>
+                                        <CardDescription>Please select a date range first.</CardDescription>
                                     </CardHeader>
                                 </Card>
                             )}
@@ -697,10 +424,9 @@ export default function Dashboard() {
                                     <CardHeader>
                                         <CardTitle>Feels lonely here</CardTitle>
                                         <CardDescription>
-                                            You have no notifications. If you had notifications,
-                                            there would be a{" "}
-                                            <Bell className="h-4 w-4 inline-block" /> icon right
-                                            next to the &quot;Notifications&quot; tab.
+                                            You have no notifications. If you had notifications, there would be a{" "}
+                                            <Bell className="h-4 w-4 inline-block" /> icon right next to the
+                                            &quot;Notifications&quot; tab.
                                         </CardDescription>
                                     </CardHeader>
                                 </Card>
@@ -710,8 +436,8 @@ export default function Dashboard() {
                                     <Terminal className="h-4 w-4" />
                                     <AlertTitle>Notification!</AlertTitle>
                                     <AlertDescription>
-                                        We recommend exporting your data regularly. Head to Settings
-                                        → Data Management to export your data now. Stay safe!
+                                        We recommend exporting your data regularly. Head to Settings → Data Management
+                                        to export your data now. Stay safe!
                                     </AlertDescription>
                                 </Alert>
                             )}

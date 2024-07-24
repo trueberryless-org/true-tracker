@@ -1,19 +1,21 @@
-import { User } from "@/models";
-import { saveData } from "./save";
-import { toast } from "sonner";
-import { sameVersion } from "./versionUtils";
 import version from "@/constants/version";
-import { initializeUpgradeFunctions } from "./upgradeFunctions";
-import { exportData } from "./export";
-import { upgradeData } from "./upgradeUtils";
+import { User } from "@/models";
+import { toast } from "sonner";
+
 import { useUser } from "@/components/UserContext";
+
+import { exportData } from "./export";
+import { saveData } from "./save";
+import { initializeUpgradeFunctions } from "./upgradeFunctions";
+import { upgradeData } from "./upgradeUtils";
+import { sameVersion } from "./versionUtils";
 
 export const importData = (file: File) => {
     return new Promise<User>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             try {
-                var result = JSON.parse(event.target?.result as string);
+                let result = JSON.parse(event.target?.result as string);
                 if (!sameVersion(result.version, version)) {
                     initializeUpgradeFunctions();
                     exportData();

@@ -1,13 +1,16 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { priorities, statuses } from "@/models/project";
-import { Badge } from "../ui/badge";
 import { format } from "date-fns";
-import { DataTableRowActions } from "./data-table-row-actions";
+
+import { priorities, statuses } from "@/models/project";
 import { ExtendedSession, flows } from "@/models/session";
+
 import { msToTime } from "@/utils/dateUtils";
+
+import { Badge } from "../ui/badge";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columnsXl: ColumnDef<ExtendedSession>[] = [
     {
@@ -16,9 +19,7 @@ export const columnsXl: ColumnDef<ExtendedSession>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("projectName")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("projectName")}</span>
                 </div>
             );
         },
@@ -32,9 +33,7 @@ export const columnsXl: ColumnDef<ExtendedSession>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("taskName")}</span>
                 </div>
             );
         },
@@ -48,9 +47,7 @@ export const columnsXl: ColumnDef<ExtendedSession>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("description")}</span>
                 </div>
             );
         },
@@ -67,9 +64,7 @@ export const columnsXl: ColumnDef<ExtendedSession>[] = [
 
             return (
                 <div className="flex w-[100px] items-center">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
                     {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{flow.label}</span>
                 </div>
@@ -148,9 +143,7 @@ export const columnsLg: ColumnDef<ExtendedSession>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("projectName")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("projectName")}</span>
                 </div>
             );
         },
@@ -164,9 +157,7 @@ export const columnsLg: ColumnDef<ExtendedSession>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("taskName")}</span>
                 </div>
             );
         },
@@ -186,9 +177,7 @@ export const columnsLg: ColumnDef<ExtendedSession>[] = [
 
             return (
                 <div className="flex w-[100px] items-center">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
                     {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{flow.label}</span>
                 </div>
@@ -267,9 +256,7 @@ export const columnsMd: ColumnDef<ExtendedSession>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("taskName")}</span>
                 </div>
             );
         },
@@ -289,9 +276,7 @@ export const columnsMd: ColumnDef<ExtendedSession>[] = [
 
             return (
                 <div className="flex w-[100px] items-center">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
                     {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{flow.label}</span>
                 </div>
@@ -359,9 +344,7 @@ export const columnsSm: ColumnDef<ExtendedSession>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("taskName")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("taskName")}</span>
                 </div>
             );
         },
@@ -381,9 +364,7 @@ export const columnsSm: ColumnDef<ExtendedSession>[] = [
 
             return (
                 <div className="flex w-[100px] items-center">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
                     {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{flow.label}</span>
                 </div>
@@ -454,9 +435,7 @@ export const columnsMobile: ColumnDef<ExtendedSession>[] = [
 
             return (
                 <div className="flex w-[100px] items-center">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
                     {flow.icon && <flow.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{flow.label}</span>
                 </div>

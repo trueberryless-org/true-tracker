@@ -61,17 +61,20 @@ function formatDateToTime(date: Date): string {
 
 function formatDateToDate(date: Date): string {
     // Format date (e.g., 30 May)
-    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
+    const options: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "short",
+    };
     return date.toLocaleDateString([], options);
 }
 
 export const msToTime = (duration: number) => {
-    let seconds = Math.floor((duration / 1000) % 60),
+    const seconds = Math.floor((duration / 1000) % 60),
         minutes = Math.floor((duration / (1000 * 60)) % 60),
         hours = Math.floor(duration / (1000 * 60 * 60));
 
     // Initialize an array to store non-zero time components
-    let timeComponents: string[] = [];
+    const timeComponents: string[] = [];
 
     if (hours > 0) {
         timeComponents.push(`${hours} hour${hours !== 1 ? "s" : ""}`);
@@ -88,12 +91,12 @@ export const msToTime = (duration: number) => {
 };
 
 export const msToShortTime = (duration: number) => {
-    let seconds = Math.floor((duration / 1000) % 60),
+    const seconds = Math.floor((duration / 1000) % 60),
         minutes = Math.floor((duration / (1000 * 60)) % 60),
         hours = Math.floor(duration / (1000 * 60 * 60));
 
     // Initialize an array to store non-zero time components
-    let timeComponents: string[] = [];
+    const timeComponents: string[] = [];
 
     if (hours > 0) {
         timeComponents.push(`${hours}h`);
@@ -110,22 +113,22 @@ export const msToShortTime = (duration: number) => {
 };
 
 export const msToTimeHours = (duration: number) => {
-    let hours = Math.floor(duration / (1000 * 60 * 60));
+    const hours = Math.floor(duration / (1000 * 60 * 60));
     return `${hours}h`;
 };
 
 export const msToTimeMinutes = (duration: number) => {
-    let minutes = Math.floor(duration / (1000 * 60));
+    const minutes = Math.floor(duration / (1000 * 60));
     return `${minutes}m`;
 };
 
 export const msToTimeSeconds = (duration: number) => {
-    let seconds = Math.floor(duration / 1000);
+    const seconds = Math.floor(duration / 1000);
     return `${seconds}s`;
 };
 
 export const msToTimeFitting = (duration: number) => {
-    let seconds = Math.floor(duration / 1000),
+    const seconds = Math.floor(duration / 1000),
         minutes = Math.floor(duration / (1000 * 60)),
         hours = Math.floor(duration / (1000 * 60 * 60)),
         days = Math.floor(duration / (1000 * 60 * 60 * 24));
@@ -165,10 +168,7 @@ export function isValidMinuteOrSecond(value: string) {
 
 type GetValidNumberConfig = { max: number; min?: number; loop?: boolean };
 
-export function getValidNumber(
-    value: string,
-    { max, min = 0, loop = false }: GetValidNumberConfig
-) {
+export function getValidNumber(value: string, { max, min = 0, loop = false }: GetValidNumberConfig) {
     let numericValue = parseInt(value, 10);
 
     if (!isNaN(numericValue)) {

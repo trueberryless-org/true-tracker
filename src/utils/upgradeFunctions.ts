@@ -1,17 +1,10 @@
 import { AutomationSettings, automationSettings } from "@/models/settings";
+
 import { registerUpgradeFunction } from "./upgradeUtils";
 
 export function initializeUpgradeFunctions() {
-    registerUpgradeFunction(
-        { major: 0, minor: 1, patch: 0 },
-        { major: 0, minor: 2, patch: 0 },
-        upgradeFrom010To020
-    );
-    registerUpgradeFunction(
-        { major: 0, minor: 2, patch: 0 },
-        { major: 0, minor: 3, patch: 0 },
-        upgradeFrom020To030
-    );
+    registerUpgradeFunction({ major: 0, minor: 1, patch: 0 }, { major: 0, minor: 2, patch: 0 }, upgradeFrom010To020);
+    registerUpgradeFunction({ major: 0, minor: 2, patch: 0 }, { major: 0, minor: 3, patch: 0 }, upgradeFrom020To030);
 }
 
 function upgradeFrom010To020(data: any): any {

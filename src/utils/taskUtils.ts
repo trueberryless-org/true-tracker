@@ -1,6 +1,7 @@
 import { Project, Task, User } from "@/models";
-import { loadData } from "./load";
 import { DateRange } from "react-day-picker";
+
+import { loadData } from "./load";
 import { isSessionInDateRange } from "./sessionUtils";
 
 export const initializeTask = (): Task => {
@@ -18,10 +19,7 @@ export const getMostRecentSessionDateOfTask = (task: Task): Date => {
     return new Date(Math.max(...dates));
 };
 
-export const getMostRecentSessionDateInIntervalOfTask = (
-    task: Task,
-    dateRange: DateRange
-): Date => {
+export const getMostRecentSessionDateInIntervalOfTask = (task: Task, dateRange: DateRange): Date => {
     const dates = task.sessions
         .filter((session) => isSessionInDateRange(session, dateRange))
         .map((session) => new Date(session.end ?? session.start).getTime());
@@ -74,9 +72,7 @@ export function calcPriorityComparison(user: User | null | undefined, priority: 
             lowerPriorityCount + mediumPriorityCount !== 1 ? "s" : ""
         }`;
     } else if (priority === "medium") {
-        return `Higher priority than ${lowerPriorityCount} other task${
-            lowerPriorityCount !== 1 ? "s" : ""
-        }`;
+        return `Higher priority than ${lowerPriorityCount} other task${lowerPriorityCount !== 1 ? "s" : ""}`;
     } else {
         return `Lower priority than ${higherPriorityCount + mediumPriorityCount} other task${
             higherPriorityCount + mediumPriorityCount !== 1 ? "s" : ""

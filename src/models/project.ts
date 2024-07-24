@@ -1,18 +1,18 @@
-import Task from "./task";
-
 import {
     ArrowDown,
     ArrowRight,
     ArrowUp,
-    CircleCheck,
     Circle,
-    CircleX,
-    CircleHelp,
-    Timer,
+    CircleCheck,
     CircleDashed,
-    CirclePause,
     CircleDotDashed,
+    CircleHelp,
+    CirclePause,
+    CircleX,
+    Timer,
 } from "lucide-react";
+
+import Task from "./task";
 
 export type Status = (typeof statuses)[number]["value"];
 export type Priority = (typeof priorities)[number]["value"];

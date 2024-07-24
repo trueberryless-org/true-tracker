@@ -2,10 +2,12 @@
 
 import { Project } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { ExtendedProject, priorities, statuses } from "@/models/project";
-import { Badge } from "../ui/badge";
 import { format } from "date-fns";
+
+import { ExtendedProject, priorities, statuses } from "@/models/project";
+
+import { Badge } from "../ui/badge";
+import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columnsXl: ColumnDef<ExtendedProject>[] = [
@@ -17,15 +19,9 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    {row.original.someSessionIsRunning === true && (
-                        <Badge variant="default">Running</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
+                    {row.original.someSessionIsRunning === true && <Badge variant="default">Running</Badge>}
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -39,9 +35,7 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
             return (
                 <div className="flex space-x-2">
                     {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("description")}</span>
                 </div>
             );
         },
@@ -107,9 +101,7 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -117,9 +109,7 @@ export const columnsXl: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -149,15 +139,9 @@ export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    {row.original.someSessionIsRunning === true && (
-                        <Badge variant="default">Running</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
+                    {row.original.someSessionIsRunning === true && <Badge variant="default">Running</Badge>}
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -171,9 +155,7 @@ export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
             return (
                 <div className="flex space-x-2">
                     {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("description")}</span>
                 </div>
             );
         },
@@ -257,9 +239,7 @@ export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -267,9 +247,7 @@ export const columnsXlWithArchivedAt: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -299,15 +277,9 @@ export const columnsLg: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    {row.original.someSessionIsRunning === true && (
-                        <Badge variant="default">Running</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
+                    {row.original.someSessionIsRunning === true && <Badge variant="default">Running</Badge>}
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -321,9 +293,7 @@ export const columnsLg: ColumnDef<ExtendedProject>[] = [
             return (
                 <div className="flex space-x-2">
                     {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("description")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("description")}</span>
                 </div>
             );
         },
@@ -371,9 +341,7 @@ export const columnsLg: ColumnDef<ExtendedProject>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -381,9 +349,7 @@ export const columnsLg: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -411,15 +377,9 @@ export const columnsMd: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex space-x-2">
-                    {row.original.projectIsArchived === true && (
-                        <Badge variant="destructive">Archived</Badge>
-                    )}
-                    {row.original.someSessionIsRunning === true && (
-                        <Badge variant="default">Running</Badge>
-                    )}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    {row.original.projectIsArchived === true && <Badge variant="destructive">Archived</Badge>}
+                    {row.original.someSessionIsRunning === true && <Badge variant="default">Running</Badge>}
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -467,9 +427,7 @@ export const columnsMd: ColumnDef<ExtendedProject>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -477,9 +435,7 @@ export const columnsMd: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -513,9 +469,7 @@ export const columnsSm: ColumnDef<ExtendedProject>[] = [
                     {row.original.someSessionIsRunning === true && (
                         <Badge variant="default">Running</Badge>
                     )} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },
@@ -545,9 +499,7 @@ export const columnsSm: ColumnDef<ExtendedProject>[] = [
         accessorKey: "priority",
         header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
         cell: ({ row }) => {
-            const priority = priorities.find(
-                (priority) => priority.value === row.getValue("priority")
-            );
+            const priority = priorities.find((priority) => priority.value === row.getValue("priority"));
 
             if (!priority) {
                 return null;
@@ -555,9 +507,7 @@ export const columnsSm: ColumnDef<ExtendedProject>[] = [
 
             return (
                 <div className="flex items-center">
-                    {priority.icon && (
-                        <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
+                    {priority.icon && <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{priority.label}</span>
                 </div>
             );
@@ -588,9 +538,7 @@ export const columnsMobile: ColumnDef<ExtendedProject>[] = [
                     {/* {row.original.isArchived === true && (
                         <Badge variant="destructive">Archived</Badge>
                     )} */}
-                    <span className="max-w-[500px] truncate font-medium">
-                        {row.getValue("name")}
-                    </span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue("name")}</span>
                 </div>
             );
         },

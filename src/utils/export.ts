@@ -1,13 +1,16 @@
-import { DateRange } from "react-day-picker";
-import { loadData } from "./load";
-import { toast } from "sonner";
 import { Project, User } from "@/models";
+import { DateRange } from "react-day-picker";
+import { toast } from "sonner";
+
+import { loadData } from "./load";
 
 export const exportData = () => {
     const data = loadData();
     if (data) {
         try {
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+            const blob = new Blob([JSON.stringify(data, null, 2)], {
+                type: "application/json",
+            });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
@@ -75,20 +78,17 @@ const convertToCSV = (data: User, dateRange: DateRange) => {
             seconds.toString().padStart(2, "0"),
         ].join(":");
 
-        return [
-            durationInMinutes.toFixed(2),
-            durationInSeconds.toFixed(2),
-            durationInHours.toFixed(2),
-            hhmmss,
-        ];
+        return [durationInMinutes.toFixed(2), durationInSeconds.toFixed(2), durationInHours.toFixed(2), hhmmss];
     };
 
     data.projects.forEach((project) => {
         project.tasks.forEach((task) => {
             task.sessions.forEach((session) => {
                 if (isWithinDateRange(session.start, dateRange)) {
-                    const [durationMinutes, durationSeconds, durationHours, durationHHMMSS] =
-                        formatDuration(session.start, session.end);
+                    const [durationMinutes, durationSeconds, durationHours, durationHHMMSS] = formatDuration(
+                        session.start,
+                        session.end,
+                    );
 
                     rows.push([
                         project.id,

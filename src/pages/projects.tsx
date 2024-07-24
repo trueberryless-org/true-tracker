@@ -1,59 +1,37 @@
-import { useState, useEffect } from "react";
-import Link from "next/link";
-
-import { Project, User } from "../models";
-import { saveData } from "../utils/save";
-import { loadData } from "../utils/load";
-import { importData } from "../utils/import";
-import { exportData } from "../utils/export";
-import { setSessionStorageItem, getSessionStorageItem } from "../utils/sessionStorage";
-
-import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useUser } from "@/components/UserContext";
-
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { DataTable } from "@/components/projects/data-table";
+import { AlertCircle } from "lucide-react";
+import Link from "next/link";
+import router from "next/router";
+import { useEffect, useState } from "react";
+
+import { ExtendedProject } from "@/models/project";
+
+import { getMostRecentSessionDateOfProject } from "@/utils/projectUtils";
+
+import { useUser } from "@/components/UserContext";
 import {
-    columnsXl,
     columnsLg,
     columnsMd,
-    columnsSm,
     columnsMobile,
+    columnsSm,
+    columnsXl,
     columnsXlWithArchivedAt,
 } from "@/components/projects/columns";
+import { DataTable } from "@/components/projects/data-table";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { getMostRecentSessionDateOfProject } from "@/utils/projectUtils";
-import router from "next/router";
-import { ExtendedProject } from "@/models/project";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+import { Project, User } from "../models";
+import { exportData } from "../utils/export";
+import { importData } from "../utils/import";
+import { loadData } from "../utils/load";
+import { saveData } from "../utils/save";
+import { getSessionStorageItem, setSessionStorageItem } from "../utils/sessionStorage";
 
 export default function Projects() {
     const { user } = useUser();
@@ -80,15 +58,10 @@ export default function Projects() {
                 ...project,
                 projectIsArchived: project.archivedAt ? true : false,
                 mostRecentDate: getMostRecentSessionDateOfProject(project),
-                someSessionIsRunning: project.tasks.some((task) =>
-                    task.sessions.some((s) => s.end === null)
-                ),
+                someSessionIsRunning: project.tasks.some((task) => task.sessions.some((s) => s.end === null)),
             };
         })
-        .sort(
-            (project1, project2) =>
-                project2.mostRecentDate.valueOf() - project1.mostRecentDate.valueOf()
-        );
+        .sort((project1, project2) => project2.mostRecentDate.valueOf() - project1.mostRecentDate.valueOf());
 
     if (data.length === 0) {
         return (
@@ -98,20 +71,16 @@ export default function Projects() {
                         <CardHeader className="pb-3">
                             <CardTitle>Welcome to Your Project Dashboard</CardTitle>
                             <CardDescription className="max-w-xl text-balance leading-relaxed pt-2">
-                                You currently have no projects set up. Start by creating your very
-                                first project! Your projects will help you organize tasks and track
-                                their progress effectively. Each project includes a name,
-                                description, status (planned, in progress, completed, etc.),
-                                priority (low, medium, high), and a list of associated tasks. Begin
-                                by clicking the &quot;Create New Project&quot; button below to get
-                                started.
+                                You currently have no projects set up. Start by creating your very first project! Your
+                                projects will help you organize tasks and track their progress effectively. Each project
+                                includes a name, description, status (planned, in progress, completed, etc.), priority
+                                (low, medium, high), and a list of associated tasks. Begin by clicking the &quot;Create
+                                New Project&quot; button below to get started.
                             </CardDescription>
                         </CardHeader>
                         <CardContent></CardContent>
                         <CardFooter>
-                            <Button onClick={() => router.push("/projects/new")}>
-                                Create New Project
-                            </Button>
+                            <Button onClick={() => router.push("/projects/new")}>Create New Project</Button>
                         </CardFooter>
                     </Card>
                 </main>

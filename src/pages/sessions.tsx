@@ -1,54 +1,25 @@
-import { useState, useEffect } from "react";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { useUser } from "@/components/UserContext";
+import { columnsLg, columnsMd, columnsMobile, columnsSm, columnsXl } from "@/components/sessions/columns";
+import { DataTable } from "@/components/sessions/data-table";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 import { Project, User } from "../models";
-import { saveData } from "../utils/save";
-import { loadData } from "../utils/load";
-import { importData } from "../utils/import";
 import { exportData } from "../utils/export";
-import { setSessionStorageItem, getSessionStorageItem } from "../utils/sessionStorage";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useUser } from "@/components/UserContext";
-
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { DataTable } from "@/components/sessions/data-table";
-import {
-    columnsXl,
-    columnsLg,
-    columnsMd,
-    columnsSm,
-    columnsMobile,
-} from "@/components/sessions/columns";
+import { importData } from "../utils/import";
+import { loadData } from "../utils/load";
+import { saveData } from "../utils/save";
+import { getSessionStorageItem, setSessionStorageItem } from "../utils/sessionStorage";
 
 export default function Sessions() {
     const { user } = useUser();
@@ -74,7 +45,7 @@ export default function Sessions() {
         .flatMap((task) => task.sessions)
         .map((session) => {
             const project = user.projects.find((project) =>
-                project.tasks.some((task) => task.sessions.some((s) => s.id === session.id))
+                project.tasks.some((task) => task.sessions.some((s) => s.id === session.id)),
             );
             const task = user.projects
                 .flatMap((project) => project.tasks)

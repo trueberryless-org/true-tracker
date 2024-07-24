@@ -1,37 +1,24 @@
 "use client";
 
+import version from "@/constants/version";
+import { User } from "@/models";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { importData } from "@/utils/import";
+import { parseUser } from "@/utils/parseUtils";
+import { saveData } from "@/utils/save";
+
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { User } from "@/models";
+
 import { useUser } from "./UserContext";
-import { saveData } from "@/utils/save";
-import { useState } from "react";
-import { importData } from "@/utils/import";
-import version from "@/constants/version";
-import { parseUser } from "@/utils/parseUtils";
 
 const FormSchema = z.object({
     username: z.string().min(2, {
@@ -99,9 +86,7 @@ export function SignUp() {
         const now = new Date();
         const sixMonthsAgo = new Date();
         sixMonthsAgo.setMonth(now.getMonth() - 6);
-        return new Date(
-            sixMonthsAgo.getTime() + Math.random() * (now.getTime() - sixMonthsAgo.getTime())
-        );
+        return new Date(sixMonthsAgo.getTime() + Math.random() * (now.getTime() - sixMonthsAgo.getTime()));
     }
 
     function getRandomSessionDuration() {
@@ -125,23 +110,21 @@ export function SignUp() {
                     project.tasks.forEach((task) => {
                         task.sessions.forEach((session) => {
                             session.start = getRandomDateWithinLast6Months();
-                            session.end = new Date(
-                                session.start.getTime() + getRandomSessionDuration()
-                            );
+                            session.end = new Date(session.start.getTime() + getRandomSessionDuration());
                         });
                     });
                 });
 
                 // Random theme
-                const themes: (
-                    | "default"
-                    | "sapphire"
-                    | "ruby"
-                    | "emerald"
-                    | "coral"
-                    | "amber"
-                    | "amethyst"
-                )[] = ["default", "sapphire", "ruby", "emerald", "coral", "amber", "amethyst"];
+                const themes: ("default" | "sapphire" | "ruby" | "emerald" | "coral" | "amber" | "amethyst")[] = [
+                    "default",
+                    "sapphire",
+                    "ruby",
+                    "emerald",
+                    "coral",
+                    "amber",
+                    "amethyst",
+                ];
                 user.settings.theme = themes[Math.floor(Math.random() * themes.length)];
 
                 setUser(user);
@@ -160,9 +143,7 @@ export function SignUp() {
                                 <Card className="mx-auto w-full">
                                     <CardHeader>
                                         <CardTitle className="text-xl">Sign Up</CardTitle>
-                                        <CardDescription>
-                                            Enter your information to create an account.
-                                        </CardDescription>
+                                        <CardDescription>Enter your information to create an account.</CardDescription>
                                     </CardHeader>
                                     <CardContent>
                                         <div className="grid gap-4">
@@ -174,10 +155,7 @@ export function SignUp() {
                                                         <FormItem>
                                                             <FormLabel>Username</FormLabel>
                                                             <FormControl>
-                                                                <Input
-                                                                    placeholder="imcool"
-                                                                    {...field}
-                                                                />
+                                                                <Input placeholder="imcool" {...field} />
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
@@ -209,21 +187,13 @@ export function SignUp() {
                             <div className="grid gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="password">User data (JSON)</Label>
-                                    <Input
-                                        type="file"
-                                        accept="application/json"
-                                        onChange={saveFileTemp}
-                                    />
+                                    <Input type="file" accept="application/json" onChange={saveFileTemp} />
                                 </div>
                                 <div className="grid gap-2 grid-cols-3">
                                     <Button onClick={importNow} className="w-full col-span-2">
                                         Import user data
                                     </Button>
-                                    <Button
-                                        onClick={tryTestData}
-                                        className="w-full"
-                                        variant={"outline"}
-                                    >
+                                    <Button onClick={tryTestData} className="w-full" variant={"outline"}>
                                         Try test data
                                     </Button>
                                 </div>
