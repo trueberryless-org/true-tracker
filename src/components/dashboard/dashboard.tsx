@@ -5,6 +5,7 @@ import {
     Book,
     ChevronLeft,
     ChevronRight,
+    ClipboardCheck,
     Copy,
     CreditCard,
     File,
@@ -34,10 +35,14 @@ import { toast } from "sonner";
 import { formatDateToDistanceFromNow, msToShortTime } from "@/utils/dateUtils";
 import { downloadData } from "@/utils/export";
 import { loadData } from "@/utils/load";
-import { getProjectWithMostSessionDurationInInterval } from "@/utils/projectUtils";
+import { getProjectWithMostSessionDuration, getProjectWithMostSessionDurationInInterval } from "@/utils/projectUtils";
 import { getSessionStorageItem, setSessionStorageItem } from "@/utils/sessionStorage";
 import { getSessionDuration, isSessionInDateRange } from "@/utils/sessionUtils";
-import { getMostRecentSessionDateOfTask } from "@/utils/taskUtils";
+import {
+    getMostRecentSessionDateOfTask,
+    getTaskWithMostSessionDuration,
+    getTaskWithMostSessionDurationInInterval,
+} from "@/utils/taskUtils";
 import { getMostRecentSessionDateInIntervalOfUser, getMostRecentSessionDateOfUser } from "@/utils/userUtils";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -73,7 +78,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useUser } from "../UserContext";
 import { Component } from "./chart";
 import { CalendarDateRangePicker } from "./date-range-picker";
-import { Overview } from "./overview";
+import { DemoChart } from "./demo-chart";
 import { RecentSessions } from "./recent-sessions";
 import { RecentTasks } from "./recent-tasks";
 import { SessionsChart } from "./sessions-chart";
@@ -81,7 +86,7 @@ import { SessionsChart } from "./sessions-chart";
 export default function Dashboard() {
     const { user, setUser } = useUser();
 
-    const [date, setDate] = React.useState<DateRange | undefined>({
+    const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
         from: addWeeks(new Date(), -6),
         to: new Date(),
     });
@@ -101,6 +106,10 @@ export default function Dashboard() {
     }, [setUser]);
 
     const niceFormattedDate = (date: Date) => {
+        if (!(date instanceof Date && !isNaN(date.getTime()))) {
+            return "Invalid Date";
+        }
+
         const formattedDate = isToday(date)
             ? format(date, "hh:mm aa") // 08:15 PM
             : format(date, "MMMM d"); // July 4
@@ -146,7 +155,7 @@ export default function Dashboard() {
         .slice(0, 5);
 
     function handleDownload(event: any): void {
-        if (!date) {
+        if (!dateRange) {
             toast("Please select a date range first");
             if (rangePickerInputRef.current) {
                 rangePickerInputRef.current.focus();
@@ -154,7 +163,7 @@ export default function Dashboard() {
             return;
         }
 
-        downloadData(date);
+        downloadData(dateRange);
     }
 
     function handleTabChange(value: string): void {
@@ -164,16 +173,16 @@ export default function Dashboard() {
         }
     }
 
-    function getWorkingTimeOfUser(user: User, flow: string[] = ["smooth", "good", "neutral", "disrupted"]): number {
-        console.log(date);
-        if (date == undefined) {
-            return 0;
-        }
+    function getWorkingTimeOfUser(
+        user: User,
+        dateRange: DateRange | undefined,
+        flow: string[] = ["smooth", "good", "neutral", "disrupted"],
+    ): number {
         return user.projects
             .flatMap((project) => project.tasks)
             .flatMap((task) => task.sessions)
             .filter((session) => {
-                return isSessionInDateRange(session, date!) && flow.includes(session.flow);
+                return dateRange ? isSessionInDateRange(session, dateRange) : true && flow.includes(session.flow);
             })
             .reduce((acc, session) => {
                 if (!session.end) {
@@ -183,7 +192,41 @@ export default function Dashboard() {
             }, 0);
     }
 
-    function getProjectDurationInfoText(user: User, dateRange: DateRange): string {
+    function getProjectDurationInfoText(user: User): string {
+        let maxDuration = 0;
+        let secondMaxDuration = 0;
+        let projectWithMaxDuration: Project | null = null;
+
+        user.projects.forEach((project) => {
+            let projectDuration = 0;
+
+            project.tasks.forEach((task) => {
+                task.sessions.forEach((session) => {
+                    projectDuration += getSessionDuration(session);
+                });
+            });
+
+            if (projectDuration > maxDuration) {
+                secondMaxDuration = maxDuration;
+                maxDuration = projectDuration;
+                projectWithMaxDuration = project;
+            } else if (projectDuration > secondMaxDuration) {
+                secondMaxDuration = projectDuration;
+            }
+        });
+
+        let infoText = "";
+        if (maxDuration > 0 && secondMaxDuration > 0) {
+            const percentageIncrease = ((maxDuration - secondMaxDuration) / secondMaxDuration) * 100;
+            infoText = `${percentageIncrease.toFixed(2)}% more than second`;
+        } else {
+            infoText = "No other projects";
+        }
+
+        return infoText;
+    }
+
+    function getProjectDurationInfoTextInInterval(user: User, dateRange: DateRange): string {
         let maxDuration = 0;
         let secondMaxDuration = 0;
         let projectWithMaxDuration: Project | null = null;
@@ -219,6 +262,162 @@ export default function Dashboard() {
         return infoText;
     }
 
+    function getTaskDurationInfoText(user: User): string {
+        let maxDuration = 0;
+        let secondMaxDuration = 0;
+        let taskWithMaxDuration: Task | undefined = undefined;
+
+        user.projects.forEach((project) => {
+            project.tasks.forEach((task) => {
+                let taskDuration = 0;
+
+                task.sessions.forEach((session) => {
+                    taskDuration += getSessionDuration(session);
+                });
+
+                if (taskDuration > maxDuration) {
+                    secondMaxDuration = maxDuration;
+                    maxDuration = taskDuration;
+                    taskWithMaxDuration = task;
+                } else if (taskDuration > secondMaxDuration) {
+                    secondMaxDuration = taskDuration;
+                }
+            });
+        });
+
+        let infoText = "";
+        if (maxDuration > 0 && secondMaxDuration > 0) {
+            const percentageIncrease = ((maxDuration - secondMaxDuration) / secondMaxDuration) * 100;
+            infoText = `${percentageIncrease.toFixed(2)}% more than second`;
+        } else {
+            infoText = "No other tasks";
+        }
+
+        return infoText;
+    }
+
+    function getTaskDurationInfoTextInInterval(user: User, dateRange: DateRange): string {
+        let maxDuration = 0;
+        let secondMaxDuration = 0;
+        let taskWithMaxDuration: Task | undefined = undefined;
+
+        user.projects.forEach((project) => {
+            project.tasks.forEach((task) => {
+                let taskDuration = 0;
+
+                task.sessions.forEach((session) => {
+                    if (isSessionInDateRange(session, dateRange)) {
+                        taskDuration += getSessionDuration(session);
+                    }
+                });
+
+                if (taskDuration > maxDuration) {
+                    secondMaxDuration = maxDuration;
+                    maxDuration = taskDuration;
+                    taskWithMaxDuration = task;
+                } else if (taskDuration > secondMaxDuration) {
+                    secondMaxDuration = taskDuration;
+                }
+            });
+        });
+
+        let infoText = "";
+        if (maxDuration > 0 && secondMaxDuration > 0) {
+            const percentageIncrease = ((maxDuration - secondMaxDuration) / secondMaxDuration) * 100;
+            infoText = `${percentageIncrease.toFixed(2)}% more than second`;
+        } else {
+            infoText = "No other tasks";
+        }
+
+        return infoText;
+    }
+
+    function getRecentTasksInfoText(user: User, dateRange: DateRange | undefined): string {
+        if (dateRange == undefined) {
+            var taskCount = user.projects.flatMap((project) => project.tasks).length;
+            return "You worked on " + taskCount + " task" + (taskCount == 1 ? "" : "s") + ".";
+        }
+
+        var taskCount = user.projects
+            .flatMap((project) => project.tasks)
+            .filter((task) => task.sessions.some((session) => isSessionInDateRange(session, dateRange))).length;
+
+        const areDatesOnSameDay = (date1: Date, date2: Date) => {
+            return (
+                date1.getFullYear() === date2.getFullYear() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getDate() === date2.getDate()
+            );
+        };
+
+        if (dateRange.to == undefined) {
+            return (
+                "You worked on " +
+                taskCount +
+                " task" +
+                (taskCount == 1 ? "" : "s") +
+                " on " +
+                format(new Date(dateRange.from!), "MMMM d") +
+                "."
+            );
+        } else {
+            return (
+                "You worked on " +
+                taskCount +
+                " task" +
+                (taskCount == 1 ? "" : "s") +
+                " between " +
+                format(new Date(dateRange.from!), "MMMM d") +
+                " and " +
+                format(new Date(dateRange.to!), "MMMM d") +
+                "."
+            );
+        }
+    }
+
+    function getRecentSessionsInfoText(user: User, dateRange: DateRange | undefined): string {
+        if (dateRange == undefined) {
+            var taskCount = user.projects.flatMap((project) => project.tasks).length;
+            return "You worked on " + taskCount + " session" + (taskCount == 1 ? "" : "s") + ".";
+        }
+
+        var taskCount = user.projects
+            .flatMap((project) => project.tasks.flatMap((task) => task.sessions))
+            .filter((session) => isSessionInDateRange(session, dateRange)).length;
+
+        const areDatesOnSameDay = (date1: Date, date2: Date) => {
+            return (
+                date1.getFullYear() === date2.getFullYear() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getDate() === date2.getDate()
+            );
+        };
+
+        if (dateRange.to == undefined) {
+            return (
+                "You worked on " +
+                taskCount +
+                " session" +
+                (taskCount == 1 ? "" : "s") +
+                " on " +
+                format(new Date(dateRange.from!), "MMMM d") +
+                "."
+            );
+        } else {
+            return (
+                "You worked on " +
+                taskCount +
+                " session" +
+                (taskCount == 1 ? "" : "s") +
+                " between " +
+                format(new Date(dateRange.from!), "MMMM d") +
+                " and " +
+                format(new Date(dateRange.to!), "MMMM d") +
+                "."
+            );
+        }
+    }
+
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -226,9 +425,13 @@ export default function Dashboard() {
                     <div className="flex items-center justify-between flex-wrap gap-4">
                         <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
                         <div className="flex items-center space-x-2">
-                            <CalendarDateRangePicker date={date} setDate={setDate} ref={rangePickerInputRef} />
-                            {date == undefined && <Button disabled>Download</Button>}
-                            {date != undefined && <Button onClick={handleDownload}>Download</Button>}{" "}
+                            <CalendarDateRangePicker
+                                dateRange={dateRange}
+                                setDateRange={setDateRange}
+                                ref={rangePickerInputRef}
+                            />
+                            {dateRange == undefined && <Button disabled>Download</Button>}
+                            {dateRange != undefined && <Button onClick={handleDownload}>Download</Button>}{" "}
                         </div>
                     </div>
                     <Tabs defaultValue="overview" className="space-y-4" onValueChange={handleTabChange}>
@@ -245,211 +448,136 @@ export default function Dashboard() {
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview" className="space-y-4">
-                            {date != undefined && (
-                                <div className="space-y-4">
-                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                                        <Card>
-                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                                <CardTitle className="text-sm font-medium text-primary">
-                                                    Working Time
-                                                </CardTitle>
-                                                <Workflow className="h-4 w-4 text-muted-foreground" />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="text-2xl font-bold">
-                                                    {msToShortTime(getWorkingTimeOfUser(user))}
-                                                </div>
-                                                <p className="text-xs text-muted-foreground">
-                                                    {(
-                                                        (getWorkingTimeOfUser(user, ["smooth"]) /
-                                                            getWorkingTimeOfUser(user)) *
-                                                        100
-                                                    ).toFixed(2)}
-                                                    {"% "}
-                                                    working really smooth
-                                                </p>
-                                            </CardContent>
-                                        </Card>
-                                        <Card>
-                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                                <CardTitle className="text-sm font-medium text-primary">
-                                                    Last time working
-                                                </CardTitle>
-                                                <History className="h-4 w-4 text-muted-foreground" />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="text-2xl font-bold">
-                                                    {niceFormattedDate(
-                                                        getMostRecentSessionDateInIntervalOfUser(user, date),
-                                                    )}
-                                                </div>
-                                                <p className="text-xs text-muted-foreground">
-                                                    {formatDateToDistanceFromNow(
-                                                        getMostRecentSessionDateInIntervalOfUser(user, date),
-                                                    )}
-                                                </p>
-                                            </CardContent>
-                                        </Card>
-                                        <Card>
-                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                                <CardTitle className="text-sm font-medium text-primary">
-                                                    Most common project
-                                                </CardTitle>
-                                                <Book className="h-4 w-4 text-muted-foreground" />
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="text-2xl font-bold">
-                                                    {getProjectWithMostSessionDurationInInterval(user, date)?.name}
-                                                </div>
-                                                <p className="text-xs text-muted-foreground">
-                                                    {getProjectDurationInfoText(user, date)}
-                                                </p>
-                                            </CardContent>
-                                        </Card>
-                                        <Card>
-                                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                                <CardTitle className="text-sm font-medium text-primary">
-                                                    Active Now
-                                                </CardTitle>
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    className="h-4 w-4 text-muted-foreground"
-                                                >
-                                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                                                </svg>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <div className="text-2xl font-bold">+573</div>
-                                                <p className="text-xs text-muted-foreground">+201 since last hour</p>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                        <Card className="col-span-4">
-                                            <CardHeader>
-                                                <CardTitle>Overview</CardTitle>
-                                            </CardHeader>
-                                            <CardContent className="pl-2">
-                                                <Overview />
-                                            </CardContent>
-                                        </Card>
-                                        <Card className="col-span-4 lg:col-span-3">
-                                            <CardHeader>
-                                                <CardTitle>Recent Tasks</CardTitle>
-                                                <CardDescription>
-                                                    You worked on{" "}
-                                                    {
-                                                        user.projects
-                                                            .flatMap((project) => project.tasks)
-                                                            .filter((task) =>
-                                                                task.sessions.some((session) =>
-                                                                    isSessionInDateRange(session, date),
-                                                                ),
-                                                            ).length
-                                                    }{" "}
-                                                    task
-                                                    {user.projects
-                                                        .flatMap((project) => project.tasks)
-                                                        .filter((task) =>
-                                                            task.sessions.some((session) =>
-                                                                isSessionInDateRange(session, date),
-                                                            ),
-                                                        ).length == 1
-                                                        ? ""
-                                                        : "s"}{" "}
-                                                    between {format(date.from!, "MMMM d")} and{" "}
-                                                    {format(
-                                                        date.to ?? new Date(date.from!.setHours(23, 59, 59, 999)),
-                                                        "MMMM d",
-                                                    )}
-                                                    .
-                                                </CardDescription>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <RecentTasks dateRange={date} limit={6} />
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                        <Card className="col-span-4 lg:col-span-3">
-                                            <CardHeader>
-                                                <CardTitle>Recent Sessions</CardTitle>
-                                                <CardDescription>
-                                                    You started{" "}
-                                                    {
-                                                        user.projects
-                                                            .flatMap((project) =>
-                                                                project.tasks.flatMap((task) => task.sessions),
-                                                            )
-                                                            .filter((session) => {
-                                                                const monthStart = new Date(
-                                                                    new Date().getFullYear(),
-                                                                    new Date().getMonth(),
-                                                                    1,
-                                                                    0,
-                                                                    0,
-                                                                    0,
-                                                                );
-
-                                                                return (
-                                                                    new Date(session.start).getTime() >
-                                                                    monthStart.getTime()
-                                                                );
-                                                            }).length
-                                                    }{" "}
-                                                    session
-                                                    {user.projects
-                                                        .flatMap((project) =>
-                                                            project.tasks.flatMap((task) => task.sessions),
-                                                        )
-                                                        .filter((session) => {
-                                                            const monthStart = new Date(
-                                                                new Date().getFullYear(),
-                                                                new Date().getMonth(),
-                                                                1,
-                                                                0,
-                                                                0,
-                                                                0,
-                                                            );
-
-                                                            return (
-                                                                new Date(session.start).getTime() > monthStart.getTime()
-                                                            );
-                                                        }).length == 1
-                                                        ? ""
-                                                        : "s"}{" "}
-                                                    this month.
-                                                </CardDescription>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <RecentSessions dateRange={date} />
-                                            </CardContent>
-                                        </Card>
-                                        <Card className="col-span-4">
-                                            <CardHeader>
-                                                <CardTitle>Overview</CardTitle>
-                                            </CardHeader>
-                                            <CardContent className="pl-2">
-                                                <Overview />
-                                            </CardContent>
-                                        </Card>
-                                    </div>
+                            <div className="space-y-4">
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                    <Card>
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <CardTitle className="text-sm font-medium text-primary">
+                                                Working Time
+                                            </CardTitle>
+                                            <Workflow className="h-4 w-4 text-muted-foreground" />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="text-2xl font-bold">
+                                                {msToShortTime(getWorkingTimeOfUser(user, dateRange))}
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">
+                                                {(
+                                                    (getWorkingTimeOfUser(user, dateRange, ["smooth"]) /
+                                                        getWorkingTimeOfUser(user, dateRange)) *
+                                                    100
+                                                ).toFixed(2)}
+                                                {"% "}
+                                                working really smooth
+                                            </p>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <CardTitle className="text-sm font-medium text-primary">
+                                                Most common project
+                                            </CardTitle>
+                                            <Book className="h-4 w-4 text-muted-foreground" />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="text-2xl font-bold">
+                                                {dateRange
+                                                    ? getProjectWithMostSessionDurationInInterval(user, dateRange)?.name
+                                                    : getProjectWithMostSessionDuration(user)?.name}
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">
+                                                {dateRange
+                                                    ? getProjectDurationInfoTextInInterval(user, dateRange)
+                                                    : getProjectDurationInfoText(user)}
+                                            </p>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <CardTitle className="text-sm font-medium text-primary">
+                                                Most common task
+                                            </CardTitle>
+                                            <ClipboardCheck className="h-4 w-4 text-muted-foreground" />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="text-2xl font-bold">
+                                                {dateRange
+                                                    ? getTaskWithMostSessionDurationInInterval(user, dateRange)?.name
+                                                    : getTaskWithMostSessionDuration(user)?.name}
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">
+                                                {dateRange
+                                                    ? getTaskDurationInfoTextInInterval(user, dateRange)
+                                                    : getTaskDurationInfoText(user)}
+                                            </p>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                            <CardTitle className="text-sm font-medium text-primary">
+                                                Last time working {dateRange && dateRange.to ? "in given interval" : ""}
+                                            </CardTitle>
+                                            <History className="h-4 w-4 text-muted-foreground" />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="text-2xl font-bold">
+                                                {niceFormattedDate(
+                                                    dateRange && dateRange.to
+                                                        ? getMostRecentSessionDateInIntervalOfUser(user, dateRange)
+                                                        : getMostRecentSessionDateOfUser(user),
+                                                )}
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">
+                                                {formatDateToDistanceFromNow(
+                                                    dateRange && dateRange.to
+                                                        ? getMostRecentSessionDateInIntervalOfUser(user, dateRange)
+                                                        : getMostRecentSessionDateOfUser(user),
+                                                )}
+                                            </p>
+                                        </CardContent>
+                                    </Card>
                                 </div>
-                            )}
-                            {date == undefined && (
-                                <Card className="col-span-4 lg:col-span-3">
-                                    <CardHeader>
-                                        <CardTitle>Life is short</CardTitle>
-                                        <CardDescription>Please select a date range first.</CardDescription>
-                                    </CardHeader>
-                                </Card>
-                            )}
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                                    <Card className="col-span-4">
+                                        <CardHeader>
+                                            <CardTitle>Demo Chart</CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="pl-2">
+                                            <DemoChart />
+                                        </CardContent>
+                                    </Card>
+                                    <Card className="col-span-4 lg:col-span-3">
+                                        <CardHeader>
+                                            <CardTitle>Recent Tasks</CardTitle>
+                                            <CardDescription>{getRecentTasksInfoText(user, dateRange)}</CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <RecentTasks dateRange={dateRange} limit={6} />
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                                    <Card className="col-span-4 lg:col-span-3">
+                                        <CardHeader>
+                                            <CardTitle>Recent Sessions</CardTitle>
+                                            <CardDescription>
+                                                {getRecentSessionsInfoText(user, dateRange)}
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <RecentSessions dateRange={dateRange} />
+                                        </CardContent>
+                                    </Card>
+                                    <Card className="col-span-4">
+                                        <CardHeader>
+                                            <CardTitle>Demo Chart</CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="pl-2">
+                                            <DemoChart />
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </div>
                         </TabsContent>
 
                         <TabsContent value="notifications" className="space-y-4">

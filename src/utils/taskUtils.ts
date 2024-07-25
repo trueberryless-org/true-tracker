@@ -103,3 +103,49 @@ export function calcStatusComparison(user: User | null | undefined, status: stri
         return `${sameStatusCount} other tasks have the same status`;
     }
 }
+
+export function getTaskWithMostSessionDuration(user: User): Task | undefined {
+    let maxDuration = 0;
+    let taskWithMaxDuration: Task | undefined = undefined;
+
+    user.projects.forEach((project) => {
+        project.tasks.forEach((task) => {
+            let taskDuration = 0;
+
+            task.sessions.forEach((session) => {
+                taskDuration += getSessionDuration(session);
+            });
+
+            if (taskDuration > maxDuration) {
+                maxDuration = taskDuration;
+                taskWithMaxDuration = task;
+            }
+        });
+    });
+
+    return taskWithMaxDuration;
+}
+
+export function getTaskWithMostSessionDurationInInterval(user: User, dateRange: DateRange): Task | undefined {
+    let maxDuration = 0;
+    let taskWithMaxDuration: Task | undefined = undefined;
+
+    user.projects.forEach((project) => {
+        project.tasks.forEach((task) => {
+            let taskDuration = 0;
+
+            task.sessions.forEach((session) => {
+                if (isSessionInDateRange(session, dateRange)) {
+                    taskDuration += getSessionDuration(session);
+                }
+            });
+
+            if (taskDuration > maxDuration) {
+                maxDuration = taskDuration;
+                taskWithMaxDuration = task;
+            }
+        });
+    });
+
+    return taskWithMaxDuration;
+}

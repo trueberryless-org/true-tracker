@@ -5,7 +5,7 @@ import Link from "next/link";
 import { DateRange } from "react-day-picker";
 
 import { msToShortTime } from "@/utils/dateUtils";
-import { getProjectOfSession, getSessionDuration, getTaskOfSession } from "@/utils/sessionUtils";
+import { getProjectOfSession, getSessionDuration, getTaskOfSession, isSessionInDateRange } from "@/utils/sessionUtils";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
@@ -39,11 +39,7 @@ export const RecentSessions: React.FC<RecentSessionsProps> = ({ dateRange, limit
                         return true;
                     }
 
-                    return (
-                        new Date(session.end ?? session.start).getTime() >= new Date(dateRange.from!).getTime() &&
-                        new Date(session.end ?? session.start).getTime() <=
-                            new Date(dateRange.to!).setHours(23, 59, 59, 999)
-                    );
+                    return isSessionInDateRange(session, dateRange);
                 })
                 .sort((a, b) => {
                     return new Date(b.end ?? b.start).getTime() - new Date(a.end ?? a.start).getTime();

@@ -74,6 +74,28 @@ export const getMostRecentSessionDateOfProject = (project: Project) => {
     return new Date(Math.max(...dates));
 };
 
+export function getProjectWithMostSessionDuration(user: User): Project | null {
+    let maxDuration = 0;
+    let projectWithMaxDuration: Project | null = null;
+
+    user.projects.forEach((project) => {
+        let projectDuration = 0;
+
+        project.tasks.forEach((task) => {
+            task.sessions.forEach((session) => {
+                projectDuration += getSessionDuration(session);
+            });
+        });
+
+        if (projectDuration > maxDuration) {
+            maxDuration = projectDuration;
+            projectWithMaxDuration = project;
+        }
+    });
+
+    return projectWithMaxDuration;
+}
+
 export function getProjectWithMostSessionDurationInInterval(user: User, dateRange: DateRange): Project | null {
     let maxDuration = 0;
     let projectWithMaxDuration: Project | null = null;
