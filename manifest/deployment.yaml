@@ -1,21 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: true-tracker
-  namespace: true-tracker
-  labels:
-    app: true-tracker
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: true-tracker
-  template:
-    metadata:
-      labels:
+    name: true-tracker
+    namespace: true-tracker
+    labels:
         app: true-tracker
-    spec:
-      containers:
-        - name: true-tracker
-          image: "trueberryless/true-tracker:26.1.1"
-          imagePullPolicy: Always
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: true-tracker
+    template:
+        metadata:
+            labels:
+                app: true-tracker
+        spec:
+            containers:
+                - name: true-tracker
+                  image: "trueberryless/true-tracker:26.1.1"
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 3000
