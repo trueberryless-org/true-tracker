@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+    name: true-tracker
+    namespace: true-tracker
+spec:
+    secretName: true-tracker
+    issuerRef:
+        name: acme-issuer
+        kind: ClusterIssuer
+    dnsNames:
+        - "true-tracker.trueberryless.org"
