@@ -144,7 +144,7 @@ jobs:
 
             - name: Update manifest.yaml file
               run: |
-                  yq eval '.spec.template.spec.containers[0].image = "trueberryless/blog:${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"' -i manifest/deployment.yaml
+                  yq eval '.spec.template.spec.containers[0].image = "trueberryless/true-tracker:${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"' -i manifest/deployment.yaml
 
             - uses: stefanzweifel/git-auto-commit-action@v4
               with:
