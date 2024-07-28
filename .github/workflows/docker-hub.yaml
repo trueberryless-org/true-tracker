@@ -141,3 +141,11 @@ jobs:
             - uses: stefanzweifel/git-auto-commit-action@v5
               with:
                   commit_message: update version.json (automated)
+
+            - name: Update manifest.yaml file
+              run: |
+                  yq eval '.spec.template.spec.containers[0].image = "trueberryless/blog:${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"' -i manifest/deployment.yaml
+
+            - uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                  commit_message: update manifest.json (automated)
