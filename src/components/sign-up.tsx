@@ -105,7 +105,7 @@ export function SignUp() {
     function generateRandomVisits(): User["visits"] {
         const visits: User["visits"] = [];
 
-        for (let i = 0; i < 5000; i++) {
+        for (let i = 0; i < 100; i++) {
             visits.push({
                 id: crypto.randomUUID(),
                 time: getRandomDateWithinLast8Year(),

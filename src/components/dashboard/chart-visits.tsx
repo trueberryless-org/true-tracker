@@ -3,7 +3,7 @@
 import { User } from "@/models";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { DateRange } from "react-day-picker";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -182,7 +182,7 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
     const [chartDataWeek, currentWeekVisits, averageVisitsPerWeek] = generateChartDataWeek(user);
 
     return (
-        <Tabs defaultValue="month" className={`${className} mt-0`}>
+        <Tabs defaultValue="week" className={`${className} mt-0`}>
             <TabsContent value="week" className="mt-0">
                 <Card>
                     <CardHeader className="flex flex-row justify-between">
@@ -208,7 +208,17 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                                     tickFormatter={(value) => value.slice(0, 3)}
                                 />
                                 <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                                <Bar dataKey="visits" fill="var(--color-visits)" radius={8} />
+                                <Bar dataKey="visits" fill="var(--color-visits)" radius={8}>
+                                    <LabelList
+                                        dataKey="visits"
+                                        position="insideTop"
+                                        offset={20}
+                                        className="fill-primary-foreground"
+                                        fontSize={12}
+                                        fontWeight={700}
+                                        formatter={(value: number) => (value > averageVisitsPerWeek / 3 ? value : "")}
+                                    />
+                                </Bar>
                             </BarChart>
                         </ChartContainer>
                     </CardContent>
@@ -254,7 +264,17 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                                     tickFormatter={(value) => value.slice(0, 3)}
                                 />
                                 <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                                <Bar dataKey="visits" fill="var(--color-visits)" radius={8} />
+                                <Bar dataKey="visits" fill="var(--color-visits)" radius={8}>
+                                    <LabelList
+                                        dataKey="visits"
+                                        position="insideTop"
+                                        offset={20}
+                                        className="fill-primary-foreground"
+                                        fontSize={12}
+                                        fontWeight={700}
+                                        formatter={(value: number) => (value > averageVisitsPerMonth / 3 ? value : "")}
+                                    />
+                                </Bar>
                             </BarChart>
                         </ChartContainer>
                     </CardContent>
@@ -305,7 +325,17 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                                 <CartesianGrid vertical={false} />
                                 <XAxis dataKey="column" tickLine={false} tickMargin={10} axisLine={false} />
                                 <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                                <Bar dataKey="visits" fill="var(--color-visits)" radius={8} />
+                                <Bar dataKey="visits" fill="var(--color-visits)" radius={8}>
+                                    <LabelList
+                                        dataKey="visits"
+                                        position="insideTop"
+                                        offset={20}
+                                        className="fill-primary-foreground"
+                                        fontSize={12}
+                                        fontWeight={700}
+                                        formatter={(value: number) => (value > averageVisitsPerYear / 3 ? value : "")}
+                                    />
+                                </Bar>
                             </BarChart>
                         </ChartContainer>
                     </CardContent>

@@ -77,6 +77,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 import { useUser } from "../UserContext";
 import { Component } from "./chart";
+import { ChartSessionFlow } from "./chart-session-flow";
+import { ChartTaskAmount } from "./chart-task-amount";
 import { ChartVisits } from "./chart-visits";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { DemoChart } from "./demo-chart";
@@ -438,7 +440,7 @@ export default function Dashboard() {
                     <Tabs defaultValue="overview" className="space-y-4" onValueChange={handleTabChange}>
                         <TabsList>
                             <TabsTrigger value="overview">Overview</TabsTrigger>
-                            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                            {/* <TabsTrigger value="analytics">Analytics</TabsTrigger> */}
                             <TabsTrigger value="notifications">
                                 <div className="flex items-center space-x-2">
                                     <span>Notifications</span>
@@ -539,14 +541,7 @@ export default function Dashboard() {
                                     </Card>
                                 </div>
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                                    <Card className="col-span-4">
-                                        <CardHeader>
-                                            <CardTitle>Demo Chart</CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="pl-2">
-                                            <DemoChart />
-                                        </CardContent>
-                                    </Card>
+                                    <ChartTaskAmount user={user} className="col-span-2" />
                                     <Card className="col-span-4 lg:col-span-3">
                                         <CardHeader>
                                             <CardTitle>Recent Tasks</CardTitle>
@@ -556,6 +551,7 @@ export default function Dashboard() {
                                             <RecentTasks dateRange={dateRange} limit={6} />
                                         </CardContent>
                                     </Card>
+                                    <ChartSessionFlow user={user} className="col-span-2" />
                                 </div>
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                                     <Card className="col-span-4 lg:col-span-3">
