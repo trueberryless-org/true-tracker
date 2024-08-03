@@ -89,10 +89,30 @@ export function SignUp() {
         return new Date(sixMonthsAgo.getTime() + Math.random() * (now.getTime() - sixMonthsAgo.getTime()));
     }
 
+    function getRandomDateWithinLast8Year() {
+        const now = new Date();
+        const eightYearsAgo = new Date();
+        eightYearsAgo.setFullYear(now.getFullYear() - 8);
+        return new Date(eightYearsAgo.getTime() + Math.random() * (now.getTime() - eightYearsAgo.getTime()));
+    }
+
     function getRandomSessionDuration() {
         const minDuration = 5 * 60 * 1000; // 5 Minuten in Millisekunden
         const maxDuration = 5 * 60 * 60 * 1000; // 5 Stunden in Millisekunden
         return minDuration + Math.random() * (maxDuration - minDuration);
+    }
+
+    function generateRandomVisits(): User["visits"] {
+        const visits: User["visits"] = [];
+
+        for (let i = 0; i < 5000; i++) {
+            visits.push({
+                id: crypto.randomUUID(),
+                time: getRandomDateWithinLast8Year(),
+            });
+        }
+
+        return visits;
     }
 
     function tryTestData(event: any): void {
@@ -114,6 +134,8 @@ export function SignUp() {
                         });
                     });
                 });
+
+                user.visits = generateRandomVisits();
 
                 // Random theme
                 const themes: ("default" | "sapphire" | "ruby" | "emerald" | "coral" | "amber" | "amethyst")[] = [

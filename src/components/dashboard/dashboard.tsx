@@ -77,6 +77,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 import { useUser } from "../UserContext";
 import { Component } from "./chart";
+import { ChartVisits } from "./chart-visits";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { DemoChart } from "./demo-chart";
 import { RecentSessions } from "./recent-sessions";
@@ -568,14 +569,7 @@ export default function Dashboard() {
                                             <RecentSessions dateRange={dateRange} />
                                         </CardContent>
                                     </Card>
-                                    <Card className="col-span-4">
-                                        <CardHeader>
-                                            <CardTitle>Demo Chart</CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="pl-2">
-                                            <DemoChart />
-                                        </CardContent>
-                                    </Card>
+                                    <ChartVisits user={user} className="col-span-4" />
                                 </div>
                             </div>
                         </TabsContent>

@@ -382,16 +382,7 @@
             "projectStatusKickoff": true
         }
     },
-    "visits": [
-        {
-            "id": "b34c55d6-17dc-4df0-b432-b181e9be0935",
-            "time": "2024-07-22T20:32:55.660Z"
-        },
-        {
-            "id": "462f68e2-eec7-4383-a669-f6dc353b390b",
-            "time": "2024-07-22T20:24:02.846Z"
-        }
-    ],
+    "visits": [],
     "version": {
         "major": 0,
         "minor": 3,
