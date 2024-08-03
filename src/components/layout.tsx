@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 import { useUser } from "./UserContext";
 import { SignUp } from "./sign-up";
+import { ExitTestMode } from "./test-mode/exit-test-mode";
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -24,6 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <>
             <Navbar />
             <main>{children}</main>
+            {user.isCurrentlyInTestMode && <ExitTestMode />}
         </>
     );
 };

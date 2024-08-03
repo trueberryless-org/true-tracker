@@ -76,6 +76,8 @@ export function SignUp() {
             },
             visits: [],
             version: version,
+
+            isCurrentlyInTestMode: false,
         };
         setUser(newUser);
         saveData(newUser);
@@ -148,6 +150,8 @@ export function SignUp() {
                     "amethyst",
                 ];
                 user.settings.theme = themes[Math.floor(Math.random() * themes.length)];
+
+                user.isCurrentlyInTestMode = true;
 
                 setUser(user);
                 saveData(user);

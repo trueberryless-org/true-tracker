@@ -13,4 +13,6 @@ export default interface User {
 
     visits: Visit[];
     version: Version;
+
+    isCurrentlyInTestMode: boolean;
 }
