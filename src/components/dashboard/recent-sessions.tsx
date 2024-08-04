@@ -59,13 +59,13 @@ export const RecentSessions: React.FC<RecentSessionsProps> = ({ dateRange, limit
                                 {session.flow === "disrupted" && <Snail className="h-4 w-4" />}
                             </AvatarFallback>
                         </Avatar>
-                        <div className="ml-4 space-y-1 max-w-[60%]">
-                            <p className="text-sm font-medium leading-none  truncate">
+                        <div className="ml-4 space-y-1 min-w-0">
+                            <p className="text-sm font-medium truncate">
                                 {getProjectOfSession(session, user)?.name} - {getTaskOfSession(session, user)?.name}
                             </p>
                             <p className="text-sm text-muted-foreground truncate">{getTimeDescription(session)}</p>
                         </div>
-                        <div className="ml-auto font-medium truncate ps-2">
+                        <div className="ml-auto font-medium ps-2 whitespace-nowrap">
                             {msToShortTime(getSessionDuration(session))}
                         </div>
                     </Link>

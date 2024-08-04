@@ -424,7 +424,7 @@ export default function Dashboard() {
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                <div className="flex-1 space-y-4 px-8">
+                <div className="flex-1 space-y-4 md:px-8">
                     <div className="flex md:items-center justify-between flex-col md:flex-row gap-4">
                         <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
                         <div className="flex items-start xs:items-center max-xs:space-y-4 xs:space-x-2 flex-col xs:flex-row">
@@ -542,7 +542,7 @@ export default function Dashboard() {
                                 </div>
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6 xl:grid-cols-7">
                                     <ChartTaskAmount user={user} className="order-1 lg:col-span-2" />
-                                    <Card className="order-2 md:col-span-2 md:max-lg:order-3 lg:col-span-4 xl:col-span-3">
+                                    <Card className="order-2 md:col-span-2 md:max-lg:order-3 lg:col-span-4 xl:col-span-3 overflow-hidden">
                                         <CardHeader>
                                             <CardTitle>Recent Tasks</CardTitle>
                                             <CardDescription>{getRecentTasksInfoText(user, dateRange)}</CardDescription>
@@ -555,7 +555,7 @@ export default function Dashboard() {
                                         user={user}
                                         className="order-3 md:order-2 lg:col-span-2 lg:order-4 xl:order-3"
                                     />
-                                    <Card className="order-4 md:col-span-2 lg:col-span-4 lg:max-xl:order-3 xl:col-span-3">
+                                    <Card className="order-4 md:col-span-2 lg:col-span-4 lg:max-xl:order-3 xl:col-span-3 overflow-hidden">
                                         <CardHeader>
                                             <CardTitle>Recent Sessions</CardTitle>
                                             <CardDescription>
