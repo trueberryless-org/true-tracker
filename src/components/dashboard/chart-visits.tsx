@@ -85,11 +85,15 @@ function generateChartDataMonth(user: User): [{ column: string; visits: number }
         December: 0,
     };
 
+    // Track the months with visits
+    const monthsWithVisits: Set<string> = new Set();
+
     // Iterate over each visit and increment the corresponding month count
     user.visits.forEach((visit) => {
         const monthIndex = new Date(visit.time).getMonth(); // Get month index (0-11)
         const monthName = monthNames[monthIndex]; // Get month name from index
         monthlyVisits[monthName]++;
+        monthsWithVisits.add(monthName);
     });
 
     // Convert the monthly visits object to an array of objects for chart data
@@ -106,8 +110,9 @@ function generateChartDataMonth(user: User): [{ column: string; visits: number }
     const totalVisits = Object.values(monthlyVisits).reduce((sum, count) => sum + count, 0);
     const currentMonthVisits = monthlyVisits[currentMonthName];
 
-    // Calculate the average visits per month
-    const averageVisitsPerMonth = totalVisits / 12;
+    // Calculate the average visits per month based on months with visits
+    const numberOfMonthsWithVisits = monthsWithVisits.size;
+    const averageVisitsPerMonth = numberOfMonthsWithVisits > 0 ? totalVisits / numberOfMonthsWithVisits : 0;
 
     return [chartData, currentMonthVisits, averageVisitsPerMonth];
 }
@@ -126,11 +131,15 @@ function generateChartDataWeek(user: User): [{ column: string; visits: number }[
         Sunday: 0,
     };
 
+    // Track the weeks with visits
+    const weeksWithVisits: Set<string> = new Set();
+
     // Iterate over each visit and increment the corresponding week count
     user.visits.forEach((visit) => {
         const weekIndex = new Date(visit.time).getDay(); // Get week index (0-6)
         const weekName = weekNames[weekIndex]; // Get week name from index
         weeklyVisits[weekName]++;
+        weeksWithVisits.add(weekName);
     });
 
     // Convert the weekly visits object to an array of objects for chart data
@@ -147,8 +156,9 @@ function generateChartDataWeek(user: User): [{ column: string; visits: number }[
     const totalVisits = Object.values(weeklyVisits).reduce((sum, count) => sum + count, 0);
     const currentWeekVisits = weeklyVisits[currentWeekName];
 
-    // Calculate the average visits per week
-    const averageVisitsPerWeek = totalVisits / 7;
+    // Calculate the average visits per week based on weeks with visits
+    const numberOfWeeksWithVisits = weeksWithVisits.size;
+    const averageVisitsPerWeek = numberOfWeeksWithVisits > 0 ? totalVisits / numberOfWeeksWithVisits : 0;
 
     return [chartData, currentWeekVisits, averageVisitsPerWeek];
 }
@@ -183,8 +193,8 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
 
     return (
         <Tabs defaultValue="week" className={`${className} mt-0`}>
-            <TabsContent value="week" className="mt-0">
-                <Card>
+            <TabsContent value="week" className="mt-0 h-full">
+                <Card className="h-full flex flex-col justify-between">
                     <CardHeader className="flex flex-row justify-between">
                         <div className="space-y-1.5">
                             <CardTitle>Visits</CardTitle>
@@ -239,8 +249,8 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                     </CardFooter>
                 </Card>
             </TabsContent>
-            <TabsContent value="month" className="mt-0">
-                <Card>
+            <TabsContent value="month" className="mt-0 h-full">
+                <Card className="h-full flex flex-col justify-between">
                     <CardHeader className="flex flex-row justify-between">
                         <div className="space-y-1.5">
                             <CardTitle>Visits</CardTitle>
@@ -306,8 +316,8 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                     </CardFooter>
                 </Card>
             </TabsContent>
-            <TabsContent value="year" className="mt-0">
-                <Card>
+            <TabsContent value="year" className="mt-0 h-full">
+                <Card className="h-full flex flex-col justify-between">
                     <CardHeader className="flex flex-row justify-between">
                         <div className="space-y-1.5">
                             <CardTitle>Visits</CardTitle>

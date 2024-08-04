@@ -62,7 +62,7 @@ export function ChartTaskAmount({ user, className }: ChartTaskAmountProps) {
                 <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[400px]">
                     <PieChart>
                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        <Pie data={chartData} dataKey="visitors" nameKey="browser" innerRadius={100} strokeWidth={5}>
+                        <Pie data={chartData} dataKey="visitors" nameKey="browser" innerRadius={"60%"}>
                             <Label
                                 content={({ viewBox }) => {
                                     if (viewBox && "cx" in viewBox && "cy" in viewBox) {

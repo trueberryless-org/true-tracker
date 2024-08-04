@@ -133,7 +133,7 @@ export const RecentTasks: React.FC<RecentTasksProps> = ({ dateRange, limit = 7 }
                                 <StatusIconLabel statusValue={task.status} />
                             </p>
                         </div>
-                        <div className="ml-auto font-medium">
+                        <div className="hidden ml-auto font-medium md:inline-block">
                             <StartStopButton
                                 key={task.id}
                                 task={task}
