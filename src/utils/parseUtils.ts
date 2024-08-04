@@ -67,4 +67,5 @@ export const parseUser = (data: any): User => ({
     projects: data.projects.map(parseProject),
     visits: data.visits.map(parseVisit),
     version: parseVersion(data.version),
+    isCurrentlyInTestMode: data.isCurrentlyInTestMode || false,
 });
