@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: true-tracker
-          image: "trueberryless/true-tracker:main-151f2983552ed4d6241f7c803c64dcdd37ef19dc"
+          image: "trueberryless/true-tracker:main-fdbf556458fa42c4640567882e07b84ad50f2d48"
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
