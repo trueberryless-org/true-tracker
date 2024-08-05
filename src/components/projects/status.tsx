@@ -20,7 +20,7 @@ const StatusIconLabel: React.FC<StatusIconLabelProps> = ({ statusValue, justify,
     const Icon = status.icon;
     const justifyClass = justify === "right" ? "justify-end" : "justify-start";
     return (
-        <div className={`flex items-center ${justifyClass} ${className}`}>
+        <div className={`flex items-center ${justifyClass} ${className} whitespace-nowrap`}>
             {Icon && <Icon className="mr-2 h-4 w-4" />}
             <span>{status.label}</span>
         </div>

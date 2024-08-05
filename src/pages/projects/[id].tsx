@@ -98,24 +98,22 @@ export default function ProjectPage() {
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 min-h-9">
                     <Link href="/projects" className="text-muted-foreground">
                         <Button variant="outline" size="icon" className="h-7 w-7">
                             <ChevronLeft className="h-4 w-4" />
                             <span className="sr-only">Back</span>
                         </Button>
                     </Link>
-                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                        {project.name}
-                    </h1>
-                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                    <h1 className="truncate text-xl font-semibold tracking-tight">{project.name}</h1>
+                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2 max-xs:hidden bg-background">
                         <PriorityIconLabel priorityValue={project.priority} className="text-muted-foreground" />
                     </Badge>
-                    <Badge variant="outline" className="hidden ml-auto sm:ml-0 py-2 sm:block bg-background">
+                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2 max-sm:hidden bg-background">
                         <StatusIconLabel statusValue={project.status} className="text-muted-foreground" />
                     </Badge>
                     {project.archivedAt && (
-                        <Badge variant="destructive" className="hidden ml-auto sm:ml-0 py-2 md:block">
+                        <Badge variant="destructive" className="ml-auto sm:ml-0 py-2 max-md:hidden">
                             <div className="flex items-center">
                                 <Archive className="mr-2 h-4 w-4" />
                                 Archived
