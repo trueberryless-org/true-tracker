@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Project from "@/models/project";
 import { flows } from "@/models/session";
 
+import { msToTimeFitting } from "@/utils/dateUtils";
 import { saveData } from "@/utils/save";
 
 import { useUser } from "@/components/UserContext";
@@ -103,19 +104,26 @@ export default function EditSession() {
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="grid flex-1 auto-rows-max gap-4">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 overflow-hidden min-h-9">
                         <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
                             <Button variant="outline" size="icon" className="h-7 w-7">
                                 <ChevronLeft className="h-4 w-4" />
                                 <span className="sr-only">Back</span>
                             </Button>
                         </Link>
+                        <h1 className="text-xl font-semibold tracking-tight truncate">
+                            {msToTimeFitting(
+                                session.end
+                                    ? new Date(session.end!).getTime() - new Date(session.start).getTime()
+                                    : Date.now() - new Date(session.start).getTime(),
+                            ) + " session"}
+                        </h1>
                         {session.flow && (
                             <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
                                 <FlowIconLabel flowValue={session.flow} className="text-muted-foreground" />
                             </Badge>
                         )}
-                        <div className="hidden items-center gap-2 md:ml-auto md:flex">
+                        <div className="flex items-center gap-2 md:ml-auto max-md:hidden">
                             <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
                                 <Button variant="outline" size="sm">
                                     Discard

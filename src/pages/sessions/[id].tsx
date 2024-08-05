@@ -126,21 +126,21 @@ export default function SessionPage() {
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 overflow-hidden min-h-9">
                     <Link href="/sessions" className="text-muted-foreground">
                         <Button variant="outline" size="icon" className="h-7 w-7">
                             <ChevronLeft className="h-4 w-4" />
                             <span className="sr-only">Back</span>
                         </Button>
                     </Link>
-                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+                    <h1 className="text-xl font-semibold tracking-tight truncate">
                         {msToTimeFitting(
                             session.end
                                 ? new Date(session.end!).getTime() - new Date(session.start).getTime()
                                 : Date.now() - new Date(session.start).getTime(),
                         ) + " session"}
                     </h1>
-                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                    <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background max-sm:hidden">
                         <FlowIconLabel flowValue={session.flow} className="text-muted-foreground" />
                     </Badge>
                     <div className="flex items-center gap-2 ml-auto">
