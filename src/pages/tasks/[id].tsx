@@ -167,28 +167,26 @@ export default function TaskPage() {
     return (
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 overflow-hidden min-h-9">
                     <Link href="/tasks" className="text-muted-foreground">
                         <Button variant="outline" size="icon" className="h-7 w-7">
                             <ChevronLeft className="h-4 w-4" />
                             <span className="sr-only">Back</span>
                         </Button>
                     </Link>
-                    <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                        {task.name}
-                    </h1>
+                    <h1 className="text-xl font-semibold tracking-tight truncate">{task.name}</h1>
                     {task.priority && (
-                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background max-xs:hidden">
                             <PriorityIconLabel priorityValue={task.priority} className="text-muted-foreground" />
                         </Badge>
                     )}
                     {task.status && (
-                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background max-sm:hidden">
                             <StatusIconLabel statusValue={task.status} className="text-muted-foreground" />
                         </Badge>
                     )}
                     {task.projectIsArchived && (
-                        <Badge variant="destructive" className="hidden ml-auto sm:ml-0 py-2 md:block">
+                        <Badge variant="destructive" className="ml-auto sm:ml-0 py-2 max-md:hidden">
                             <div className="flex items-center">
                                 <Archive className="mr-2 h-4 w-4" />
                                 Archived by project

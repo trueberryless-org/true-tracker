@@ -101,27 +101,25 @@ export default function EditTask() {
         <div className="flex w-full flex-col">
             <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
                 <div className="grid flex-1 auto-rows-max gap-4">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 overflow-hidden min-h-9">
                         <Link href={`/tasks/${task.id}`} className="text-muted-foreground">
                             <Button variant="outline" size="icon" className="h-7 w-7">
                                 <ChevronLeft className="h-4 w-4" />
                                 <span className="sr-only">Back</span>
                             </Button>
                         </Link>
-                        <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                            {task.name}
-                        </h1>
+                        <h1 className="text-xl font-semibold tracking-tight truncate">{task.name}</h1>
                         {task.priority && (
-                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background max-xs:hidden">
                                 <PriorityIconLabel priorityValue={task.priority} className="text-muted-foreground" />
                             </Badge>
                         )}
                         {task.status && (
-                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
+                            <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background max-sm:hidden">
                                 <StatusIconLabel statusValue={task.status} className="text-muted-foreground" />
                             </Badge>
                         )}
-                        <div className="hidden items-center gap-2 md:ml-auto md:flex">
+                        <div className="flex items-center gap-2 md:ml-auto max-md:hidden">
                             <Link href={`/tasks/${task.id}`} className="text-muted-foreground">
                                 <Button variant="outline" size="sm">
                                     Discard
