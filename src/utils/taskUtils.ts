@@ -126,12 +126,20 @@ export function getTaskWithMostSessionDuration(user: User): Task | undefined {
     return taskWithMaxDuration;
 }
 
-export function getTaskWithMostSessionDurationInInterval(user: User, dateRange: DateRange): Task | undefined {
+export function getTaskWithMostSessionDurationInInterval(
+    user: User,
+    dateRange: DateRange,
+    excludeTaskIds: string[] = [],
+): Task | undefined {
     let maxDuration = 0;
     let taskWithMaxDuration: Task | undefined = undefined;
 
     user.projects.forEach((project) => {
         project.tasks.forEach((task) => {
+            if (excludeTaskIds.includes(task.id)) {
+                return;
+            }
+
             let taskDuration = 0;
 
             task.sessions.forEach((session) => {

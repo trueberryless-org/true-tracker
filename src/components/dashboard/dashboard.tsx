@@ -79,6 +79,7 @@ import { useUser } from "../UserContext";
 import { Component } from "./chart";
 import { ChartSessionFlow } from "./chart-session-flow";
 import { ChartTaskAmount } from "./chart-task-amount";
+import { ChartTaskDurationRadar } from "./chart-task-duration-radar";
 import { ChartVisits } from "./chart-visits";
 import { CalendarDateRangePicker } from "./date-range-picker";
 import { DemoChart } from "./demo-chart";
@@ -179,20 +180,15 @@ export default function Dashboard() {
     function getWorkingTimeOfUser(
         user: User,
         dateRange: DateRange | undefined,
-        flow: string[] = ["smooth", "good", "neutral", "disrupted"],
+        flows: string[] = ["smooth", "good", "neutral", "disrupted"],
     ): number {
         return user.projects
             .flatMap((project) => project.tasks)
             .flatMap((task) => task.sessions)
             .filter((session) => {
-                return dateRange ? isSessionInDateRange(session, dateRange) : true && flow.includes(session.flow);
+                return (dateRange ? isSessionInDateRange(session, dateRange) : true) && flows.includes(session.flow);
             })
-            .reduce((acc, session) => {
-                if (!session.end) {
-                    return acc + new Date().getTime() - new Date(session.start).getTime();
-                }
-                return acc + (new Date(session.end).getTime() - new Date(session.start).getTime());
-            }, 0);
+            .reduce((acc, session) => acc + getSessionDuration(session), 0);
     }
 
     function getProjectDurationInfoText(user: User): string {
@@ -541,7 +537,11 @@ export default function Dashboard() {
                                     </Card>
                                 </div>
                                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6 xl:grid-cols-7">
-                                    <ChartTaskAmount user={user} className="order-1 lg:col-span-2" />
+                                    <ChartTaskAmount
+                                        user={user}
+                                        dateRange={dateRange}
+                                        className="order-1 lg:col-span-2"
+                                    />
                                     <Card className="order-2 md:col-span-2 md:max-lg:order-3 lg:col-span-4 xl:col-span-3 overflow-hidden">
                                         <CardHeader>
                                             <CardTitle>Recent Tasks</CardTitle>
@@ -551,7 +551,7 @@ export default function Dashboard() {
                                             <RecentTasks dateRange={dateRange} limit={6} />
                                         </CardContent>
                                     </Card>
-                                    <ChartSessionFlow
+                                    <ChartTaskDurationRadar
                                         user={user}
                                         className="order-3 md:order-2 lg:col-span-2 lg:order-4 xl:order-3"
                                     />

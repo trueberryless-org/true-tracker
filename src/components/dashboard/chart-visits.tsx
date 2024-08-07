@@ -167,15 +167,6 @@ function calculateVisitPercentage(currentVisits: number, averageVisits: number):
     // Calculate the percentage difference
     const percentageDifference = (currentVisits / averageVisits - 1) * 100;
 
-    console.log(
-        "currentVisits",
-        currentVisits,
-        "averageVisits",
-        averageVisits,
-        "percentageDifference",
-        percentageDifference,
-    );
-
     // Format the percentage with + or - sign
     const formattedPercentage = percentageDifference.toFixed(1);
     return `${percentageDifference >= 0 ? "+" : ""}${formattedPercentage}%`;
