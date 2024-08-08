@@ -214,7 +214,7 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                                         dataKey="visits"
                                         position="insideTop"
                                         offset={20}
-                                        className="fill-primary-foreground"
+                                        className="fill-primary-foreground max-md:hidden"
                                         fontSize={12}
                                         fontWeight={700}
                                         formatter={(value: number) => (value > averageVisitsPerWeek / 3 ? value : "")}
@@ -270,7 +270,7 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                                         dataKey="visits"
                                         position="insideTop"
                                         offset={20}
-                                        className="fill-primary-foreground"
+                                        className="fill-primary-foreground max-md:hidden"
                                         fontSize={12}
                                         fontWeight={700}
                                         formatter={(value: number) => (value > averageVisitsPerMonth / 3 ? value : "")}
@@ -331,7 +331,7 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                                         dataKey="visits"
                                         position="insideTop"
                                         offset={20}
-                                        className="fill-primary-foreground"
+                                        className="fill-primary-foreground max-md:hidden"
                                         fontSize={12}
                                         fontWeight={700}
                                         formatter={(value: number) => (value > averageVisitsPerYear / 3 ? value : "")}
