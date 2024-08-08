@@ -77,7 +77,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 import { useUser } from "../UserContext";
 import { Component } from "./chart";
-import { ChartSessionFlow } from "./chart-session-flow";
+import { ChartSessionFlowRadar } from "./chart-session-flow-radar";
 import { ChartTaskAmount } from "./chart-task-amount";
 import { ChartTaskDurationRadar } from "./chart-task-duration-radar";
 import { ChartVisits } from "./chart-visits";
@@ -551,8 +551,9 @@ export default function Dashboard() {
                                             <RecentTasks dateRange={dateRange} limit={6} />
                                         </CardContent>
                                     </Card>
-                                    <ChartTaskDurationRadar
+                                    <ChartSessionFlowRadar
                                         user={user}
+                                        dateRange={dateRange}
                                         className="order-3 md:order-2 lg:col-span-2 lg:order-4 xl:order-3"
                                     />
                                     <Card className="order-4 md:col-span-2 lg:col-span-4 lg:max-xl:order-3 xl:col-span-3 overflow-hidden">

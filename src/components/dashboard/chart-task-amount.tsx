@@ -70,8 +70,6 @@ const calculateChartData = (user: User, dateRange: DateRange | undefined) => {
         },
     ];
 
-    console.log(chartData);
-
     return chartData;
 };
 
