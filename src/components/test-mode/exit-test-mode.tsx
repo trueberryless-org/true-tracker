@@ -35,21 +35,6 @@ export function ExitTestMode() {
         toast("Successfully exited test mode.");
     };
 
-    React.useEffect(() => {
-        const updateData = () => {
-            const newData = data.map((item) => ({
-                value: Math.floor(Math.random() * 400) + 100,
-            }));
-            setData(newData);
-        };
-
-        const interval = setInterval(() => {
-            updateData();
-        }, 2690); // Update data every 2 seconds
-
-        return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, [data]);
-
     return (
         <Drawer>
             <DrawerTrigger asChild>
