@@ -145,6 +145,36 @@ export const msToTimeFitting = (duration: number) => {
     return `${seconds}s`;
 };
 
+export const msToTimeFittingLong = (duration: number) => {
+    const seconds = Math.floor(duration / 1000),
+        minutes = Math.floor(duration / (1000 * 60)),
+        hours = Math.floor(duration / (1000 * 60 * 60)),
+        days = Math.floor(duration / (1000 * 60 * 60 * 24));
+
+    if (days > 0) {
+        return `${days} day${days !== 1 ? "s" : ""}`;
+    }
+    if (hours > 0) {
+        return `${hours} hour${hours !== 1 ? "s" : ""}`;
+    }
+    if (minutes > 0) {
+        return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+    }
+    return `${seconds} second${seconds !== 1 ? "s" : ""}`;
+};
+
+export const msToTimeDaysOrSecondsLong = (duration: number) => {
+    const seconds = Math.floor(duration / 1000),
+        minutes = Math.floor(duration / (1000 * 60)),
+        hours = Math.floor(duration / (1000 * 60 * 60)),
+        days = Math.floor(duration / (1000 * 60 * 60 * 24));
+
+    if (days > 0) {
+        return `${days} day${days !== 1 ? "s" : ""}`;
+    }
+    return `${seconds} second${seconds !== 1 ? "s" : ""}`;
+};
+
 /**
  * regular expression to check for valid hour format (01-23)
  */

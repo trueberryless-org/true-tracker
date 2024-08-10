@@ -4,6 +4,7 @@ import {
     Activity,
     Archive,
     ArrowUpRight,
+    Calculator,
     CalendarCog,
     CalendarMinus,
     CalendarPlus,
@@ -15,6 +16,7 @@ import {
     Package2,
     Plus,
     Search,
+    Timer,
     Users,
     Workflow,
 } from "lucide-react";
@@ -24,7 +26,14 @@ import { useRouter } from "next/router";
 
 import Task from "@/models/task";
 
-import { calcPriorityComparison, calcStatusComparison } from "@/utils/projectUtils";
+import {
+    msToTime,
+    msToTimeDaysOrSecondsLong,
+    msToTimeFitting,
+    msToTimeFittingLong,
+    msToTimeHours,
+} from "@/utils/dateUtils";
+import { calcPriorityComparison, calcStatusComparison, getProjectDuration } from "@/utils/projectUtils";
 import { saveData } from "@/utils/save";
 import { getMostRecentSessionDateOfTask } from "@/utils/taskUtils";
 
@@ -237,7 +246,7 @@ export default function ProjectPage() {
                     </Card>
                 </div>
                 <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-                    <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+                    <Card className="xl:col-span-2 row-span-3 max-lg:order-1" x-chunk="dashboard-01-chunk-4">
                         <CardHeader className="flex flex-row items-center gap-4">
                             <div className="grid gap-2">
                                 <CardTitle>Tasks</CardTitle>
@@ -309,80 +318,58 @@ export default function ProjectPage() {
                             </Table>
                         </CardContent>
                     </Card>
-                    {/* <Card x-chunk="dashboard-01-chunk-5">
-                        <CardHeader>
-                            <CardTitle>Recent Sales</CardTitle>
+                    <Card x-chunk="dashboard-01-chunk-0">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-primary">Duration</CardTitle>
+                            <Timer className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
-                        <CardContent className="grid gap-8">
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                                    <AvatarFallback>OM</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Olivia Martin
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        olivia.martin@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$1,999.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                                    <AvatarFallback>JL</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">Jackson Lee</p>
-                                    <p className="text-sm text-muted-foreground">
-                                        jackson.lee@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$39.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/03.png" alt="Avatar" />
-                                    <AvatarFallback>IN</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Isabella Nguyen
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        isabella.nguyen@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$299.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/04.png" alt="Avatar" />
-                                    <AvatarFallback>WK</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">William Kim</p>
-                                    <p className="text-sm text-muted-foreground">will@email.com</p>
-                                </div>
-                                <div className="ml-auto font-medium">+$99.00</div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <Avatar className="hidden h-9 w-9 sm:flex">
-                                    <AvatarImage src="/avatars/05.png" alt="Avatar" />
-                                    <AvatarFallback>SD</AvatarFallback>
-                                </Avatar>
-                                <div className="grid gap-1">
-                                    <p className="text-sm font-medium leading-none">Sofia Davis</p>
-                                    <p className="text-sm text-muted-foreground">
-                                        sofia.davis@email.com
-                                    </p>
-                                </div>
-                                <div className="ml-auto font-medium">+$39.00</div>
-                            </div>
+                        <CardContent>
+                            <div className="text-2xl font-bold">{msToTime(getProjectDuration(project))}</div>
+                            <p className="text-xs text-muted-foreground">
+                                You could also say around {msToTimeDaysOrSecondsLong(getProjectDuration(project))}
+                            </p>
                         </CardContent>
-                    </Card> */}
+                    </Card>
+                    <Card x-chunk="dashboard-01-chunk-0">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-primary">Task Count</CardTitle>
+                            <Calculator className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">
+                                {project.tasks.length} task{project.tasks.length !== 1 && "s"}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {project.tasks.filter((task) => task.priority === "high").length} task
+                                {project.tasks.filter((task) => task.priority === "high").length !== 1 && "s"} with high
+                                priority
+                            </p>
+                        </CardContent>
+                    </Card>
+                    <Card x-chunk="dashboard-01-chunk-0">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium text-primary">Session Count</CardTitle>
+                            <Calculator className="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-2xl font-bold">
+                                {project.tasks.flatMap((task) => task.sessions).length} session
+                                {project.tasks.flatMap((task) => task.sessions).length !== 1 && "s"}
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                {
+                                    project.tasks
+                                        .flatMap((task) => task.sessions)
+                                        .filter((session) => session.flow === "smooth").length
+                                }{" "}
+                                session
+                                {project.tasks
+                                    .flatMap((task) => task.sessions)
+                                    .filter((session) => session.flow === "smooth").length !== 1 && "s"}{" "}
+                                with smooth flow
+                            </p>
+                        </CardContent>
+                    </Card>
                 </div>
             </main>
         </div>
