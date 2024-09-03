@@ -15,6 +15,7 @@ import {
     DollarSign,
     Menu,
     Package2,
+    Plus,
     Search,
     Users,
     Workflow,
@@ -284,12 +285,30 @@ export default function TaskPage() {
                                 <CardTitle>Sessions</CardTitle>
                                 <CardDescription>Recent sessions for this task.</CardDescription>
                             </div>
-                            <Button asChild size="sm" className="ml-auto gap-1" variant={"outline"}>
-                                <Link href={`/sessions?taskId=${task.id}`}>
-                                    View All
-                                    <ArrowUpRight className="h-4 w-4" />
-                                </Link>
-                            </Button>
+                            {task.projectIsArchived && (
+                                <Button asChild size="sm" className="ml-auto gap-1" variant={"outline"}>
+                                    <Link href={`/sessions?taskId=${task.id}`}>
+                                        View All
+                                        <ArrowUpRight className="h-4 w-4" />
+                                    </Link>
+                                </Button>
+                            )}
+                            {!task.projectIsArchived && (
+                                <div className="ml-auto flex flex-row items-center gap-4">
+                                    <Button asChild size="sm" className="gap-1 max-md:hidden">
+                                        <Link href={`/sessions/new?taskId=${task.id}`}>
+                                            Create New Task
+                                            <Plus className="h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                    <Button asChild size="sm" className="gap-1" variant={"outline"}>
+                                        <Link href={`/sessions?taskId=${task.id}`}>
+                                            View All
+                                            <ArrowUpRight className="h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                </div>
+                            )}
                         </CardHeader>
                         <CardContent>
                             <Table>
