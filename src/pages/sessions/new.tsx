@@ -69,9 +69,12 @@ export default function NewSession() {
         if (session && user) {
             const updatedUser = { ...user };
             updatedUser.projects = updatedUser.projects.map((project) => {
-                const updatedTasks = project.tasks.map((task) => {
-                    const updatedSessions = [...task.sessions, session];
-                    return { ...task, sessions: updatedSessions };
+                const updatedTasks = project.tasks.map((t) => {
+                    if (t.id === task.id) {
+                        const updatedSessions = [...t.sessions, session];
+                        return { ...t, sessions: updatedSessions };
+                    }
+                    return t;
                 });
                 return { ...project, tasks: updatedTasks };
             });
