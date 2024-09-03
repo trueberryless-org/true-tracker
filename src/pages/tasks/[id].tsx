@@ -297,7 +297,7 @@ export default function TaskPage() {
                                 <div className="ml-auto flex flex-row items-center gap-4">
                                     <Button asChild size="sm" className="gap-1 max-md:hidden">
                                         <Link href={`/sessions/new?taskId=${task.id}`}>
-                                            Create New Task
+                                            Create New Session
                                             <Plus className="h-4 w-4" />
                                         </Link>
                                     </Button>
