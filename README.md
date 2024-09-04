@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## True Tracker
 
-## Getting Started
+The website [true-tracker](https://true-tracker.trueberryless.org) allows you to track your time spent on different projects. To further organize your projects there are also this thing called "tasks" which are basically subfolders of projects with extra features.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The key features of this software are listed below:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Privacy**:  
+  All data is only stored locally, which means that nothing is shared via the internet which makes using the app 100% safe (as long as your own computer isn't hacked of course).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **OSS**:  
+  The whole source code is completely open source which means that everybody can look into and improve the code we are developing. Furthermore, the GNU GENERAL PUBLIC LICENSE V3 ensures that every fork of this code must also be open source forever. Nice!
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Clean design**:  
+  Thanks to the wonderful [shadcn/ui](https://ui.shadcn.com/) the website looks clean and minimalistic with consistent design through and through.
 
-## Learn More
+## Star History
 
-To learn more about Next.js, take a look at the following resources:
-
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<a href="https://star-history.com/#trueberryless-org/true-tracker&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=trueberryless-org/true-tracker&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=trueberryless-org/true-tracker&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=trueberryless-org/true-tracker&type=Date" />
+ </picture>
+</a>
