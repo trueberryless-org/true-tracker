@@ -65,6 +65,10 @@ export default function EditProduct() {
     const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState<boolean>(false);
     const [archiveDialogIsOpen, setArchiveDialogIsOpen] = useState<boolean>(false);
 
+    const [otherActionsDropdownMobileIsOpen, setOtherActionsDropdownMobileIsOpen] = useState<boolean>(false);
+    const [deleteDialogMobileIsOpen, setDeleteDialogMobileIsOpen] = useState<boolean>(false);
+    const [archiveDialogMobileIsOpen, setArchiveDialogMobileIsOpen] = useState<boolean>(false);
+
     useEffect(() => {
         if (user) {
             const foundProject = user.projects.find((project) => project.id === projectId);
@@ -74,21 +78,37 @@ export default function EditProduct() {
         }
     }, [user, projectId]);
 
-    // useEffect(() => {
-    //     if (!deleteDialogIsOpen) {
-    //         return () => {
-    //             document.body.style.pointerEvents = "";
-    //         };
-    //     }
-    // }, [deleteDialogIsOpen]);
+    useEffect(() => {
+        if (!deleteDialogIsOpen) {
+            return () => {
+                document.body.style.pointerEvents = "";
+            };
+        }
+    }, [deleteDialogIsOpen]);
 
-    // useEffect(() => {
-    //     if (!archiveDialogIsOpen) {
-    //         return () => {
-    //             document.body.style.pointerEvents = "";
-    //         };
-    //     }
-    // }, [archiveDialogIsOpen]);
+    useEffect(() => {
+        if (!archiveDialogIsOpen) {
+            return () => {
+                document.body.style.pointerEvents = "";
+            };
+        }
+    }, [archiveDialogIsOpen]);
+
+    useEffect(() => {
+        if (!deleteDialogMobileIsOpen) {
+            return () => {
+                document.body.style.pointerEvents = "";
+            };
+        }
+    }, [deleteDialogMobileIsOpen]);
+
+    useEffect(() => {
+        if (!archiveDialogMobileIsOpen) {
+            return () => {
+                document.body.style.pointerEvents = "";
+            };
+        }
+    }, [archiveDialogMobileIsOpen]);
 
     const handleInputChange = (field: keyof Project, value: any) => {
         setProject((prevProject) => (prevProject ? { ...prevProject, [field]: value } : null));
@@ -217,7 +237,7 @@ export default function EditProduct() {
                                 <DropdownMenuContent className="w-56">
                                     <DropdownMenuItem>
                                         <Dialog open={archiveDialogIsOpen} onOpenChange={setArchiveDialogIsOpen}>
-                                            <DialogTrigger className="w-full text-left">Archive</DialogTrigger>
+                                            <DialogTrigger className="w-full text-left">Archive Project</DialogTrigger>
                                             <DialogContent>
                                                 <DialogHeader>
                                                     <DialogTitle>Are you absolutely sure?</DialogTitle>
@@ -237,7 +257,7 @@ export default function EditProduct() {
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
                                         <Dialog open={deleteDialogIsOpen} onOpenChange={setDeleteDialogIsOpen}>
-                                            <DialogTrigger className="w-full text-left">Delete</DialogTrigger>
+                                            <DialogTrigger className="w-full text-left">Delete Project</DialogTrigger>
                                             <DialogContent>
                                                 <DialogHeader>
                                                     <DialogTitle>Are you absolutely sure?</DialogTitle>
@@ -399,6 +419,65 @@ export default function EditProduct() {
                         </div>
                     </div>
                     <div className="flex items-center justify-end gap-2 md:hidden">
+                        <DropdownMenu
+                            open={
+                                otherActionsDropdownMobileIsOpen ||
+                                archiveDialogMobileIsOpen ||
+                                deleteDialogMobileIsOpen
+                            }
+                            onOpenChange={setOtherActionsDropdownMobileIsOpen}
+                        >
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size={"sm"}>
+                                    Other Actions
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                                <DropdownMenuItem>
+                                    <Dialog
+                                        open={archiveDialogMobileIsOpen}
+                                        onOpenChange={setArchiveDialogMobileIsOpen}
+                                    >
+                                        <DialogTrigger className="w-full text-left">Archive</DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                                <DialogDescription>
+                                                    This action cannot be undone. This will permanently delete all your
+                                                    projects and remove this data from your local storage.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <DialogClose>
+                                                    <Button variant={"outline"}>Cancel</Button>
+                                                </DialogClose>
+                                                <Button onClick={handleArchiveProject}>Continue</Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Dialog open={deleteDialogMobileIsOpen} onOpenChange={setDeleteDialogMobileIsOpen}>
+                                        <DialogTrigger className="w-full text-left">Delete</DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                                <DialogDescription>
+                                                    This action cannot be undone. This will permanently delete your
+                                                    project {project.name} and remove this data from your local storage.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <DialogClose>
+                                                    <Button variant={"outline"}>Cancel</Button>
+                                                </DialogClose>
+                                                <Button onClick={handleDeleteProject}>Continue</Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         <Link href={`/projects/${project.id}`} className="text-muted-foreground">
                             <Button variant="outline" size="sm">
                                 Discard
