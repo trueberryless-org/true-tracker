@@ -379,7 +379,13 @@
         "exportReminder": "weekly",
         "theme": "default",
         "automation": {
-            "projectStatusKickoff": true
+            "archiveStopSessions": true,
+            "archiveProjectStatusRetirement": true,
+            "archiveTaskStatusRetirement": true,
+            "projectStatusKickoff": true,
+            "projectStatusRetirement": true,
+            "taskStatusKickoff": true,
+            "taskStatusRetirement": true
         }
     },
     "visits": [],

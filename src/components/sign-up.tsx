@@ -71,7 +71,13 @@ export function SignUp() {
                 exportReminder: "weekly",
                 theme: "default",
                 automation: {
+                    archiveStopSessions: true,
+                    archiveProjectStatusRetirement: true,
+                    archiveTaskStatusRetirement: true,
                     projectStatusKickoff: true,
+                    projectStatusRetirement: true,
+                    taskStatusKickoff: true,
+                    taskStatusRetirement: true
                 },
             },
             visits: [],
