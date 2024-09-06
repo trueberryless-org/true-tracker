@@ -18,6 +18,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +40,9 @@ export default function EditSession() {
     const router = useRouter();
 
     const [sessionFlow, setSessionFlow] = useState<string>("");
+
+    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState<boolean>(false);
+    const [deleteDialogMobileIsOpen, setDeleteDialogMobileIsOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (user) {
@@ -60,6 +73,23 @@ export default function EditSession() {
             setUser(updatedUser);
             saveData(updatedUser);
             router.push(`/sessions/${session.id}`);
+        }
+    };
+
+    const handleDeleteSession = () => {
+        if (session && user) {
+            const updatedUser = { ...user };
+            updatedUser.projects = updatedUser.projects.map((project) => {
+                const updatedTasks = project.tasks.map((task) => {
+                    const updatedSessions = task.sessions.filter((s) => s.id !== session.id);
+                    return { ...task, sessions: updatedSessions };
+                });
+                return { ...project, tasks: updatedTasks };
+            });
+
+            setUser(updatedUser);
+            saveData(updatedUser);
+            router.push("/sessions");
         }
     };
 
@@ -124,6 +154,28 @@ export default function EditSession() {
                             </Badge>
                         )}
                         <div className="flex items-center gap-2 md:ml-auto max-md:hidden">
+                            <Dialog open={deleteDialogIsOpen} onOpenChange={setDeleteDialogIsOpen}>
+                                <DialogTrigger asChild>
+                                    <Button variant={"destructive"} size={"sm"}>
+                                        Delete
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                        <DialogDescription>
+                                            This action cannot be undone. This will permanently delete this session and
+                                            remove this data from your local storage.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <DialogFooter>
+                                        <DialogClose>
+                                            <Button variant={"outline"}>Cancel</Button>
+                                        </DialogClose>
+                                        <Button onClick={handleDeleteSession}>Continue</Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                             <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
                                 <Button variant="outline" size="sm">
                                     Discard
@@ -231,6 +283,28 @@ export default function EditSession() {
                         </div>
                     </div>
                     <div className="flex items-center justify-end gap-2 md:hidden">
+                        <Dialog open={deleteDialogMobileIsOpen} onOpenChange={setDeleteDialogMobileIsOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant={"destructive"} size={"sm"}>
+                                    Delete
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                    <DialogDescription>
+                                        This action cannot be undone. This will permanently delete this session and
+                                        remove this data from your local storage.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                    <DialogClose>
+                                        <Button variant={"outline"}>Cancel</Button>
+                                    </DialogClose>
+                                    <Button onClick={handleDeleteSession}>Continue</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                         <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
                             <Button variant="outline" size="sm">
                                 Discard
