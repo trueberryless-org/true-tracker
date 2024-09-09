@@ -49,7 +49,13 @@ export const CalendarDateRangePicker = React.forwardRef<HTMLButtonElement, Calen
                         <Calendar
                             initialFocus
                             mode="range"
-                            defaultMonth={dateRange?.from}
+                            defaultMonth={
+                                dateRange?.to
+                                    ? addMonths(dateRange.to, -1)
+                                    : dateRange?.from
+                                      ? addMonths(dateRange.from, -1)
+                                      : addMonths(new Date(), -1)
+                            }
                             selected={dateRange}
                             onSelect={setDateRange}
                             numberOfMonths={2}
