@@ -24,3 +24,9 @@ The key features of this software are listed below:
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=trueberryless-org/true-tracker&type=Date" />
  </picture>
 </a>
+
+## License
+
+Licensed under the MIT license, Copyright © trueberryless-org.
+
+See [LICENSE](/LICENSE) for more information.
