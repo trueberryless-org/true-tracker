@@ -4,15 +4,15 @@ import Version from "./version";
 import Visit from "./visit";
 
 export default interface User {
-    id: string;
-    username: string;
-    profilePicture?: string | null;
-    settings: Settings;
+  id: string;
+  username: string;
+  profilePicture?: string | null;
+  settings: Settings;
 
-    projects: Project[];
+  projects: Project[];
 
-    visits: Visit[];
-    version: Version;
+  visits: Visit[];
+  version: Version;
 
-    isCurrentlyInTestMode: boolean;
+  isCurrentlyInTestMode: boolean;
 }

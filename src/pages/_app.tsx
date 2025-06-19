@@ -13,33 +13,33 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 interface MyAppProps {
-    Component: React.ElementType;
-    pageProps: any;
+  Component: React.ElementType;
+  pageProps: any;
 }
 
 function MyApp({ Component, pageProps }: MyAppProps) {
-    const { setUser } = useUser();
+  const { setUser } = useUser();
 
-    useEffect(() => {
-        loadUserAndUpdateVersion(setUser);
-    }, [setUser]);
+  useEffect(() => {
+    loadUserAndUpdateVersion(setUser);
+  }, [setUser]);
 
-    return (
-        <div className={inter.className}>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                <Layout>
-                    <Component {...pageProps} />
-                </Layout>
-                <Toaster />
-            </ThemeProvider>
-        </div>
-    );
+  return (
+    <div className={inter.className}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+        <Toaster />
+      </ThemeProvider>
+    </div>
+  );
 }
 
 export default function AppWrapper(props: MyAppProps) {
-    return (
-        <UserProvider>
-            <MyApp {...props} />
-        </UserProvider>
-    );
+  return (
+    <UserProvider>
+      <MyApp {...props} />
+    </UserProvider>
+  );
 }

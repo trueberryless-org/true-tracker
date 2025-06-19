@@ -1,4 +1,4 @@
 export default interface Visit {
-    id: string;
-    time: Date;
+  id: string;
+  time: Date;
 }

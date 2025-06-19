@@ -11,23 +11,23 @@ import { SignUp } from "./sign-up";
 import { ExitTestMode } from "./test-mode/exit-test-mode";
 
 interface LayoutProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-    const { user } = useUser();
+  const { user } = useUser();
 
-    if (!user) {
-        return <SignUp />;
-    }
+  if (!user) {
+    return <SignUp />;
+  }
 
-    return (
-        <>
-            <Navbar />
-            <main>{children}</main>
-            {user.isCurrentlyInTestMode && <ExitTestMode />}
-        </>
-    );
+  return (
+    <>
+      <Navbar />
+      <main>{children}</main>
+      {user.isCurrentlyInTestMode && <ExitTestMode />}
+    </>
+  );
 };
 
 export default Layout;

@@ -17,207 +17,260 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function EditSession() {
-    const { user, setUser } = useUser();
-    const [session, setSession] = useState<Session | null>(null);
-    const router = useRouter();
+  const { user, setUser } = useUser();
+  const [session, setSession] = useState<Session | null>(null);
+  const router = useRouter();
 
-    const [sessionFlow, setSessionFlow] = useState<string>("");
+  const [sessionFlow, setSessionFlow] = useState<string>("");
 
-    const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState<boolean>(false);
-    const [deleteDialogMobileIsOpen, setDeleteDialogMobileIsOpen] = useState<boolean>(false);
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState<boolean>(false);
+  const [deleteDialogMobileIsOpen, setDeleteDialogMobileIsOpen] =
+    useState<boolean>(false);
 
-    useEffect(() => {
-        if (user) {
-            const foundSession = user?.projects
-                .flatMap((project) => project.tasks)
-                .flatMap((task) => task.sessions)
-                .find((session) => session.id === router.query.id);
-            setSession(foundSession || null);
-            setSessionFlow(foundSession?.flow || "");
-        }
-    }, [user, router.query.id]);
-
-    const handleInputChange = (field: keyof Session, value: any) => {
-        setSession((prevSession) => (prevSession ? { ...prevSession, [field]: value } : null));
-    };
-
-    const handleSaveSession = () => {
-        if (session && user) {
-            const updatedUser = { ...user };
-            updatedUser.projects = updatedUser.projects.map((project) => {
-                const updatedTasks = project.tasks.map((task) => {
-                    const updatedSessions = task.sessions.map((s) => (s.id === session.id ? session : s));
-                    return { ...task, sessions: updatedSessions };
-                });
-                return { ...project, tasks: updatedTasks };
-            });
-
-            setUser(updatedUser);
-            saveData(updatedUser);
-            router.push(`/sessions/${session.id}`);
-        }
-    };
-
-    const handleDeleteSession = () => {
-        if (session && user) {
-            const updatedUser = { ...user };
-            updatedUser.projects = updatedUser.projects.map((project) => {
-                const updatedTasks = project.tasks.map((task) => {
-                    const updatedSessions = task.sessions.filter((s) => s.id !== session.id);
-                    return { ...task, sessions: updatedSessions };
-                });
-                return { ...project, tasks: updatedTasks };
-            });
-
-            setUser(updatedUser);
-            saveData(updatedUser);
-            router.push("/sessions");
-        }
-    };
-
-    if (!session) {
-        return (
-            <div className="flex w-full flex-col">
-                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                    <Alert variant="default">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Loading...</AlertTitle>
-                        <AlertDescription>
-                            We are currently trying to fetch your data from your local storage.
-                        </AlertDescription>
-                    </Alert>
-                </main>
-            </div>
-        );
+  useEffect(() => {
+    if (user) {
+      const foundSession = user?.projects
+        .flatMap((project) => project.tasks)
+        .flatMap((task) => task.sessions)
+        .find((session) => session.id === router.query.id);
+      setSession(foundSession || null);
+      setSessionFlow(foundSession?.flow || "");
     }
+  }, [user, router.query.id]);
 
-    if (
-        user?.projects.find((project) =>
-            project.tasks.some((task) => task.sessions.some((session) => session.id === router.query.id)),
-        )?.archivedAt !== null
-    ) {
-        return (
-            <div className="flex w-full flex-col">
-                <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                    <Alert variant="destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Error</AlertTitle>
-                        <AlertDescription>
-                            This task belongs to a project that has been archived. Please unarchive the project again,
-                            by clicking the button in the top right of the project view!
-                        </AlertDescription>
-                    </Alert>
-                </main>
-            </div>
-        );
+  const handleInputChange = (field: keyof Session, value: any) => {
+    setSession((prevSession) =>
+      prevSession ? { ...prevSession, [field]: value } : null
+    );
+  };
+
+  const handleSaveSession = () => {
+    if (session && user) {
+      const updatedUser = { ...user };
+      updatedUser.projects = updatedUser.projects.map((project) => {
+        const updatedTasks = project.tasks.map((task) => {
+          const updatedSessions = task.sessions.map((s) =>
+            s.id === session.id ? session : s
+          );
+          return { ...task, sessions: updatedSessions };
+        });
+        return { ...project, tasks: updatedTasks };
+      });
+
+      setUser(updatedUser);
+      saveData(updatedUser);
+      router.push(`/sessions/${session.id}`);
     }
+  };
 
+  const handleDeleteSession = () => {
+    if (session && user) {
+      const updatedUser = { ...user };
+      updatedUser.projects = updatedUser.projects.map((project) => {
+        const updatedTasks = project.tasks.map((task) => {
+          const updatedSessions = task.sessions.filter(
+            (s) => s.id !== session.id
+          );
+          return { ...task, sessions: updatedSessions };
+        });
+        return { ...project, tasks: updatedTasks };
+      });
+
+      setUser(updatedUser);
+      saveData(updatedUser);
+      router.push("/sessions");
+    }
+  };
+
+  if (!session) {
     return (
-        <div className="flex w-full flex-col">
-            <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-                <div className="flex items-center gap-4 overflow-hidden min-h-9">
-                    <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
-                        <Button variant="outline" size="icon" className="h-7 w-7">
-                            <ChevronLeft className="h-4 w-4" />
-                            <span className="sr-only">Back</span>
-                        </Button>
-                    </Link>
-                    <h1 className="text-xl font-semibold tracking-tight truncate">
-                        {msToTimeFitting(
-                            session.end
-                                ? new Date(session.end!).getTime() - new Date(session.start).getTime()
-                                : Date.now() - new Date(session.start).getTime(),
-                        ) + " session"}
-                    </h1>
-                    {session.flow && (
-                        <Badge variant="outline" className="ml-auto sm:ml-0 py-2 bg-background">
-                            <FlowIconLabel flowValue={session.flow} className="text-muted-foreground" />
-                        </Badge>
-                    )}
-                    <div className="flex items-center gap-2 md:ml-auto max-md:hidden">
-                        <Dialog open={deleteDialogIsOpen} onOpenChange={setDeleteDialogIsOpen}>
-                            <DialogTrigger asChild>
-                                <Button variant={"destructive"} size={"sm"}>
-                                    Delete
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                                    <DialogDescription>
-                                        This action cannot be undone. This will permanently delete this session and
-                                        remove this data from your local storage.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <DialogFooter>
-                                    <DialogClose>
-                                        <Button variant={"outline"}>Cancel</Button>
-                                    </DialogClose>
-                                    <Button onClick={handleDeleteSession}>Continue</Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                        <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
-                            <Button variant="outline" size="sm">
-                                Discard
-                            </Button>
-                        </Link>
-                        <Button size="sm" onClick={handleSaveSession}>
-                            Save Session
-                        </Button>
-                    </div>
+      <div className="flex w-full flex-col">
+        <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+          <Alert variant="default">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Loading...</AlertTitle>
+            <AlertDescription>
+              We are currently trying to fetch your data from your local
+              storage.
+            </AlertDescription>
+          </Alert>
+        </main>
+      </div>
+    );
+  }
+
+  if (
+    user?.projects.find((project) =>
+      project.tasks.some((task) =>
+        task.sessions.some((session) => session.id === router.query.id)
+      )
+    )?.archivedAt !== null
+  ) {
+    return (
+      <div className="flex w-full flex-col">
+        <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              This task belongs to a project that has been archived. Please
+              unarchive the project again, by clicking the button in the top
+              right of the project view!
+            </AlertDescription>
+          </Alert>
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex w-full flex-col">
+      <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+        <div className="flex items-center gap-4 overflow-hidden min-h-9">
+          <Link
+            href={`/sessions/${session.id}`}
+            className="text-muted-foreground"
+          >
+            <Button variant="outline" size="icon" className="h-7 w-7">
+              <ChevronLeft className="h-4 w-4" />
+              <span className="sr-only">Back</span>
+            </Button>
+          </Link>
+          <h1 className="text-xl font-semibold tracking-tight truncate">
+            {msToTimeFitting(
+              session.end
+                ? new Date(session.end!).getTime() -
+                    new Date(session.start).getTime()
+                : Date.now() - new Date(session.start).getTime()
+            ) + " session"}
+          </h1>
+          {session.flow && (
+            <Badge
+              variant="outline"
+              className="ml-auto sm:ml-0 py-2 bg-background"
+            >
+              <FlowIconLabel
+                flowValue={session.flow}
+                className="text-muted-foreground"
+              />
+            </Badge>
+          )}
+          <div className="flex items-center gap-2 md:ml-auto max-md:hidden">
+            <Dialog
+              open={deleteDialogIsOpen}
+              onOpenChange={setDeleteDialogIsOpen}
+            >
+              <DialogTrigger asChild>
+                <Button variant={"destructive"} size={"sm"}>
+                  Delete
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Are you absolutely sure?</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this session and remove this data from your local storage.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose>
+                    <Button variant={"outline"}>Cancel</Button>
+                  </DialogClose>
+                  <Button onClick={handleDeleteSession}>Continue</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Link
+              href={`/sessions/${session.id}`}
+              className="text-muted-foreground"
+            >
+              <Button variant="outline" size="sm">
+                Discard
+              </Button>
+            </Link>
+            <Button size="sm" onClick={handleSaveSession}>
+              Save Session
+            </Button>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
+          <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
+            <Card x-chunk="dashboard-07-chunk-0">
+              <CardHeader>
+                <CardTitle>Session Details</CardTitle>
+                <CardDescription>
+                  Edit the description of the session.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-6">
+                  <div className="grid gap-3">
+                    <Label htmlFor="name">Identifier</Label>
+                    <Input
+                      id="id"
+                      type="text"
+                      className="w-full"
+                      value={session.id}
+                      disabled
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      value={session.description}
+                      onChange={(e) =>
+                        handleInputChange("description", e.target.value)
+                      }
+                      className="min-h-36"
+                    />
+                  </div>
                 </div>
-                <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-                    <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-                        <Card x-chunk="dashboard-07-chunk-0">
-                            <CardHeader>
-                                <CardTitle>Session Details</CardTitle>
-                                <CardDescription>Edit the description of the session.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="grid gap-6">
-                                    <div className="grid gap-3">
-                                        <Label htmlFor="name">Identifier</Label>
-                                        <Input id="id" type="text" className="w-full" value={session.id} disabled />
-                                    </div>
-                                    <div className="grid gap-3">
-                                        <Label htmlFor="description">Description</Label>
-                                        <Textarea
-                                            id="description"
-                                            value={session.description}
-                                            onChange={(e) => handleInputChange("description", e.target.value)}
-                                            className="min-h-36"
-                                        />
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-                    <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-                        <Card x-chunk="dashboard-07-chunk-3">
-                            <CardHeader>
-                                <CardTitle>
-                                    <div className="flex items-center justify-between">
-                                        <div>Session Flow</div>
-                                        {/* <HoverCard>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
+            <Card x-chunk="dashboard-07-chunk-3">
+              <CardHeader>
+                <CardTitle>
+                  <div className="flex items-center justify-between">
+                    <div>Session Flow</div>
+                    {/* <HoverCard>
                                                 <HoverCardTrigger asChild>
                                                     <BadgeInfo className="h-5 w-5 text-primary" />
                                                 </HoverCardTrigger>
@@ -250,70 +303,76 @@ export default function EditSession() {
                                                     </div>
                                                 </HoverCardContent>
                                             </HoverCard> */}
-                                    </div>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="grid gap-6">
-                                    <div className="grid gap-3">
-                                        <Label htmlFor="flow">Flow</Label>
-                                        <Select
-                                            value={sessionFlow}
-                                            onValueChange={(value) => {
-                                                setSessionFlow(value);
-                                                handleInputChange("flow", value);
-                                            }}
-                                        >
-                                            <SelectTrigger id="flow" aria-label="Select flow">
-                                                <SelectValue placeholder="Select flow" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {flows.map((flow) => (
-                                                    <SelectItem key={flow.value} value={flow.value}>
-                                                        <FlowIconLabel flowValue={flow.value} />
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
+                  </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-6">
+                  <div className="grid gap-3">
+                    <Label htmlFor="flow">Flow</Label>
+                    <Select
+                      value={sessionFlow}
+                      onValueChange={(value) => {
+                        setSessionFlow(value);
+                        handleInputChange("flow", value);
+                      }}
+                    >
+                      <SelectTrigger id="flow" aria-label="Select flow">
+                        <SelectValue placeholder="Select flow" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {flows.map((flow) => (
+                          <SelectItem key={flow.value} value={flow.value}>
+                            <FlowIconLabel flowValue={flow.value} />
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div className="flex items-center justify-end gap-2 md:hidden">
-                    <Dialog open={deleteDialogMobileIsOpen} onOpenChange={setDeleteDialogMobileIsOpen}>
-                        <DialogTrigger asChild>
-                            <Button variant={"destructive"} size={"sm"}>
-                                Delete
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                                <DialogDescription>
-                                    This action cannot be undone. This will permanently delete this session and remove
-                                    this data from your local storage.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <DialogClose>
-                                    <Button variant={"outline"}>Cancel</Button>
-                                </DialogClose>
-                                <Button onClick={handleDeleteSession}>Continue</Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                    <Link href={`/sessions/${session.id}`} className="text-muted-foreground">
-                        <Button variant="outline" size="sm">
-                            Discard
-                        </Button>
-                    </Link>
-                    <Button size="sm" onClick={handleSaveSession}>
-                        Save Session
-                    </Button>
-                </div>
-            </main>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-    );
+        <div className="flex items-center justify-end gap-2 md:hidden">
+          <Dialog
+            open={deleteDialogMobileIsOpen}
+            onOpenChange={setDeleteDialogMobileIsOpen}
+          >
+            <DialogTrigger asChild>
+              <Button variant={"destructive"} size={"sm"}>
+                Delete
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  this session and remove this data from your local storage.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose>
+                  <Button variant={"outline"}>Cancel</Button>
+                </DialogClose>
+                <Button onClick={handleDeleteSession}>Continue</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          <Link
+            href={`/sessions/${session.id}`}
+            className="text-muted-foreground"
+          >
+            <Button variant="outline" size="sm">
+              Discard
+            </Button>
+          </Link>
+          <Button size="sm" onClick={handleSaveSession}>
+            Save Session
+          </Button>
+        </div>
+      </main>
+    </div>
+  );
 }

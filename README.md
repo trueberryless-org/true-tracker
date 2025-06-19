@@ -29,6 +29,6 @@ The key features of this software are listed below:
 
 ## License
 
-Licensed under the MIT license, Copyright © trueberryless-org.
+Licensed under the MIT license, Copyright © trueberryless.
 
 See [LICENSE](/LICENSE) for more information.
