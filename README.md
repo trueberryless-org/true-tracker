@@ -12,7 +12,7 @@ The key features of this software are listed below:
     All data is only stored locally, which means that nothing is shared via the internet which makes using the app 100% safe (as long as your own computer isn't hacked of course).
 
 -   **OSS**:  
-    The whole source code is completely open source which means that everybody can look into and improve the code we are developing. Furthermore, the GPL-3.0 licence ensures that every fork of this code must also be open source forever. Nice!
+    The whole source code is completely open source which means that everybody can look into it and improve the code we are developing. Furthermore, the MIT licence ensures that every fork of this code must also be open source forever. Nice!
 
 -   **Clean design**:  
     Thanks to the wonderful [shadcn/ui](https://ui.shadcn.com/) the website looks clean and minimalistic with consistent design through and through.
