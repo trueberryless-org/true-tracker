@@ -7,7 +7,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
+    "lint": "eslint .",
     "start": "next start"
   },
   "dependencies": {
@@ -34,35 +34,44 @@
     "@tanstack/react-table": "^8.19.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "cmdk": "^1.0.0",
+    "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.400.0",
-    "next": "14.2.32",
-    "next-themes": "^0.3.0",
-    "react": "^18",
-    "react-day-picker": "^8.10.1",
-    "react-dom": "^18",
+    "next": "16.1.0",
+    "next-themes": "^0.4.6",
+    "react": "19.2.3",
+    "react-day-picker": "^9.13.0",
+    "react-dom": "19.2.3",
     "react-hook-form": "^7.52.1",
-    "recharts": "^2.12.7",
-    "sonner": "^1.5.0",
-    "swr": "^2.2.5",
+    "recharts": "^3.6.0",
+    "sonner": "^2.0.7",
+    "swr": "^2.3.8",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^0.9.1",
+    "vaul": "^1.1.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "5.2.2",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.4",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.0",
     "postcss": "^8",
     "prettier": "3.6.2",
     "prettier-plugin-astro": "0.14.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.10.0",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.7",
+      "@types/react-dom": "19.2.3"
+    },
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
+  }
 }
