@@ -2,8 +2,16 @@
   "name": "true-tracker",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://true-tracker.trueberryless.org",
+  "bugs": {
+    "url": "https://github.com/trueberryless-org/true-tracker/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trueberryless-org/true-tracker.git"
+  },
   "license": "MIT",
-  "author": "trueberryless",
+  "author": "trueberryless <trueberryless@gmail.com> (https://trueberryless.org)",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
@@ -59,7 +67,7 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
-    "prettier": "3.7.4",
+    "prettier": "3.8.1",
     "prettier-plugin-astro": "0.14.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
