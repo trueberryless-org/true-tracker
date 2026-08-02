@@ -145,7 +145,7 @@ importers:
         specifier: 14.2.35
         version: 14.2.35(eslint@8.57.1)(typescript@5.9.3)
       postcss:
-        specifier: ^8.5.17
+        specifier: ^8.5.18
         version: 8.5.19
       prettier:
         specifier: 3.9.5
