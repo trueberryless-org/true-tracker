@@ -102,7 +102,7 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-hook-form:
-        specifier: ^7.85.0
+        specifier: ^7.86.0
         version: 7.86.0(react@18.3.1)
       recharts:
         specifier: ^2.15.4
