@@ -2,7 +2,7 @@ import { Session, Task } from "@/models";
 import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import Project from "@/models/project";
@@ -44,41 +44,31 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function NewSession() {
   const { user, setUser } = useUser();
-  const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
-
-  const [task, setTask] = useState<Task | null>(null);
   const taskInputRef = useRef<HTMLButtonElement>(null);
 
-  const [sessionFlow, setSessionFlow] = useState<string>("");
-  const [start, setStart] = useState<Date>();
-  const [end, setEnd] = useState<Date>();
+  // 1. Lazy State Initialization
+  // This runs only once on mount, avoiding the Effect -> setState loop.
+  const [session, setSession] = useState<Session>(() => initializeSession());
 
-  const tasks =
-    user?.projects
-      .filter((project) => project.archivedAt === null)
-      .flatMap((project) => project.tasks) || [];
+  // 2. Derived State for Tasks
+  const tasks = useMemo(
+    () =>
+      user?.projects
+        .filter((project) => project.archivedAt === null)
+        .flatMap((project) => project.tasks) || [],
+    [user?.projects]
+  );
 
-  useEffect(() => {
-    const newSession = initializeSession();
-    setSession(newSession);
-    setSessionFlow(newSession.flow);
-    setStart(newSession.start);
-    setEnd(newSession.end!);
-    const taskId = router.query.taskId as string;
-    if (taskId) {
-      const task =
-        user?.projects
-          .flatMap((project) => project.tasks)
-          .find((t) => t.id === taskId) || null;
-      setTask(task);
-    }
-  }, [router.query.taskId, user?.projects]);
+  // 3. Derived State for the currently selected Task
+  // We use local state to track manual selection, defaulting to the query param.
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
+  const activeTaskId = selectedTaskId || (router.query.taskId as string);
+  const task = tasks.find((t) => t.id === activeTaskId) || null;
 
   const handleInputChange = (field: keyof Session, value: any) => {
-    setSession((prevSession) =>
-      prevSession ? { ...prevSession, [field]: value } : null
-    );
+    setSession((prevSession) => ({ ...prevSession, [field]: value }));
   };
 
   const handleSaveSession = () => {
@@ -108,32 +98,13 @@ export default function NewSession() {
     }
   };
 
-  if (!session) {
-    return (
-      <div className="flex w-full flex-col">
-        <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-          <Alert variant="default">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Loading...</AlertTitle>
-            <AlertDescription>
-              We are currently trying to fetch your data from your local
-              storage.
-            </AlertDescription>
-          </Alert>
-        </main>
-      </div>
-    );
-  }
-
-  function handleStartChange(date: Date | undefined): void {
-    setStart(date);
+  const handleStartChange = (date: Date | undefined) => {
     handleInputChange("start", date);
-  }
+  };
 
-  function handleEndChange(date: Date | undefined): void {
-    setEnd(date);
+  const handleEndChange = (date: Date | undefined) => {
     handleInputChange("end", date);
-  }
+  };
 
   return (
     <div className="flex w-full flex-col">
@@ -167,7 +138,7 @@ export default function NewSession() {
           </div>
           <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <Card x-chunk="dashboard-07-chunk-0">
+              <Card>
                 <CardHeader>
                   <CardTitle>Session Details</CardTitle>
                   <CardDescription>
@@ -177,7 +148,7 @@ export default function NewSession() {
                 <CardContent>
                   <div className="grid gap-6">
                     <div className="grid gap-3">
-                      <Label htmlFor="name">Identifier</Label>
+                      <Label htmlFor="id">Identifier</Label>
                       <Input
                         id="id"
                         type="text"
@@ -189,13 +160,8 @@ export default function NewSession() {
                     <div className="grid gap-3">
                       <Label htmlFor="task">Task</Label>
                       <Select
-                        value={task?.id}
-                        onValueChange={(value) => {
-                          const selectedTask = tasks.find(
-                            (t) => t.id === value
-                          );
-                          setTask(selectedTask || null);
-                        }}
+                        value={task?.id || ""}
+                        onValueChange={(value) => setSelectedTaskId(value)}
                       >
                         <SelectTrigger
                           id="task"
@@ -207,9 +173,9 @@ export default function NewSession() {
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          {tasks.map((task) => (
-                            <SelectItem key={task.id} value={task.id}>
-                              {task.name}
+                          {tasks.map((t) => (
+                            <SelectItem key={t.id} value={t.id}>
+                              {t.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -231,44 +197,44 @@ export default function NewSession() {
               </Card>
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <Card x-chunk="dashboard-07-chunk-3">
+              <Card>
                 <CardHeader>
                   <CardTitle>
                     <div className="flex items-center justify-between">
                       <div>Session Flow</div>
                       {/* <HoverCard>
-                                                <HoverCardTrigger asChild>
-                                                    <BadgeInfo className="h-5 w-5 text-primary" />
-                                                </HoverCardTrigger>
-                                                <HoverCardContent className="w-80" align="end">
-                                                    <div className="flex justify-between space-x-4">
-                                                        <Avatar>
-                                                            <AvatarImage src="https://github.com/trueberryless.png" />
-                                                            <AvatarFallback>T</AvatarFallback>
-                                                        </Avatar>
-                                                        <div className="space-y-1">
-                                                            <h4 className="text-sm font-semibold">
-                                                                @trueberryless
-                                                            </h4>
-                                                            <p className="text-sm">
-                                                                We try to automate this flow in
-                                                                order to help you focus on your
-                                                                projects, not this app.
-                                                            </p>
-                                                            <div className="flex items-center pt-2">
-                                                                <span className="text-xs text-muted-foreground">
-                                                                    For example we will
-                                                                    automatically move this session
-                                                                    from “Backlog” to “In Progress”,
-                                                                    when you start working on it -
-                                                                    when the first session is
-                                                                    started.
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </HoverCardContent>
-                                            </HoverCard> */}
+                            <HoverCardTrigger asChild>
+                                <BadgeInfo className="h-5 w-5 text-primary" />
+                            </HoverCardTrigger>
+                            <HoverCardContent className="w-80" align="end">
+                                <div className="flex justify-between space-x-4">
+                                    <Avatar>
+                                        <AvatarImage src="https://github.com/trueberryless.png" />
+                                        <AvatarFallback>T</AvatarFallback>
+                                    </Avatar>
+                                    <div className="space-y-1">
+                                        <h4 className="text-sm font-semibold">
+                                            @trueberryless
+                                        </h4>
+                                        <p className="text-sm">
+                                            We try to automate this flow in
+                                            order to help you focus on your
+                                            projects, not this app.
+                                        </p>
+                                        <div className="flex items-center pt-2">
+                                            <span className="text-xs text-muted-foreground">
+                                                For example we will
+                                                automatically move this session
+                                                from “Backlog” to “In Progress”,
+                                                when you start working on it -
+                                                when the first session is
+                                                started.
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard> */}
                     </div>
                   </CardTitle>
                 </CardHeader>
@@ -277,11 +243,10 @@ export default function NewSession() {
                     <div className="grid gap-3">
                       <Label htmlFor="flow">Flow</Label>
                       <Select
-                        value={sessionFlow}
-                        onValueChange={(value) => {
-                          setSessionFlow(value);
-                          handleInputChange("flow", value);
-                        }}
+                        value={session.flow}
+                        onValueChange={(value) =>
+                          handleInputChange("flow", value)
+                        }
                       >
                         <SelectTrigger id="flow" aria-label="Select flow">
                           <SelectValue placeholder="Select flow" />
@@ -298,7 +263,7 @@ export default function NewSession() {
                   </div>
                 </CardContent>
               </Card>
-              <Card x-chunk="dashboard-07-chunk-3">
+              <Card>
                 <CardHeader>
                   <CardTitle>
                     <div className="flex items-center justify-between">
@@ -331,12 +296,15 @@ export default function NewSession() {
                 <CardContent>
                   <div className="grid gap-6">
                     <div className="grid gap-3">
-                      <TimePicker12 date={start} setDate={handleStartChange} />
+                      <TimePicker12
+                        date={session.start}
+                        setDate={handleStartChange}
+                      />
                     </div>
                   </div>
                 </CardContent>
               </Card>
-              <Card x-chunk="dashboard-07-chunk-3">
+              <Card>
                 <CardHeader>
                   <CardTitle>
                     <div className="flex items-center justify-between">
@@ -369,7 +337,10 @@ export default function NewSession() {
                 <CardContent>
                   <div className="grid gap-6">
                     <div className="grid gap-3">
-                      <TimePicker12 date={end} setDate={handleEndChange} />
+                      <TimePicker12
+                        date={session.end || undefined}
+                        setDate={handleEndChange}
+                      />
                     </div>
                   </div>
                 </CardContent>

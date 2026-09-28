@@ -98,7 +98,7 @@ function getHelperText(
   );
 
   if (totalSessions === 0) {
-    return "Keine Sitzungen in diesem Zeitraum.";
+    return "No sessions during this period.";
   }
 
   const flowData = chartData.map(({ flow, ...priorities }) => {
@@ -118,7 +118,7 @@ function getHelperText(
     flowData[0]
   );
 
-  return `Von ${totalSessions} Sitzungen sind ${highestFlow.percentage}% in "${highestFlow.flow}"`;
+  return `Of ${totalSessions} sessions, ${highestFlow.percentage}% are in "${highestFlow.flow}".`;
 }
 
 interface ChartSessionFlowRadarProps {

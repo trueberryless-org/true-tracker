@@ -2,7 +2,7 @@ import { Task } from "@/models";
 import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import Project from "@/models/project";
 import { priorities, statuses } from "@/models/task";
@@ -52,27 +52,31 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function EditTask() {
   const { user, setUser } = useUser();
-  const [task, setTask] = useState<Task | null>(null);
   const router = useRouter();
   const taskId = router.query.id as string;
-
-  const [taskStatus, setTaskStatus] = useState<string>("");
-  const [taskPriority, setTaskPriority] = useState<string>("");
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState<boolean>(false);
   const [deleteDialogMobileIsOpen, setDeleteDialogMobileIsOpen] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    if (user) {
-      const foundTask = user?.projects
+  // 1. Initialize task state lazily from the user data.
+  // This happens once and avoids an Effect-based re-render.
+  const [task, setTask] = useState<Task | null>(() => {
+    if (!user || !taskId) return null;
+    return (
+      user.projects
         .flatMap((project) => project.tasks)
-        .find((task) => task.id === taskId);
-      setTask(foundTask || null);
-      setTaskStatus(foundTask?.status || "");
-      setTaskPriority(foundTask?.priority || "");
-    }
-  }, [user, taskId]);
+        .find((t) => t.id === taskId) || null
+    );
+  });
+
+  // 2. Derive the project data directly from the current state/user context
+  const parentProject = useMemo(() => {
+    if (!user || !task) return null;
+    return user.projects.find((project) =>
+      project.tasks.some((t) => t.id === task.id)
+    );
+  }, [user, task]);
 
   const handleInputChange = (field: keyof Task, value: any) => {
     setTask((prevTask) => (prevTask ? { ...prevTask, [field]: value } : null));
@@ -80,14 +84,17 @@ export default function EditTask() {
 
   const handleSaveTask = () => {
     if (task && user) {
-      const updatedUser = { ...user };
-      updatedUser.projects = updatedUser.projects.map((project) => {
-        const updatedTasks = project.tasks.map((t) => {
-          return t.id === task.id ? task : t;
-        });
+      const updatedProjects = user.projects.map((project) => {
+        const isTargetProject = project.tasks.some((t) => t.id === task.id);
+        if (!isTargetProject) return project;
+
+        const updatedTasks = project.tasks.map((t) =>
+          t.id === task.id ? task : t
+        );
         return { ...project, tasks: updatedTasks };
       });
 
+      const updatedUser = { ...user, projects: updatedProjects };
       setUser(updatedUser);
       saveData(updatedUser);
       router.push(`/tasks/${task.id}`);
@@ -96,18 +103,19 @@ export default function EditTask() {
 
   const handleDeleteTask = () => {
     if (task && user) {
-      const updatedUser = { ...user };
-      updatedUser.projects = updatedUser.projects.map((project) => {
+      const updatedProjects = user.projects.map((project) => {
         const updatedTasks = project.tasks.filter((t) => t.id !== task.id);
         return { ...project, tasks: updatedTasks };
       });
 
+      const updatedUser = { ...user, projects: updatedProjects };
       setUser(updatedUser);
       saveData(updatedUser);
       router.push("/tasks");
     }
   };
 
+  // UI States
   if (!task) {
     return (
       <div className="flex w-full flex-col">
@@ -125,11 +133,7 @@ export default function EditTask() {
     );
   }
 
-  if (
-    user?.projects.find((project) =>
-      project.tasks.some((t: { id: any }) => t.id === task.id)
-    )?.archivedAt !== null
-  ) {
+  if (parentProject?.archivedAt) {
     return (
       <div className="flex w-full flex-col">
         <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -202,7 +206,7 @@ export default function EditTask() {
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                  <DialogClose>
+                  <DialogClose asChild>
                     <Button variant={"outline"}>Cancel</Button>
                   </DialogClose>
                   <Button onClick={handleDeleteTask}>Continue</Button>
@@ -221,7 +225,7 @@ export default function EditTask() {
         </div>
         <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-0">
+            <Card>
               <CardHeader>
                 <CardTitle>Task Details</CardTitle>
                 <CardDescription>
@@ -231,7 +235,7 @@ export default function EditTask() {
               <CardContent>
                 <div className="grid gap-6">
                   <div className="grid gap-3">
-                    <Label htmlFor="name">Identifier</Label>
+                    <Label htmlFor="id">Identifier</Label>
                     <Input
                       id="id"
                       type="text"
@@ -268,7 +272,7 @@ export default function EditTask() {
             </Card>
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-3">
+            <Card>
               <CardHeader>
                 <CardTitle>
                   <div className="flex items-center justify-between">
@@ -291,14 +295,6 @@ export default function EditTask() {
                               We try to automate this status in order to help
                               you focus on your projects, not this app.
                             </p>
-                            <div className="flex items-center pt-2">
-                              <span className="text-xs text-muted-foreground">
-                                For example we will automatically move this task
-                                from “Backlog” to “In Progress”, when you start
-                                working on it - when the first session is
-                                started.
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </HoverCardContent>
@@ -311,11 +307,10 @@ export default function EditTask() {
                   <div className="grid gap-3">
                     <Label htmlFor="status">Status</Label>
                     <Select
-                      value={taskStatus}
-                      onValueChange={(value) => {
-                        setTaskStatus(value);
-                        handleInputChange("status", value);
-                      }}
+                      value={task.status}
+                      onValueChange={(value) =>
+                        handleInputChange("status", value)
+                      }
                     >
                       <SelectTrigger id="status" aria-label="Select status">
                         <SelectValue placeholder="Select status" />
@@ -332,7 +327,7 @@ export default function EditTask() {
                 </div>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-3">
+            <Card>
               <CardHeader>
                 <CardTitle>Task Priority</CardTitle>
               </CardHeader>
@@ -341,11 +336,10 @@ export default function EditTask() {
                   <div className="grid gap-3">
                     <Label htmlFor="priority">Priority</Label>
                     <Select
-                      value={taskPriority}
-                      onValueChange={(value) => {
-                        setTaskPriority(value);
-                        handleInputChange("priority", value);
-                      }}
+                      value={task.priority}
+                      onValueChange={(value) =>
+                        handleInputChange("priority", value)
+                      }
                     >
                       <SelectTrigger id="priority" aria-label="Select priority">
                         <SelectValue placeholder="Select priority" />
@@ -387,7 +381,7 @@ export default function EditTask() {
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <DialogClose>
+                <DialogClose asChild>
                   <Button variant={"outline"}>Cancel</Button>
                 </DialogClose>
                 <Button onClick={handleDeleteTask}>Continue</Button>

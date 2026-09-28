@@ -1,7 +1,8 @@
+import { Task } from "@/models";
 import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import Project, { priorities, statuses } from "@/models/project";
@@ -37,8 +38,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -59,12 +58,15 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function EditProduct() {
   const { user, setUser } = useUser();
-  const [project, setProject] = useState<Project | null>(null);
   const router = useRouter();
   const projectId = router.query.id as string;
 
-  const [projectStatus, setProjectStatus] = useState<string>("");
-  const [projectPriority, setProjectPriority] = useState<string>("");
+  // 1. Lazy State Initialization
+  // This finds the project once on mount and avoids using an Effect to sync data.
+  const [project, setProject] = useState<Project | null>(() => {
+    if (!user || !projectId) return null;
+    return user.projects.find((p) => p.id === projectId) || null;
+  });
 
   const [otherActionsDropdownIsOpen, setOtherActionsDropdownIsOpen] =
     useState<boolean>(false);
@@ -81,63 +83,23 @@ export default function EditProduct() {
   const [archiveDialogMobileIsOpen, setArchiveDialogMobileIsOpen] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    if (user) {
-      const foundProject = user.projects.find(
-        (project) => project.id === projectId
-      );
-      setProject(foundProject || null);
-      setProjectStatus(foundProject?.status || "");
-      setProjectPriority(foundProject?.priority || "");
-    }
-  }, [user, projectId]);
-
-  useEffect(() => {
-    if (!deleteDialogIsOpen) {
-      return () => {
-        document.body.style.pointerEvents = "";
-      };
-    }
-  }, [deleteDialogIsOpen]);
-
-  useEffect(() => {
-    if (!archiveDialogIsOpen) {
-      return () => {
-        document.body.style.pointerEvents = "";
-      };
-    }
-  }, [archiveDialogIsOpen]);
-
-  useEffect(() => {
-    if (!deleteDialogMobileIsOpen) {
-      return () => {
-        document.body.style.pointerEvents = "";
-      };
-    }
-  }, [deleteDialogMobileIsOpen]);
-
-  useEffect(() => {
-    if (!archiveDialogMobileIsOpen) {
-      return () => {
-        document.body.style.pointerEvents = "";
-      };
-    }
-  }, [archiveDialogMobileIsOpen]);
-
   const handleInputChange = (field: keyof Project, value: any) => {
-    setProject((prevProject) =>
-      prevProject ? { ...prevProject, [field]: value } : null
-    );
+    setProject((prev) => (prev ? { ...prev, [field]: value } : null));
   };
 
   const handleSaveProject = () => {
     if (project && user) {
-      project.lastUpdatedAt = new Date();
+      const updatedProject = {
+        ...project,
+        lastUpdatedAt: new Date(),
+      };
 
-      const updatedUser = { ...user };
-      updatedUser.projects = updatedUser.projects.map((p) => {
-        return p.id === project.id ? project : p;
-      });
+      const updatedUser = {
+        ...user,
+        projects: user.projects.map((p) =>
+          p.id === project.id ? updatedProject : p
+        ),
+      };
 
       setUser(updatedUser);
       saveData(updatedUser);
@@ -147,10 +109,10 @@ export default function EditProduct() {
 
   const handleDeleteProject = () => {
     if (project && user) {
-      const updatedUser = { ...user };
-      updatedUser.projects = updatedUser.projects.filter(
-        (p) => p.id !== project.id
-      );
+      const updatedUser = {
+        ...user,
+        projects: user.projects.filter((p) => p.id !== project.id),
+      };
 
       setUser(updatedUser);
       saveData(updatedUser);
@@ -160,10 +122,10 @@ export default function EditProduct() {
 
   const handleArchiveProject = () => {
     if (user && project) {
-      project.archivedAt = new Date();
+      const archivedProject = { ...project, archivedAt: new Date() };
 
       if (user.settings.automation.archiveStopSessions) {
-        project.tasks.forEach((task) => {
+        archivedProject.tasks.forEach((task) => {
           task.sessions.forEach((session) => {
             if (session.end === null) session.end = new Date();
           });
@@ -172,21 +134,24 @@ export default function EditProduct() {
       }
 
       if (user.settings.automation.archiveProjectStatusRetirement) {
-        project.status = "completed";
+        archivedProject.status = "completed";
         toast("We automatically moved your project status to “Completed”.");
       }
 
       if (user.settings.automation.archiveTaskStatusRetirement) {
-        project.tasks.forEach((task) => {
+        archivedProject.tasks.forEach((task) => {
           task.status = "done";
         });
         toast("We automatically moved every task of the project in “Done”.");
       }
 
-      const updatedProjects = user.projects.map((proj) =>
-        proj.id === project.id ? project : proj
-      );
-      const updatedUser = { ...user, projects: updatedProjects };
+      const updatedUser = {
+        ...user,
+        projects: user.projects.map((proj) =>
+          proj.id === project.id ? archivedProject : proj
+        ),
+      };
+
       setUser(updatedUser);
       saveData(updatedUser);
       router.push(`/projects/${project.id}`);
@@ -277,7 +242,7 @@ export default function EditProduct() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <Dialog
                     open={archiveDialogIsOpen}
                     onOpenChange={setArchiveDialogIsOpen}
@@ -295,7 +260,7 @@ export default function EditProduct() {
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
-                        <DialogClose>
+                        <DialogClose asChild>
                           <Button variant={"outline"}>Cancel</Button>
                         </DialogClose>
                         <Button onClick={handleArchiveProject}>Continue</Button>
@@ -303,7 +268,7 @@ export default function EditProduct() {
                     </DialogContent>
                   </Dialog>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <Dialog
                     open={deleteDialogIsOpen}
                     onOpenChange={setDeleteDialogIsOpen}
@@ -321,7 +286,7 @@ export default function EditProduct() {
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
-                        <DialogClose>
+                        <DialogClose asChild>
                           <Button variant={"outline"}>Cancel</Button>
                         </DialogClose>
                         <Button onClick={handleDeleteProject}>Continue</Button>
@@ -346,7 +311,7 @@ export default function EditProduct() {
         </div>
         <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-0">
+            <Card>
               <CardHeader>
                 <CardTitle>Project Details</CardTitle>
                 <CardDescription>
@@ -356,21 +321,13 @@ export default function EditProduct() {
               <CardContent>
                 <div className="grid gap-6">
                   <div className="grid gap-3">
-                    <Label htmlFor="name">Identifier</Label>
-                    <Input
-                      id="id"
-                      type="text"
-                      className="w-full"
-                      value={project.id}
-                      disabled
-                    />
+                    <Label htmlFor="id">Identifier</Label>
+                    <Input id="id" value={project.id} disabled />
                   </div>
                   <div className="grid gap-3">
                     <Label htmlFor="name">Name</Label>
                     <Input
                       id="name"
-                      type="text"
-                      className="w-full"
                       value={project.name}
                       onChange={(e) =>
                         handleInputChange("name", e.target.value)
@@ -393,11 +350,11 @@ export default function EditProduct() {
             </Card>
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-3">
+            <Card>
               <CardHeader>
                 <CardTitle>
                   <div className="flex items-center justify-between">
-                    <div>Task Status</div>
+                    <div>Project Status</div>
                     <HoverCard>
                       <HoverCardTrigger asChild>
                         <BadgeInfo className="h-5 w-5 text-primary" />
@@ -413,17 +370,8 @@ export default function EditProduct() {
                               @trueberryless
                             </h4>
                             <p className="text-sm">
-                              We try to automate this status in order to help
-                              you focus on your projects, not this app.
+                              We help you automate project flows.
                             </p>
-                            <div className="flex items-center pt-2">
-                              <span className="text-xs text-muted-foreground">
-                                For example we will automatically move this task
-                                from “Planned” to “In Progress”, when you start
-                                working on it - when the first session is
-                                started.
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </HoverCardContent>
@@ -436,13 +384,12 @@ export default function EditProduct() {
                   <div className="grid gap-3">
                     <Label htmlFor="status">Status</Label>
                     <Select
-                      value={projectStatus}
-                      onValueChange={(value) => {
-                        setProjectStatus(value);
-                        handleInputChange("status", value);
-                      }}
+                      value={project.status}
+                      onValueChange={(value) =>
+                        handleInputChange("status", value)
+                      }
                     >
-                      <SelectTrigger id="status" aria-label="Select status">
+                      <SelectTrigger id="status">
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -457,7 +404,7 @@ export default function EditProduct() {
                 </div>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-3">
+            <Card>
               <CardHeader>
                 <CardTitle>Project Priority</CardTitle>
               </CardHeader>
@@ -466,11 +413,10 @@ export default function EditProduct() {
                   <div className="grid gap-3">
                     <Label htmlFor="priority">Priority</Label>
                     <Select
-                      value={projectPriority}
-                      onValueChange={(value) => {
-                        setProjectPriority(value);
-                        handleInputChange("priority", value);
-                      }}
+                      value={project.priority}
+                      onValueChange={(value) =>
+                        handleInputChange("priority", value)
+                      }
                     >
                       <SelectTrigger id="priority" aria-label="Select priority">
                         <SelectValue placeholder="Select priority" />
@@ -492,6 +438,7 @@ export default function EditProduct() {
             </Card>
           </div>
         </div>
+        {/* Mobile View Buttons */}
         <div className="flex items-center justify-end gap-2 md:hidden">
           <DropdownMenu
             open={
@@ -507,7 +454,7 @@ export default function EditProduct() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuItem>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <Dialog
                   open={archiveDialogMobileIsOpen}
                   onOpenChange={setArchiveDialogMobileIsOpen}
@@ -525,7 +472,7 @@ export default function EditProduct() {
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                      <DialogClose>
+                      <DialogClose asChild>
                         <Button variant={"outline"}>Cancel</Button>
                       </DialogClose>
                       <Button onClick={handleArchiveProject}>Continue</Button>
@@ -533,7 +480,7 @@ export default function EditProduct() {
                   </DialogContent>
                 </Dialog>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <Dialog
                   open={deleteDialogMobileIsOpen}
                   onOpenChange={setDeleteDialogMobileIsOpen}
@@ -551,7 +498,7 @@ export default function EditProduct() {
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                      <DialogClose>
+                      <DialogClose asChild>
                         <Button variant={"outline"}>Cancel</Button>
                       </DialogClose>
                       <Button onClick={handleDeleteProject}>Continue</Button>

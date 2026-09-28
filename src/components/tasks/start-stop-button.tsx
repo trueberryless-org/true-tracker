@@ -12,18 +12,12 @@ interface TaskCardProps {
   showElapsedTime?: boolean;
 }
 
-const defaultProps: Partial<TaskCardProps> = {
-  activeText: "Stop Tracking",
-  inactiveText: "Start Tracking",
-  showElapsedTime: false,
-};
-
 const StartStopButton: React.FC<TaskCardProps> = ({
   task,
   onSessionChange,
-  showElapsedTime,
-  activeText,
-  inactiveText,
+  showElapsedTime = false,
+  activeText = "Stop Tracking",
+  inactiveText = "Start Tracking",
 }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [currentSession, setCurrentSession] = useState<Session | null>(null);
@@ -107,5 +101,4 @@ const StartStopButton: React.FC<TaskCardProps> = ({
   );
 };
 
-StartStopButton.defaultProps = defaultProps;
 export default StartStopButton;

@@ -9,15 +9,8 @@ import {
   CalendarMinus,
   CalendarPlus,
   ChevronLeft,
-  CircleUser,
-  CreditCard,
-  DollarSign,
-  Menu,
-  Package2,
   Plus,
-  Search,
   Timer,
-  Users,
   Workflow,
 } from "lucide-react";
 import { AlertCircle } from "lucide-react";
@@ -26,13 +19,7 @@ import { useRouter } from "next/router";
 
 import Task from "@/models/task";
 
-import {
-  msToTime,
-  msToTimeDaysOrSecondsLong,
-  msToTimeFitting,
-  msToTimeFittingLong,
-  msToTimeHours,
-} from "@/utils/dateUtils";
+import { msToTime, msToTimeDaysOrSecondsLong } from "@/utils/dateUtils";
 import {
   calcPriorityComparison,
   calcStatusComparison,
@@ -56,16 +43,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
   Table,
   TableBody,
   TableCell,
@@ -76,7 +53,6 @@ import {
 
 export default function ProjectPage() {
   const { user, setUser } = useUser();
-
   const router = useRouter();
 
   const project = user?.projects.find(
@@ -85,10 +61,13 @@ export default function ProjectPage() {
 
   const unarchiveProject = () => {
     if (user && project) {
-      project.archivedAt = null;
+      // FIX: Create a new object instead of modifying the existing one directly
+      const updatedProject = { ...project, archivedAt: null };
+
       const updatedProjects = user.projects.map((proj) =>
-        proj.id === project.id ? project : proj
+        proj.id === project.id ? updatedProject : proj
       );
+
       const updatedUser = { ...user, projects: updatedProjects };
       setUser(updatedUser);
       saveData(updatedUser);
@@ -186,7 +165,7 @@ export default function ProjectPage() {
         <div
           className={`grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 ${gridColsClass}`}
         >
-          <Card x-chunk="dashboard-01-chunk-0">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-primary">
                 Creation
@@ -223,7 +202,7 @@ export default function ProjectPage() {
               </p>
             </CardContent>
           </Card>
-          <Card x-chunk="dashboard-01-chunk-1">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-primary">
                 Last Update
@@ -249,7 +228,7 @@ export default function ProjectPage() {
             </CardContent>
           </Card>
           {project.archivedAt && (
-            <Card className="hidden xl:block" x-chunk="dashboard-01-chunk-1">
+            <Card className="hidden xl:block">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-primary">
                   Deletion
@@ -278,7 +257,7 @@ export default function ProjectPage() {
               </CardContent>
             </Card>
           )}
-          <Card x-chunk="dashboard-01-chunk-2">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-primary">
                 Status
@@ -294,7 +273,7 @@ export default function ProjectPage() {
               </p>
             </CardContent>
           </Card>
-          <Card x-chunk="dashboard-01-chunk-3">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-primary">
                 Priority
@@ -312,10 +291,7 @@ export default function ProjectPage() {
           </Card>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-          <Card
-            className="xl:col-span-2 row-span-3 max-lg:order-1"
-            x-chunk="dashboard-01-chunk-4"
-          >
+          <Card className="xl:col-span-2 row-span-3 max-lg:order-1">
             <CardHeader className="flex flex-row items-center gap-4">
               <div className="grid gap-2">
                 <CardTitle>Tasks</CardTitle>
@@ -402,7 +378,7 @@ export default function ProjectPage() {
               </Table>
             </CardContent>
           </Card>
-          <Card x-chunk="dashboard-01-chunk-0">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-primary">
                 Duration
@@ -419,7 +395,7 @@ export default function ProjectPage() {
               </p>
             </CardContent>
           </Card>
-          <Card x-chunk="dashboard-01-chunk-0">
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-primary">
                 Task Count
@@ -442,7 +418,23 @@ export default function ProjectPage() {
               </p>
             </CardContent>
           </Card>
-          <Card x-chunk="dashboard-01-chunk-0">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-primary">
+                Project Status
+              </CardTitle>
+              <Workflow className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                <StatusIconLabel statusValue={project.status} />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {calcStatusComparison(user, project.status)}
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-primary">
                 Session Count

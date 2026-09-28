@@ -2,7 +2,7 @@ import { Session } from "@/models";
 import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 import Project from "@/models/project";
 import { flows } from "@/models/session";
@@ -52,25 +52,34 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function EditSession() {
   const { user, setUser } = useUser();
-  const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
+  const sessionId = router.query.id as string;
 
-  const [sessionFlow, setSessionFlow] = useState<string>("");
+  // 1. Lazy State Initialization: Find the session once on mount.
+  // This removes the need for useEffect and prevents double-renders.
+  const [session, setSession] = useState<Session | null>(() => {
+    if (!user || !sessionId) return null;
+    return (
+      user.projects
+        .flatMap((project) => project.tasks)
+        .flatMap((task) => task.sessions)
+        .find((s) => s.id === sessionId) || null
+    );
+  });
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState<boolean>(false);
   const [deleteDialogMobileIsOpen, setDeleteDialogMobileIsOpen] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    if (user) {
-      const foundSession = user?.projects
-        .flatMap((project) => project.tasks)
-        .flatMap((task) => task.sessions)
-        .find((session) => session.id === router.query.id);
-      setSession(foundSession || null);
-      setSessionFlow(foundSession?.flow || "");
-    }
-  }, [user, router.query.id]);
+  // 2. Derived Project Logic: Calculate the archived status during render.
+  const parentProject = useMemo(() => {
+    if (!user || !sessionId) return null;
+    return user.projects.find((project) =>
+      project.tasks.some((task) =>
+        task.sessions.some((s) => s.id === sessionId)
+      )
+    );
+  }, [user, sessionId]);
 
   const handleInputChange = (field: keyof Session, value: any) => {
     setSession((prevSession) =>
@@ -133,13 +142,7 @@ export default function EditSession() {
     );
   }
 
-  if (
-    user?.projects.find((project) =>
-      project.tasks.some((task) =>
-        task.sessions.some((session) => session.id === router.query.id)
-      )
-    )?.archivedAt !== null
-  ) {
+  if (parentProject?.archivedAt) {
     return (
       <div className="flex w-full flex-col">
         <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -157,6 +160,11 @@ export default function EditSession() {
     );
   }
 
+  // Purely calculating duration without calling Date.now() in the middle of JSX
+  const durationMs = session.end
+    ? new Date(session.end).getTime() - new Date(session.start).getTime()
+    : 0; // Or a fallback, since active sessions are usually handled via a timer component
+
   return (
     <div className="flex w-full flex-col">
       <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
@@ -171,12 +179,7 @@ export default function EditSession() {
             </Button>
           </Link>
           <h1 className="text-xl font-semibold tracking-tight truncate">
-            {msToTimeFitting(
-              session.end
-                ? new Date(session.end!).getTime() -
-                    new Date(session.start).getTime()
-                : Date.now() - new Date(session.start).getTime()
-            ) + " session"}
+            {msToTimeFitting(durationMs) + " session"}
           </h1>
           {session.flow && (
             <Badge
@@ -208,7 +211,7 @@ export default function EditSession() {
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                  <DialogClose>
+                  <DialogClose asChild>
                     <Button variant={"outline"}>Cancel</Button>
                   </DialogClose>
                   <Button onClick={handleDeleteSession}>Continue</Button>
@@ -230,7 +233,7 @@ export default function EditSession() {
         </div>
         <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-0">
+            <Card>
               <CardHeader>
                 <CardTitle>Session Details</CardTitle>
                 <CardDescription>
@@ -240,7 +243,7 @@ export default function EditSession() {
               <CardContent>
                 <div className="grid gap-6">
                   <div className="grid gap-3">
-                    <Label htmlFor="name">Identifier</Label>
+                    <Label htmlFor="id">Identifier</Label>
                     <Input
                       id="id"
                       type="text"
@@ -265,44 +268,44 @@ export default function EditSession() {
             </Card>
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-3">
+            <Card>
               <CardHeader>
                 <CardTitle>
                   <div className="flex items-center justify-between">
                     <div>Session Flow</div>
                     {/* <HoverCard>
-                                                <HoverCardTrigger asChild>
-                                                    <BadgeInfo className="h-5 w-5 text-primary" />
-                                                </HoverCardTrigger>
-                                                <HoverCardContent className="w-80" align="end">
-                                                    <div className="flex justify-between space-x-4">
-                                                        <Avatar>
-                                                            <AvatarImage src="https://github.com/trueberryless.png" />
-                                                            <AvatarFallback>T</AvatarFallback>
-                                                        </Avatar>
-                                                        <div className="space-y-1">
-                                                            <h4 className="text-sm font-semibold">
-                                                                @trueberryless
-                                                            </h4>
-                                                            <p className="text-sm">
-                                                                We try to automate this flow in
-                                                                order to help you focus on your
-                                                                projects, not this app.
-                                                            </p>
-                                                            <div className="flex items-center pt-2">
-                                                                <span className="text-xs text-muted-foreground">
-                                                                    For example we will
-                                                                    automatically move this session
-                                                                    from “Backlog” to “In Progress”,
-                                                                    when you start working on it -
-                                                                    when the first session is
-                                                                    started.
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </HoverCardContent>
-                                            </HoverCard> */}
+                          <HoverCardTrigger asChild>
+                              <BadgeInfo className="h-5 w-5 text-primary" />
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-80" align="end">
+                              <div className="flex justify-between space-x-4">
+                                  <Avatar>
+                                      <AvatarImage src="https://github.com/trueberryless.png" />
+                                      <AvatarFallback>T</AvatarFallback>
+                                  </Avatar>
+                                  <div className="space-y-1">
+                                      <h4 className="text-sm font-semibold">
+                                          @trueberryless
+                                      </h4>
+                                      <p className="text-sm">
+                                          We try to automate this flow in
+                                          order to help you focus on your
+                                          projects, not this app.
+                                      </p>
+                                      <div className="flex items-center pt-2">
+                                          <span className="text-xs text-muted-foreground">
+                                              For example we will
+                                              automatically move this session
+                                              from “Backlog” to “In Progress”,
+                                              when you start working on it -
+                                              when the first session is
+                                              started.
+                                          </span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </HoverCardContent>
+                      </HoverCard> */}
                   </div>
                 </CardTitle>
               </CardHeader>
@@ -311,9 +314,8 @@ export default function EditSession() {
                   <div className="grid gap-3">
                     <Label htmlFor="flow">Flow</Label>
                     <Select
-                      value={sessionFlow}
+                      value={session.flow}
                       onValueChange={(value) => {
-                        setSessionFlow(value);
                         handleInputChange("flow", value);
                       }}
                     >
@@ -353,7 +355,7 @@ export default function EditSession() {
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <DialogClose>
+                <DialogClose asChild>
                   <Button variant={"outline"}>Cancel</Button>
                 </DialogClose>
                 <Button onClick={handleDeleteSession}>Continue</Button>

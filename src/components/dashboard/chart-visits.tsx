@@ -264,7 +264,7 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                     className="fill-primary-foreground max-md:hidden"
                     fontSize={12}
                     fontWeight={700}
-                    formatter={(value: number) =>
+                    formatter={(value: any) =>
                       value > averageVisitsPerWeek / 3 ? value : ""
                     }
                   />
@@ -339,7 +339,7 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                     className="fill-primary-foreground max-md:hidden"
                     fontSize={12}
                     fontWeight={700}
-                    formatter={(value: number) =>
+                    formatter={(value: any) =>
                       value > averageVisitsPerMonth / 3 ? value : ""
                     }
                   />
@@ -418,7 +418,7 @@ export function ChartVisits({ user, className }: ChartVisitsProps) {
                     className="fill-primary-foreground max-md:hidden"
                     fontSize={12}
                     fontWeight={700}
-                    formatter={(value: number) =>
+                    formatter={(value: any) =>
                       value > averageVisitsPerYear / 3 ? value : ""
                     }
                   />

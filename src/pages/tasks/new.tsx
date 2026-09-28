@@ -2,7 +2,7 @@ import { Task } from "@/models";
 import { AlertCircle, BadgeInfo, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import Project from "@/models/project";
@@ -44,32 +44,31 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function NewTask() {
   const { user, setUser } = useUser();
-  const [task, setTask] = useState<Task | null>(null);
   const router = useRouter();
-
-  const [project, setProject] = useState<Project | null>(null);
   const projectInputRef = useRef<HTMLButtonElement>(null);
 
-  const [taskStatus, setTaskStatus] = useState<string>("");
-  const [taskPriority, setTaskPriority] = useState<string>("");
+  // 1. Initialize task once on mount using a lazy initializer
+  const [task, setTask] = useState<Task>(() => initializeTask());
 
-  const projects =
-    user?.projects.filter((project) => project.archivedAt === null) || [];
+  // 2. Derive project from user data and router query instead of using useEffect
+  const projects = useMemo(
+    () => user?.projects.filter((project) => project.archivedAt === null) || [],
+    [user?.projects]
+  );
 
-  useEffect(() => {
-    const newTask = initializeTask();
-    setTask(newTask);
-    setTaskStatus(newTask.status);
-    setTaskPriority(newTask.priority);
-    const projectId = router.query.projectId as string;
-    if (projectId) {
-      const project = user?.projects.find((p) => p.id === projectId) || null;
-      setProject(project);
-    }
-  }, [router.query.projectId, user?.projects]);
+  const projectIdFromQuery = router.query.projectId as string;
+
+  // Local state for manually selected project, defaulting to query param if exists
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null
+  );
+
+  // Determine which project is currently active
+  const activeProjectId = selectedProjectId || projectIdFromQuery;
+  const project = projects.find((p) => p.id === activeProjectId) || null;
 
   const handleInputChange = (field: keyof Task, value: any) => {
-    setTask((prevTask) => (prevTask ? { ...prevTask, [field]: value } : null));
+    setTask((prevTask) => ({ ...prevTask, [field]: value }));
   };
 
   const handleSaveTask = () => {
@@ -92,30 +91,13 @@ export default function NewTask() {
     }
   };
 
-  if (!task) {
-    return (
-      <div className="flex w-full flex-col">
-        <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-          <Alert variant="default">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Loading...</AlertTitle>
-            <AlertDescription>
-              We are currently trying to fetch your data from your local
-              storage.
-            </AlertDescription>
-          </Alert>
-        </main>
-      </div>
-    );
-  }
-
   return (
     <div className="flex w-full flex-col">
       <main className="flex min-h-[calc(100vh-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
         <div className="grid flex-1 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              {task.name}
+              {task.name || "New Task"}
             </h1>
             {task.priority && (
               <Badge
@@ -155,7 +137,7 @@ export default function NewTask() {
           </div>
           <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-              <Card x-chunk="dashboard-07-chunk-0">
+              <Card>
                 <CardHeader>
                   <CardTitle>Task Details</CardTitle>
                   <CardDescription>
@@ -165,7 +147,7 @@ export default function NewTask() {
                 <CardContent>
                   <div className="grid gap-6">
                     <div className="grid gap-3">
-                      <Label htmlFor="name">Identifier</Label>
+                      <Label htmlFor="id">Identifier</Label>
                       <Input
                         id="id"
                         type="text"
@@ -177,13 +159,8 @@ export default function NewTask() {
                     <div className="grid gap-3">
                       <Label htmlFor="project">Project</Label>
                       <Select
-                        value={project?.id}
-                        onValueChange={(value) => {
-                          const selectedProject = projects.find(
-                            (proj) => proj.id === value
-                          );
-                          setProject(selectedProject || null);
-                        }}
+                        value={project?.id || ""}
+                        onValueChange={(value) => setSelectedProjectId(value)}
                       >
                         <SelectTrigger
                           id="project"
@@ -195,9 +172,9 @@ export default function NewTask() {
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          {projects.map((project) => (
-                            <SelectItem key={project.id} value={project.id}>
-                              {project.name}
+                          {projects.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                              {p.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -231,7 +208,7 @@ export default function NewTask() {
               </Card>
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <Card x-chunk="dashboard-07-chunk-3">
+              <Card>
                 <CardHeader>
                   <CardTitle>
                     <div className="flex items-center justify-between">
@@ -254,14 +231,6 @@ export default function NewTask() {
                                 We try to automate this status in order to help
                                 you focus on your projects, not this app.
                               </p>
-                              <div className="flex items-center pt-2">
-                                <span className="text-xs text-muted-foreground">
-                                  For example we will automatically move this
-                                  task from “Backlog” to “In Progress”, when you
-                                  start working on it - when the first session
-                                  is started.
-                                </span>
-                              </div>
                             </div>
                           </div>
                         </HoverCardContent>
@@ -274,11 +243,10 @@ export default function NewTask() {
                     <div className="grid gap-3">
                       <Label htmlFor="status">Status</Label>
                       <Select
-                        value={taskStatus}
-                        onValueChange={(value) => {
-                          setTaskStatus(value);
-                          handleInputChange("status", value);
-                        }}
+                        value={task.status}
+                        onValueChange={(value) =>
+                          handleInputChange("status", value)
+                        }
                       >
                         <SelectTrigger id="status" aria-label="Select status">
                           <SelectValue placeholder="Select status" />
@@ -295,7 +263,7 @@ export default function NewTask() {
                   </div>
                 </CardContent>
               </Card>
-              <Card x-chunk="dashboard-07-chunk-3">
+              <Card>
                 <CardHeader>
                   <CardTitle>Task Priority</CardTitle>
                 </CardHeader>
@@ -304,11 +272,10 @@ export default function NewTask() {
                     <div className="grid gap-3">
                       <Label htmlFor="priority">Priority</Label>
                       <Select
-                        value={taskPriority}
-                        onValueChange={(value) => {
-                          setTaskPriority(value);
-                          handleInputChange("priority", value);
-                        }}
+                        value={task.priority}
+                        onValueChange={(value) =>
+                          handleInputChange("priority", value)
+                        }
                       >
                         <SelectTrigger
                           id="priority"
