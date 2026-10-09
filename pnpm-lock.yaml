@@ -128,7 +128,7 @@ importers:
     devDependencies:
       '@trivago/prettier-plugin-sort-imports':
         specifier: 6.0.2
-        version: 6.0.2(prettier@3.9.7)
+        version: 6.0.2(prettier@3.9.8)
       '@types/node':
         specifier: ^20.19.43
         version: 20.19.43
@@ -148,8 +148,8 @@ importers:
         specifier: ^8.5.19
         version: 8.5.19
       prettier:
-        specifier: 3.9.7
-        version: 3.9.7
+        specifier: 3.9.8
+        version: 3.9.8
       prettier-plugin-astro:
         specifier: 0.14.1
         version: 0.14.1
@@ -2406,13 +2406,13 @@ packages:
     resolution: {integrity: sha512-RiBETaaP9veVstE4vUwSIcdATj6dKmXljouXc/DDNwBSPTp8FRkLGDSGFClKsAFeeg+13SB0Z1JZvbD76bigJw==}
     engines: {node: ^14.15.0 || >=16.0.0}
 
-  prettier@3.9.6:
-    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
+  prettier@3.9.7:
+    resolution: {integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==}
     engines: {node: '>=14'}
     hasBin: true
 
-  prettier@3.9.7:
-    resolution: {integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==}
+  prettier@3.9.8:
+    resolution: {integrity: sha512-WRFq3Wn3WId7LLROfMLdH7xaFr2jR62wU8nLO6rQUOLOxNZUviyJQs1M0iIhLexSFy+L+w0ch66wtoO2jRjG0A==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -3758,7 +3758,7 @@ snapshots:
 
   '@tanstack/table-core@8.21.3': {}
 
-  '@trivago/prettier-plugin-sort-imports@6.0.2(prettier@3.9.7)':
+  '@trivago/prettier-plugin-sort-imports@6.0.2(prettier@3.9.8)':
     dependencies:
       '@babel/generator': 7.28.5
       '@babel/parser': 7.28.5
@@ -3768,7 +3768,7 @@ snapshots:
       lodash-es: 4.17.22
       minimatch: 9.0.5
       parse-imports-exports: 0.2.4
-      prettier: 3.9.7
+      prettier: 3.9.8
     transitivePeerDependencies:
       - supports-color
 
@@ -5240,12 +5240,12 @@ snapshots:
   prettier-plugin-astro@0.14.1:
     dependencies:
       '@astrojs/compiler': 2.12.2
-      prettier: 3.9.6
+      prettier: 3.9.7
       sass-formatter: 0.7.9
 
-  prettier@3.9.6: {}
-
   prettier@3.9.7: {}
+
+  prettier@3.9.8: {}
 
   prop-types@15.8.1:
     dependencies:
