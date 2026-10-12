@@ -82,8 +82,9 @@ export async function signInWithAtproto(identifier: string) {
   await oauth.signIn(identifier)
 }
 
-export async function signOut() {
+export async function signOut(options: SignOutOptions = {}) {
   const user = useAuthUser()
+  if (options.removeDeviceData && user.value) removeLocalItem(getAccountDataKey(user.value.did))
 
   try {
     if (oauthClient && user.value) await oauthClient.revoke(user.value.did)
@@ -93,6 +94,11 @@ export async function signOut() {
 
   rememberIdentity(null)
   window.location.href = '/'
+}
+
+export interface SignOutOptions {
+  /** Delete this account's copy of the data from this device, for shared devices. */
+  removeDeviceData?: boolean
 }
 
 export interface AuthUser {

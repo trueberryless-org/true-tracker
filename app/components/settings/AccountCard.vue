@@ -22,6 +22,10 @@ const storageDescription = computed(() => {
   return 'Connecting to your ATproto repository…'
 })
 
+const canRemoveDeviceData = computed(
+  () => (target.value === 'vault' || target.value === 'public') && status.value === 'idle',
+)
+
 const statusDescription = computed(() => {
   if (status.value === 'syncing') return 'Saving to your repository…'
   if (status.value === 'offline')
@@ -77,7 +81,7 @@ async function stopStoringPublicly() {
     </CardHeader>
     <CardContent class="space-y-2 text-sm">
       <p>{{ storageDescription }}</p>
-      <p v-if="statusDescription" role="status" :class="status === 'failed' && 'text-destructive font-medium'">
+      <p v-if="statusDescription" role="status" :class="status === 'failed' && 'text-destructive-text font-medium'">
         {{ statusDescription }}
       </p>
       <p v-if="status === 'failed' && lastError" class="text-muted-foreground font-mono text-xs break-words">
@@ -123,7 +127,18 @@ async function stopStoringPublicly() {
           Copies that other services already made cannot be removed.
         </p>
       </ConfirmPopover>
-      <Button variant="outline" @click="signOut">Sign out</Button>
+      <Button variant="outline" @click="signOut()">Sign out</Button>
+      <ConfirmPopover
+        v-if="canRemoveDeviceData"
+        title="Sign out and remove your data from this device?"
+        confirm-label="Sign out"
+        @confirm="signOut({ removeDeviceData: true })"
+      >
+        <template #trigger>
+          <Button variant="outline">Sign out and remove from this device</Button>
+        </template>
+        <p>Your data stays in your ATproto repository. This device forgets it, which is useful on shared computers.</p>
+      </ConfirmPopover>
     </CardFooter>
   </Card>
   <form v-else @submit.prevent="signIn">
@@ -157,7 +172,12 @@ async function stopStoringPublicly() {
               :aria-describedby="signInError ? 'settings-handle-message' : undefined"
             />
           </div>
-          <p v-if="signInError" id="settings-handle-message" class="text-destructive text-sm font-medium" role="alert">
+          <p
+            v-if="signInError"
+            id="settings-handle-message"
+            class="text-destructive-text text-sm font-medium"
+            role="alert"
+          >
             {{ signInError }}
           </p>
         </div>

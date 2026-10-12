@@ -118,7 +118,7 @@ function linkClass(isActive: boolean) {
             <NuxtLink to="/settings">Settings</NuxtLink>
           </DropdownMenuItem>
           <DropdownMenuItem @select="exportNow">Export data</DropdownMenuItem>
-          <DropdownMenuItem v-if="isAccount" @select="signOut">Sign out</DropdownMenuItem>
+          <DropdownMenuItem v-if="isAccount" @select="signOut()">Sign out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

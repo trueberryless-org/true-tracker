@@ -12,6 +12,13 @@ const RECONNECT_MS = 30 * 1000
 export default defineNuxtPlugin(() => {
   if (import.meta.test) return
 
+  if (window.location.hostname === 'localhost') {
+    const url = new URL(window.location.href)
+    url.hostname = '127.0.0.1'
+    window.location.replace(url)
+    return
+  }
+
   const authUser = useAuthUser()
   const router = useRouter()
   const connected = useConnected()
@@ -99,6 +106,10 @@ export default defineNuxtPlugin(() => {
         toast('The sign-in with your ATproto account was cancelled or failed. Please try again.')
       }
       if (remembered) {
+        if (!useTrackerUser().value && !useTrackerLoaded().value) {
+          useTrackerLoaded().value = true
+          toast('We could not reach your ATproto account. Check your connection, we keep trying.')
+        }
         clearTimeout(retryTimer)
         retryTimer = setTimeout(() => void connect(), RECONNECT_MS)
         return
