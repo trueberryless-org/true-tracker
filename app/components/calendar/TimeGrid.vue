@@ -82,7 +82,7 @@ function startCreate(event: PointerEvent, dayIndex: number) {
 }
 
 function startMove(event: PointerEvent, calendarEvent: CalendarEvent, dayIndex: number, type: 'move' | 'resize') {
-  if (event.button !== 0 || calendarEvent.isReadOnly) return
+  if (event.button !== 0) return
   event.stopPropagation()
   ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
   drag.value = {
@@ -106,6 +106,8 @@ function updateDrag(event: PointerEvent) {
     drag.value = { ...state, currentMinute: getMinuteFromPointer(event, state.column), moved }
     return
   }
+
+  if (state.event.isReadOnly) return
 
   const dayIndex = state.type === 'move' ? getDayIndexFromPointer(event) : null
   drag.value = {
@@ -267,7 +269,7 @@ interface MoveState {
               cn(
                 'focus-visible:ring-ring absolute overflow-hidden rounded-md border-l-4 px-2 py-1 text-left text-xs shadow-xs outline-hidden select-none focus-visible:z-20 focus-visible:ring-2',
                 segment.event.isReadOnly
-                  ? 'cursor-pointer opacity-70'
+                  ? 'cursor-pointer border-dashed'
                   : 'cursor-grab touch-none active:cursor-grabbing',
                 segment.event.id === highlightId && 'ring-primary ring-2',
                 drag?.type !== 'create' &&

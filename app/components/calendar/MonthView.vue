@@ -143,7 +143,7 @@ interface DragState {
                 :class="
                   cn(
                     'focus-visible:ring-ring flex min-h-6 items-center gap-1 truncate rounded-sm border-l-4 px-1 py-0.5 text-xs outline-hidden select-none focus-visible:ring-2',
-                    calendarEvent.isReadOnly ? 'cursor-pointer opacity-70' : 'cursor-grab touch-none',
+                    calendarEvent.isReadOnly ? 'cursor-pointer border-dashed' : 'cursor-grab touch-none',
                     calendarEvent.id === highlightId && 'ring-primary ring-2',
                   )
                 "
