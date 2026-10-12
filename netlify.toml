@@ -4,3 +4,6 @@ publish = "dist"
 
 [build.environment]
 NODE_VERSION = "24"
+# Netlify auto-installed its Next.js runtime when this was a Next.js app. It can't be
+# uninstalled from the plugin directory, and it fails builds without Next.js output.
+NETLIFY_NEXT_PLUGIN_SKIP = "true"
