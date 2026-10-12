@@ -65,6 +65,22 @@ export function loadGuestUser() {
   }
 }
 
+export function adoptGuestDataFromOtherTab() {
+  const raw = readLocalJson(LOCAL_DATA_KEY)
+  if (!raw) {
+    useTrackerUser().value = null
+    return
+  }
+
+  try {
+    const user = parseUser(raw)
+    useTrackerUser().value = user
+    applyColorTheme(user.settings.theme)
+  } catch (error) {
+    console.error('[time-tracker] Failed to read the data another tab stored on this device.', error)
+  }
+}
+
 export function signUpLocally(username: string) {
   saveUser(createUser(username))
   toast(`You sign up with the username "${username}".`)

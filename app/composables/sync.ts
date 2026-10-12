@@ -8,6 +8,7 @@ const MAX_RETRY_MS = 5 * 60 * 1000
 const PUBLIC_OPT_IN_PREFIX = 'time-tracker-public-opt-in:'
 const SPACE_SCOPE_PREFIX = 'space:'
 const SCOPE_MESSAGE_RE = /scope|space declaration|retrieve space|not authorized|forbidden/i
+const REFRESH_INTERVAL_MS = 60 * 1000
 const SESSION_MESSAGE_RE = /invalid_grant|token.*(expired|revoked)|session.*(expired|revoked|deleted)|401/i
 
 let syncedRecords: RecordSet = createEmptyRecordSet()
@@ -18,6 +19,7 @@ let hasPendingFlush = false
 let isRemoteLoaded = false
 let visitRecordedFor: string | null = null
 let placeholderFor: string | null = null
+let lastRemoteLoad = 0
 let retryTimer: ReturnType<typeof setTimeout> | undefined
 let retryDelay = MIN_RETRY_MS
 
@@ -83,6 +85,25 @@ export function showCachedAccount(did: string) {
   syncedRecords = cache.synced
   profilePictureBlob = cache.profilePictureBlob
   showAccountUser(cache.user)
+}
+
+export async function refreshFromRemote(identity: AuthUser): Promise<void> {
+  const { status, target } = useSyncState()
+  if (!isRemoteLoaded || flushing || status.value === 'syncing') return
+  if (target.value !== 'vault' && target.value !== 'public') return
+  if (Date.now() - lastRemoteLoad < REFRESH_INTERVAL_MS) return
+
+  await loadRemote(identity, identity.handle ?? identity.did, readAccountCache(identity.did))
+}
+
+export function adoptAccountCacheFromOtherTab(did: string) {
+  if (flushing) return
+  const cache = readAccountCache(did)
+  if (!cache) return
+
+  syncedRecords = cache.synced
+  profilePictureBlob = cache.profilePictureBlob
+  useTrackerUser().value = cache.user
 }
 
 export function scheduleSync() {
@@ -211,6 +232,7 @@ async function loadRemote(identity: AuthUser, handle: string, cache: AccountCach
     }
 
     isRemoteLoaded = true
+    lastRemoteLoad = Date.now()
     placeholderFor = null
     status.value = 'idle'
     lastError.value = null

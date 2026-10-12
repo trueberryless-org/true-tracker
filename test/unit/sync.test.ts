@@ -65,6 +65,44 @@ describe('connectAccount', () => {
   })
 })
 
+describe('refreshFromRemote', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    setAirspaceClient(null)
+  })
+
+  it('picks up changes made on another device', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    localStorage.clear()
+    useTrackerUser().value = null
+    const remote = userToRecordSet({ ...createTestUser(), username: 'remote-name' })
+    const identity = useSignedIn('did:plc:refresh')
+    setAirspaceClient(createFakeAirspace(remote) as unknown as TrackerAirspace)
+    await connectAccount(identity)
+
+    remote.project['project-other'] = { name: 'From another device', position: 5, priority: 'low', status: 'planned' }
+    vi.advanceTimersByTime(2 * 60 * 1000)
+    await refreshFromRemote(identity)
+
+    expect(useTrackerUser().value?.projects.map((project) => project.name)).toContain('From another device')
+    expect(useTrackerUser().value?.projects.map((project) => project.name)).toContain('Alpha')
+  })
+})
+
+describe('adoptAccountCacheFromOtherTab', () => {
+  it('shows the data another tab stored', () => {
+    const identity = useSignedIn('did:plc:tabs')
+    writeLocalJson(getAccountDataKey(identity.did), {
+      synced: createEmptyRecordSet(),
+      user: { ...createTestUser(), id: identity.did, username: 'other-tab' },
+    })
+
+    adoptAccountCacheFromOtherTab(identity.did)
+
+    expect(useTrackerUser().value?.username).toBe('other-tab')
+  })
+})
+
 function useSignedIn(did: string): AuthUser {
   const identity = { did, handle: 'tester.test' }
   useAuthUser().value = identity
