@@ -29,8 +29,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
-      - name: Run prettier
-        run: pnpm exec prettier . --write
+      - name: Run formatter
+        run: pnpm format
 
       # Optimize all PNGs with https://pngquant.org/
       - run: sudo apt-get update && sudo apt-get install -y pngquant

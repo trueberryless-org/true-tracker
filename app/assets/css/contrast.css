@@ -1,0 +1,101 @@
+/* Generated contrast fixes: the smallest lightness changes that bring every theme to WCAG 2.2 AA (4.5:1). */
+:root:not(.dark):not(.palette, .amethyst, .sapphire, .emerald, .ruby, .coral, .amber, .daylight, .midnight) {
+  --muted-foreground: 215.4 16.3% 45.4%;
+  --destructive: 0 84.2% 48.7%;
+  --primary-text: 222.2 47.4% 11.2%;
+  --destructive-text: 0 84.2% 48.7%;
+}
+:root.dark:not(.palette, .amethyst, .sapphire, .emerald, .ruby, .coral, .amber, .daylight, .midnight) {
+  --primary-text: 210 40% 98%;
+  --destructive-text: 0 62.8% 55.1%;
+}
+:root.palette:not(.dark) {
+  --foreground: 197 37% 42.5%;
+  --muted-foreground: 240 3.8% 43.6%;
+  --destructive: 0 84.2% 48.7%;
+  --primary-text: 240 5.9% 10%;
+  --destructive-text: 0 84.2% 48.7%;
+}
+:root.palette.dark {
+  --primary-foreground: 30 80% 35%;
+  --primary-text: 30 80% 92%;
+  --destructive-text: 0 62.8% 55.6%;
+}
+:root.amethyst:not(.dark) {
+  --muted-foreground: 220 8.9% 45.1%;
+  --destructive: 0 84.2% 48.7%;
+  --primary-text: 262.1 83.3% 57.8%;
+  --destructive-text: 0 84.2% 48.7%;
+}
+:root.amethyst.dark {
+  --primary-text: 263.4 70% 61.9%;
+  --destructive-text: 0 62.8% 55.1%;
+}
+:root.sapphire:not(.dark) {
+  --primary-text: 221.2 83.2% 53.3%;
+  --destructive-text: 0 72% 51%;
+}
+:root.sapphire.dark {
+  --primary-text: 221.2 83.2% 57.8%;
+  --destructive-text: 0 72% 55%;
+}
+:root.emerald:not(.dark) {
+  --muted-foreground: 142 3.8% 43%;
+  --primary: 142 86% 27.5%;
+  --primary-text: 142 86% 27.5%;
+  --destructive-text: 0 72% 51%;
+}
+:root.emerald.dark {
+  --primary: 142 86% 27.5%;
+  --primary-text: 142 86% 29.5%;
+  --destructive-text: 0 72% 55%;
+}
+:root.ruby:not(.dark) {
+  --primary-text: 346.8 77.2% 49.8%;
+  --destructive-text: 0 72% 51%;
+}
+:root.ruby.dark {
+  --primary-text: 346.8 77.2% 53.3%;
+  --destructive-text: 0 72% 55%;
+}
+:root.coral:not(.dark) {
+  --muted-foreground: 25 5.3% 43.7%;
+  --primary: 24.6 95% 38.6%;
+  --destructive: 0 84.2% 48.7%;
+  --primary-text: 24.6 95% 38.6%;
+  --destructive-text: 0 84.2% 48.7%;
+}
+:root.coral.dark {
+  --primary: 20.5 90.2% 41.2%;
+  --primary-text: 20.5 90.2% 43.2%;
+  --destructive-text: 0 72.2% 55.1%;
+}
+:root.amber:not(.dark) {
+  --muted-foreground: 25 5.3% 43.7%;
+  --destructive: 0 84.2% 48.7%;
+  --primary-text: 47.9 95.8% 28.6%;
+  --destructive-text: 0 84.2% 48.7%;
+}
+:root.amber.dark {
+  --primary-text: 47.9 95.8% 53.1%;
+  --destructive-text: 0 62.8% 55.6%;
+}
+:root.daylight:not(.dark) {
+  --primary: 36 45% 36%;
+  --primary-text: 36 45% 32%;
+  --destructive-text: 0 84% 37%;
+}
+:root.daylight.dark {
+  --muted-foreground: 36 45% 76%;
+  --accent: 36 64% 31.5%;
+  --primary-text: 36 45% 85%;
+  --destructive-text: 0 84% 71%;
+}
+:root.midnight:not(.dark) {
+  --primary-text: 240 0% 10%;
+  --destructive-text: 0 60% 43%;
+}
+:root.midnight.dark {
+  --primary-text: 240 0% 90%;
+  --destructive-text: 0 60% 63%;
+}
