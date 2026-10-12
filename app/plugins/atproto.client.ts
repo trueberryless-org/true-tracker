@@ -1,5 +1,6 @@
 import { createAirspace } from 'airspace'
 import { createBrowserOAuth } from 'airspace/oauth/browser'
+import { toast } from 'vue-sonner'
 
 import { collections, spaces } from '~~/shared/atproto/collections'
 import { clientMetadataOptions, fallbackScopes } from '~~/shared/atproto/oauth'
@@ -12,6 +13,7 @@ export default defineNuxtPlugin(() => {
   if (import.meta.test) return
 
   const authUser = useAuthUser()
+  const router = useRouter()
   const connected = useConnected()
   const online = useOnline()
   const origin = window.location.origin
@@ -66,6 +68,9 @@ export default defineNuxtPlugin(() => {
       if (result.state && window.location.hash) {
         history.replaceState(null, '', window.location.pathname + window.location.search)
       }
+      const redirect = readSessionValue(SIGNIN_REDIRECT_KEY)
+      safeRemoveSessionItem(SIGNIN_REDIRECT_KEY)
+      if (result.state && redirect?.startsWith('/') && !redirect.startsWith('//')) void router.replace(redirect)
 
       const airspace = useAirspace()
       const identity = await airspace?.identity().catch(() => null)
@@ -87,7 +92,12 @@ export default defineNuxtPlugin(() => {
 
       safeRemoveSessionItem(SIGNIN_HANDLE_KEY)
       safeRemoveSessionItem(SIGNIN_RETRY_KEY)
+      safeRemoveSessionItem(SIGNIN_REDIRECT_KEY)
       console.error('[time-tracker] Failed to restore the ATproto session.', error)
+      if (isOAuthCallback) {
+        history.replaceState(null, '', window.location.pathname)
+        toast('The sign-in with your ATproto account was cancelled or failed. Please try again.')
+      }
       if (remembered) {
         clearTimeout(retryTimer)
         retryTimer = setTimeout(() => void connect(), RECONNECT_MS)

@@ -1,4 +1,4 @@
-import { cidFromBlob, ScopeError } from 'airspace'
+import { cidFromBlob, ScopeError, ValidationError } from 'airspace'
 import type { OAuthSession } from 'airspace/oauth/browser'
 import { toast } from 'vue-sonner'
 
@@ -8,11 +8,16 @@ const MAX_RETRY_MS = 5 * 60 * 1000
 const PUBLIC_OPT_IN_PREFIX = 'time-tracker-public-opt-in:'
 const SPACE_SCOPE_PREFIX = 'space:'
 const SCOPE_MESSAGE_RE = /scope|space declaration|retrieve space|not authorized|forbidden/i
+const SESSION_MESSAGE_RE = /invalid_grant|token.*(expired|revoked)|session.*(expired|revoked|deleted)|401/i
 
 let syncedRecords: RecordSet = createEmptyRecordSet()
 let profilePictureBlob: unknown
 let oauthSession: OAuthSession | null = null
 let flushing: Promise<void> | null = null
+let hasPendingFlush = false
+let isRemoteLoaded = false
+let visitRecordedFor: string | null = null
+let placeholderFor: string | null = null
 let retryTimer: ReturnType<typeof setTimeout> | undefined
 let retryDelay = MIN_RETRY_MS
 
@@ -41,6 +46,7 @@ export async function connectAccount(identity: AuthUser): Promise<void> {
   if (!airspace) return
 
   const { lastError, spaceAccess, target } = useSyncState()
+  isRemoteLoaded = false
   const cache = readAccountCache(identity.did)
   const handle = identity.handle ?? (await airspace.identity().catch(() => null))?.handle ?? identity.did
 
@@ -62,7 +68,7 @@ export async function connectAccount(identity: AuthUser): Promise<void> {
   if (target.value === 'device') {
     syncedRecords = cache?.synced ?? createEmptyRecordSet()
     profilePictureBlob = cache?.profilePictureBlob
-    showAccountUser(addVisit(cache?.user ?? migrateGuestOrCreate(identity.did, handle)))
+    showAccountUser(withVisit(cache?.user ?? migrateGuestOrCreate(identity.did, handle)))
     persistAccountCache()
     return
   }
@@ -85,7 +91,17 @@ export function scheduleSync() {
 }
 
 export async function flushChanges(): Promise<void> {
-  flushing ??= runFlush().finally(() => (flushing = null))
+  if (flushing) {
+    hasPendingFlush = true
+    return flushing
+  }
+
+  flushing = runFlush().finally(() => {
+    flushing = null
+    if (!hasPendingFlush) return
+    hasPendingFlush = false
+    void flushChanges()
+  })
   return flushing
 }
 
@@ -100,11 +116,12 @@ export async function enablePublicStorage(did: string) {
   target.value = 'public'
 
   if (!auth.value || !user.value) return
-  const cached = user.value
+  syncedRecords = createEmptyRecordSet()
+  isRemoteLoaded = false
   await loadRemote(auth.value, auth.value.handle ?? auth.value.did, {
     profilePictureBlob,
     synced: createEmptyRecordSet(),
-    user: cached,
+    user: user.value,
   })
 }
 
@@ -169,34 +186,46 @@ async function loadRemote(identity: AuthUser, handle: string, cache: AccountCach
   const { lastError, status, target } = useSyncState()
   if (!airspace || (target.value !== 'vault' && target.value !== 'public')) return
 
+  clearTimeout(retryTimer)
   status.value = 'syncing'
   try {
     const remote = await fetchRecordSet(airspace, target.value)
+    const current = useTrackerUser().value
+    const local = current?.id === identity.did ? current : (cache?.user ?? null)
 
-    if (isRecordSetEmpty(remote) && !cache) {
+    if (isRecordSetEmpty(remote) && !local) {
       syncedRecords = remote
-      showAccountUser(addVisit(migrateGuestOrCreate(identity.did, handle)))
+      showAccountUser(withVisit(migrateGuestOrCreate(identity.did, handle)))
     } else {
-      const localChanges = cache
-        ? diffRecordSets(cache.synced, userToRecordSet(cache.user, cache.profilePictureBlob))
-        : []
+      const base = cache?.synced ?? createEmptyRecordSet()
+      const isPlaceholder = placeholderFor === identity.did
+      const localChanges = (local ? diffRecordSets(base, userToRecordSet(local, profilePictureBlob)) : []).filter(
+        (operation) => !isPlaceholder || operation.collection !== 'settings',
+      )
       const merged = applyRecordOperations(remote, localChanges)
+      const previousBlob = profilePictureBlob
       syncedRecords = remote
       profilePictureBlob = merged.settings[SETTINGS_RKEY]?.profilePicture
-      const profilePicture = await resolveProfilePicture(profilePictureBlob, cache)
-      showAccountUser(addVisit(recordSetToUser(merged, { did: identity.did, handle, profilePicture })))
+      const profilePicture = await resolveProfilePicture(profilePictureBlob, previousBlob, local)
+      showAccountUser(withVisit(recordSetToUser(merged, { did: identity.did, handle, profilePicture })))
     }
 
+    isRemoteLoaded = true
+    placeholderFor = null
     status.value = 'idle'
     lastError.value = null
+    retryDelay = MIN_RETRY_MS
     persistAccountCache()
     await flushChanges()
   } catch (error) {
     console.error('[time-tracker] Failed to load your data from your ATproto repository.', error)
     status.value = 'failed'
     lastError.value = describeError(error)
-    if (!cache) showAccountUser(addVisit(createAccountUser(identity.did, handle)))
-    handleWriteFailure(error)
+    if (!useTrackerUser().value) {
+      if (!cache) placeholderFor = identity.did
+      showAccountUser(withVisit(cache?.user ?? createAccountUser(identity.did, handle)))
+    }
+    handleSyncFailure(error, () => loadRemote(identity, handle, readAccountCache(identity.did) ?? cache))
   }
 }
 
@@ -204,7 +233,7 @@ async function runFlush() {
   const airspace = useAirspace()
   const { lastError, status, target } = useSyncState()
   const user = useTrackerUser()
-  if (!airspace || !user.value || (target.value !== 'vault' && target.value !== 'public')) return
+  if (!airspace || !user.value || !isRemoteLoaded || (target.value !== 'vault' && target.value !== 'public')) return
 
   if (!navigator.onLine) {
     status.value = 'offline'
@@ -227,22 +256,34 @@ async function runFlush() {
     console.error('[time-tracker] Failed to save your changes to your ATproto repository.', error)
     status.value = 'failed'
     lastError.value = describeError(error)
-    handleWriteFailure(error)
+    handleSyncFailure(error, flushChanges)
   }
 }
 
-function handleWriteFailure(error: unknown) {
-  const { spaceAccess, target } = useSyncState()
+function handleSyncFailure(error: unknown, retry: () => Promise<void>) {
+  const { lastError, spaceAccess, target } = useSyncState()
 
   if (target.value === 'vault' && isScopeProblem(error)) {
     spaceAccess.value = 'denied'
     target.value = 'device'
+    isRemoteLoaded = false
     persistAccountCache()
     toast('Your account did not grant access to the private space. Your data stays on this device for now.')
     return
   }
 
-  scheduleRetry()
+  if (error instanceof ValidationError) {
+    const issues = error.issues.map((issue) => `${issue.path}: ${issue.message}`).join('; ')
+    lastError.value = `Some data does not fit the record format (${issues}). Shorten it and try again.`
+    return
+  }
+
+  if (SESSION_MESSAGE_RE.test(describeError(error))) {
+    lastError.value = 'Your ATproto session expired. Sign out and sign in again to keep saving to your account.'
+    return
+  }
+
+  scheduleRetry(retry)
 }
 
 async function writeInChunks(
@@ -316,11 +357,9 @@ async function resolveSpaceAccess(airspace: TrackerAirspace): Promise<SpaceAcces
   return 'granted'
 }
 
-async function resolveProfilePicture(blob: unknown, cache: AccountCache | null): Promise<string | null> {
+async function resolveProfilePicture(blob: unknown, previousBlob: unknown, local: User | null): Promise<string | null> {
   if (!blob) return null
-  if (cache?.user.profilePicture && cidFromBlob(cache.profilePictureBlob) === cidFromBlob(blob)) {
-    return cache.user.profilePicture
-  }
+  if (local?.profilePicture && cidFromBlob(previousBlob) === cidFromBlob(blob)) return local.profilePicture
 
   const airspace = useAirspace()
   const { target } = useSyncState()
@@ -339,6 +378,12 @@ async function resolveProfilePicture(blob: unknown, cache: AccountCache | null):
     console.error('[time-tracker] Failed to load your profile picture.', error)
     return null
   }
+}
+
+function withVisit(user: User): User {
+  if (visitRecordedFor === user.id) return user
+  visitRecordedFor = user.id
+  return addVisit(user)
 }
 
 function showAccountUser(user: User) {
@@ -393,9 +438,9 @@ function persistAccountCache() {
   } satisfies StoredAccountCache)
 }
 
-function scheduleRetry() {
+function scheduleRetry(retry: () => Promise<void>) {
   clearTimeout(retryTimer)
-  retryTimer = setTimeout(() => void flushChanges(), retryDelay)
+  retryTimer = setTimeout(() => void retry(), retryDelay)
   retryDelay = Math.min(retryDelay * 2, MAX_RETRY_MS)
 }
 

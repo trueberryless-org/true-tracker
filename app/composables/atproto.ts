@@ -7,6 +7,7 @@ export type TrackerAirspace = Airspace<typeof collections, typeof spaces>
 
 export const SIGNIN_HANDLE_KEY = 'time-tracker-signin-handle'
 export const SIGNIN_RETRY_KEY = 'time-tracker-signin-retried'
+export const SIGNIN_REDIRECT_KEY = 'time-tracker-signin-redirect'
 
 const IDENTITY_KEY = 'time-tracker-identity'
 
@@ -75,6 +76,7 @@ export async function signInWithAtproto(identifier: string) {
 
   try {
     sessionStorage.setItem(SIGNIN_HANDLE_KEY, identifier)
+    sessionStorage.setItem(SIGNIN_REDIRECT_KEY, `${window.location.pathname}${window.location.search}`)
   } catch {}
 
   await oauth.signIn(identifier)
