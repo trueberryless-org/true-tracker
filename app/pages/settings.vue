@@ -101,7 +101,7 @@ function isToday(date: Date) {
 }
 
 const tabTriggerClass =
-  'data-[state=active]:text-primary focus-visible:ring-ring rounded-sm text-left outline-hidden focus-visible:ring-2 data-[state=active]:font-semibold'
+  'data-[state=active]:text-primary-text focus-visible:ring-ring rounded-sm text-left outline-hidden focus-visible:ring-2 data-[state=active]:font-semibold'
 const fileInputClass =
   'border-input bg-background ring-offset-background focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden'
 </script>
@@ -145,7 +145,11 @@ const fileInputClass =
                   "
                   @input="usernameError = null"
                 />
-                <p v-if="usernameError" id="settings-username-message" class="text-destructive text-sm font-medium">
+                <p
+                  v-if="usernameError"
+                  id="settings-username-message"
+                  class="text-destructive-text text-sm font-medium"
+                >
                   {{ usernameError }}
                 </p>
               </div>

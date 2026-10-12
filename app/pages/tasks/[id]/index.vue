@@ -52,7 +52,7 @@ useHead(() => ({ title: `${task.value?.name ?? 'Task'} · Time Tracker` }))
     >
       <Card class="focus-within:ring-ring relative cursor-pointer focus-within:ring-2">
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Project</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Project</CardTitle>
           <Book class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -67,7 +67,7 @@ useHead(() => ({ title: `${task.value?.name ?? 'Task'} · Time Tracker` }))
       </Card>
       <Card v-if="task.description">
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Description</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Description</CardTitle>
           <BadgeInfo class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -77,7 +77,7 @@ useHead(() => ({ title: `${task.value?.name ?? 'Task'} · Time Tracker` }))
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Status</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Status</CardTitle>
           <Workflow class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -87,7 +87,7 @@ useHead(() => ({ title: `${task.value?.name ?? 'Task'} · Time Tracker` }))
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Priority</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Priority</CardTitle>
           <Activity class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>

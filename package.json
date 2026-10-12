@@ -27,7 +27,8 @@
     "check:all": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm knip && pnpm test",
     "lexicons:build": "node scripts/build-lexicons.ts",
     "lexicons:plan": "pnpm lexicons:build && airspace lexicons publish --lexicons lexicons --identity \"$AUTHORITY_IDENTITY\" --authority space.time-tracker --dry-run",
-    "lexicons:publish": "pnpm lexicons:build && airspace lexicons publish --lexicons lexicons --identity \"$AUTHORITY_IDENTITY\" --authority space.time-tracker"
+    "lexicons:publish": "pnpm lexicons:build && airspace lexicons publish --lexicons lexicons --identity \"$AUTHORITY_IDENTITY\" --authority space.time-tracker",
+    "contrast:build": "node scripts/build-contrast.mjs app/assets/css/themes.css app/assets/css/contrast.css"
   },
   "dependencies": {
     "@atproto/oauth-client-browser": "^0.5.7",

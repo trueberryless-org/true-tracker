@@ -95,7 +95,7 @@ const stats = computed(() => {
     >
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Creation</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Creation</CardTitle>
           <CalendarPlus class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -105,7 +105,7 @@ const stats = computed(() => {
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Last Update</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Last Update</CardTitle>
           <CalendarCog class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -115,7 +115,7 @@ const stats = computed(() => {
       </Card>
       <Card v-if="project.archivedAt" class="hidden xl:block">
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Deletion</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Deletion</CardTitle>
           <CalendarMinus class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -125,7 +125,7 @@ const stats = computed(() => {
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Status</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Status</CardTitle>
           <Workflow class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -135,7 +135,7 @@ const stats = computed(() => {
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Priority</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Priority</CardTitle>
           <Activity class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -205,7 +205,7 @@ const stats = computed(() => {
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Duration</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Duration</CardTitle>
           <Timer class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -215,7 +215,7 @@ const stats = computed(() => {
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Task Count</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Task Count</CardTitle>
           <Calculator class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -225,7 +225,7 @@ const stats = computed(() => {
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Project Status</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Project Status</CardTitle>
           <Workflow class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -235,7 +235,7 @@ const stats = computed(() => {
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Session Count</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Session Count</CardTitle>
           <Calculator class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>

@@ -20,7 +20,7 @@ const views = computed(() => {
       <Card class="flex h-full flex-col justify-between">
         <CardHeader class="flex flex-row justify-between">
           <div class="space-y-1.5">
-            <CardTitle as="h3">Visits</CardTitle>
+            <CardTitle as="h2">Visits</CardTitle>
             <CardDescription>{{ view.description }}</CardDescription>
           </div>
           <TabsList class="right-0" aria-label="Group visits by">

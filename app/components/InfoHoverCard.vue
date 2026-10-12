@@ -15,7 +15,7 @@ const open = ref(false)
         :aria-expanded="open"
         @click="open = !open"
       >
-        <BadgeInfo class="text-primary h-5 w-5" aria-hidden="true" />
+        <BadgeInfo class="text-primary-text h-5 w-5" aria-hidden="true" />
       </button>
     </HoverCardTrigger>
     <HoverCardContent class="w-80" align="end">

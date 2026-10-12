@@ -10,7 +10,7 @@ const shownProjects = computed(() => data.value.filter((slice) => slice.value !=
 <template>
   <Card :class="cn(className, 'flex flex-col')">
     <CardHeader class="items-center pb-0">
-      <CardTitle as="h3">Active Tasks per project</CardTitle>
+      <CardTitle as="h2">Active Tasks per project</CardTitle>
       <CardDescription>{{ formatRangeText(dateRange) }}</CardDescription>
     </CardHeader>
     <CardContent class="flex-1 pb-0">

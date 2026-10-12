@@ -44,6 +44,9 @@ jobs:
       - name: 🧠 Typecheck
         run: pnpm typecheck
 
+      - name: 🌗 Check theme contrast overrides are up to date
+        run: pnpm contrast:build && git diff --exit-code app/assets/css/contrast.css
+
   test:
     runs-on: ubuntu-latest
     steps:

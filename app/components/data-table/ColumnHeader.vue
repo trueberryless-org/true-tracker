@@ -35,9 +35,9 @@ const directionLabel = computed(() => {
           :aria-label="`${title}, ${directionLabel}. Open column options`"
         >
           <span>{{ title }}</span>
-          <ArrowDownIcon v-if="direction === 'desc'" class="text-primary ml-2 h-4 w-4" aria-hidden="true" />
-          <ArrowUpIcon v-else-if="direction === 'asc'" class="text-primary ml-2 h-4 w-4" aria-hidden="true" />
-          <ArrowUpDownIcon v-else class="text-primary ml-2 h-4 w-4" aria-hidden="true" />
+          <ArrowDownIcon v-if="direction === 'desc'" class="text-primary-text ml-2 h-4 w-4" aria-hidden="true" />
+          <ArrowUpIcon v-else-if="direction === 'asc'" class="text-primary-text ml-2 h-4 w-4" aria-hidden="true" />
+          <ArrowUpDownIcon v-else class="text-primary-text ml-2 h-4 w-4" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">

@@ -157,9 +157,7 @@ interface DragState {
                 @pointercancel="drag = null"
                 @keydown="handleKeydown($event, calendarEvent)"
               >
-                <span class="text-muted-foreground hidden shrink-0 sm:inline">{{
-                  format(calendarEvent.start, 'h:mmaaaaa')
-                }}</span>
+                <span class="hidden shrink-0 sm:inline">{{ format(calendarEvent.start, 'h:mmaaaaa') }}</span>
                 <span class="truncate font-medium">{{ calendarEvent.taskName }}</span>
               </div>
             </li>

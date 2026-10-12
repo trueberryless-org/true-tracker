@@ -55,7 +55,7 @@ async function signIn() {
                 <div class="grid gap-4">
                   <div class="grid gap-2">
                     <div class="space-y-2">
-                      <Label for="signup-username" :class="usernameError && 'text-destructive'">Username</Label>
+                      <Label for="signup-username" :class="usernameError && 'text-destructive-text'">Username</Label>
                       <Input
                         id="signup-username"
                         v-model="username"
@@ -65,7 +65,11 @@ async function signIn() {
                         :aria-describedby="usernameError ? 'signup-username-message' : undefined"
                         @input="usernameError = null"
                       />
-                      <p v-if="usernameError" id="signup-username-message" class="text-destructive text-sm font-medium">
+                      <p
+                        v-if="usernameError"
+                        id="signup-username-message"
+                        class="text-destructive-text text-sm font-medium"
+                      >
                         {{ usernameError }}
                       </p>
                     </div>
@@ -152,7 +156,7 @@ async function signIn() {
               <p
                 v-if="signInError"
                 id="signup-handle-message"
-                class="text-destructive mt-2 text-sm font-medium"
+                class="text-destructive-text mt-2 text-sm font-medium"
                 role="alert"
               >
                 {{ signInError }}

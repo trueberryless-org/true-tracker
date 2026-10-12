@@ -135,7 +135,7 @@ function combineDateAndTime(day: string, time: string): Date | null {
           <Label :for="`${id}-description`">Description</Label>
           <Textarea :id="`${id}-description`" v-model="description" class="min-h-24" />
         </div>
-        <p v-if="error" class="text-destructive text-sm font-medium" role="alert">{{ error }}</p>
+        <p v-if="error" class="text-destructive-text text-sm font-medium" role="alert">{{ error }}</p>
       </form>
       <DialogFooter class="gap-2 sm:gap-0">
         <Button v-if="!isNew" variant="destructive" class="sm:mr-auto" @click="remove">Delete</Button>

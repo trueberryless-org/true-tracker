@@ -38,7 +38,7 @@ useHead(() => ({ title: `${title.value} · Time Tracker` }))
     <section aria-label="Session overview" class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
       <Card class="focus-within:ring-ring relative cursor-pointer focus-within:ring-2">
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Project</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Project</CardTitle>
           <Book class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -53,7 +53,7 @@ useHead(() => ({ title: `${title.value} · Time Tracker` }))
       </Card>
       <Card class="focus-within:ring-ring relative cursor-pointer focus-within:ring-2">
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Task</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Task</CardTitle>
           <ClipboardCheck class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -68,7 +68,7 @@ useHead(() => ({ title: `${title.value} · Time Tracker` }))
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Duration</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Duration</CardTitle>
           <Clock9 class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>
@@ -80,7 +80,7 @@ useHead(() => ({ title: `${title.value} · Time Tracker` }))
       </Card>
       <Card>
         <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle as="h2" class="text-primary text-sm font-medium">Flow</CardTitle>
+          <CardTitle as="h2" class="text-primary-text text-sm font-medium">Flow</CardTitle>
           <Activity class="text-muted-foreground h-4 w-4" aria-hidden="true" />
         </CardHeader>
         <CardContent>

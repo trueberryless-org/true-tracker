@@ -70,7 +70,7 @@ function markNotificationsRead(value: string | number) {
             <div class="flex items-center space-x-2">
               <span>Notifications</span>
               <template v-if="hasNotifications">
-                <Bell :class="cn('h-4 w-4', !notificationsRead && 'text-primary')" aria-hidden="true" />
+                <Bell :class="cn('h-4 w-4', !notificationsRead && 'text-primary-text')" aria-hidden="true" />
                 <span class="sr-only">(new)</span>
               </template>
             </div>
@@ -81,7 +81,7 @@ function markNotificationsRead(value: string | number) {
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle as="h3" class="text-primary text-sm font-medium">Working Time</CardTitle>
+                  <CardTitle as="h2" class="text-primary-text text-sm font-medium">Working Time</CardTitle>
                   <Workflow class="text-muted-foreground h-4 w-4" aria-hidden="true" />
                 </CardHeader>
                 <CardContent>
@@ -91,7 +91,7 @@ function markNotificationsRead(value: string | number) {
               </Card>
               <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle as="h3" class="text-primary text-sm font-medium">Most common project</CardTitle>
+                  <CardTitle as="h2" class="text-primary-text text-sm font-medium">Most common project</CardTitle>
                   <Book class="text-muted-foreground h-4 w-4" aria-hidden="true" />
                 </CardHeader>
                 <CardContent>
@@ -101,7 +101,7 @@ function markNotificationsRead(value: string | number) {
               </Card>
               <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle as="h3" class="text-primary text-sm font-medium">Most common task</CardTitle>
+                  <CardTitle as="h2" class="text-primary-text text-sm font-medium">Most common task</CardTitle>
                   <ClipboardCheck class="text-muted-foreground h-4 w-4" aria-hidden="true" />
                 </CardHeader>
                 <CardContent>
@@ -111,7 +111,7 @@ function markNotificationsRead(value: string | number) {
               </Card>
               <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle as="h3" class="text-primary text-sm font-medium">
+                  <CardTitle as="h2" class="text-primary-text text-sm font-medium">
                     Last time working {{ dateRange?.to ? 'in given interval' : '' }}
                   </CardTitle>
                   <History class="text-muted-foreground h-4 w-4" aria-hidden="true" />
@@ -126,7 +126,7 @@ function markNotificationsRead(value: string | number) {
               <DashboardTaskAmountChart :date-range="range" class="order-1 lg:col-span-2" />
               <Card class="order-2 overflow-hidden md:col-span-2 md:max-lg:order-3 lg:col-span-4 xl:col-span-3">
                 <CardHeader>
-                  <CardTitle as="h3">Recent Tasks</CardTitle>
+                  <CardTitle as="h2">Recent Tasks</CardTitle>
                   <CardDescription>{{ getRecentTasksInfoText(user, range) }}</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -139,7 +139,7 @@ function markNotificationsRead(value: string | number) {
               />
               <Card class="order-4 overflow-hidden md:col-span-2 lg:col-span-4 lg:max-xl:order-3 xl:col-span-3">
                 <CardHeader>
-                  <CardTitle as="h3">Recent Sessions</CardTitle>
+                  <CardTitle as="h2">Recent Sessions</CardTitle>
                   <CardDescription>{{ getRecentSessionsInfoText(user, range) }}</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -153,7 +153,7 @@ function markNotificationsRead(value: string | number) {
         <TabsContent value="notifications" class="mt-0 space-y-4">
           <Card v-if="!hasNotifications" class="col-span-4 lg:col-span-3">
             <CardHeader>
-              <CardTitle as="h3">Feels lonely here</CardTitle>
+              <CardTitle as="h2">Feels lonely here</CardTitle>
               <CardDescription>
                 You have no notifications. If you had notifications, there would be a
                 <Bell class="inline-block h-4 w-4" aria-label="bell" />

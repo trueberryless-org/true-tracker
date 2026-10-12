@@ -9,7 +9,7 @@ const axes = flows.map((flow) => flow.label)
 <template>
   <Card :class="className">
     <CardHeader class="items-center pb-4">
-      <CardTitle as="h3">Session flow per priority</CardTitle>
+      <CardTitle as="h2">Session flow per priority</CardTitle>
       <CardDescription>{{ formatRangeText(dateRange) }}</CardDescription>
     </CardHeader>
     <CardContent class="pb-0">

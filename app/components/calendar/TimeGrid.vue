@@ -224,7 +224,13 @@ interface MoveState {
         </span>
       </button>
     </div>
-    <div ref="scroller" class="max-h-[36rem] overflow-y-auto overscroll-contain">
+    <div
+      ref="scroller"
+      tabindex="0"
+      role="region"
+      aria-label="Time grid, scroll to see other hours"
+      class="focus-visible:ring-ring max-h-[36rem] overflow-y-auto overscroll-contain outline-hidden focus-visible:ring-2 focus-visible:ring-inset"
+    >
       <div
         class="relative grid"
         :style="{ gridTemplateColumns: `3.5rem repeat(${days.length}, minmax(0, 1fr))`, height: `${GRID_HEIGHT}px` }"
@@ -290,8 +296,8 @@ interface MoveState {
             @keydown="handleEventKeydown($event, segment.event)"
           >
             <p class="truncate font-medium">{{ segment.event.taskName }}</p>
-            <p class="text-muted-foreground truncate">{{ segment.event.projectName }}</p>
-            <p class="text-muted-foreground truncate">{{ formatEventTimes(segment.event) }}</p>
+            <p class="truncate">{{ segment.event.projectName }}</p>
+            <p class="truncate">{{ formatEventTimes(segment.event) }}</p>
             <div
               v-if="!segment.event.isReadOnly && segment.event.end && !segment.continuesAfter"
               class="absolute inset-x-0 bottom-0 h-2 cursor-ns-resize"
