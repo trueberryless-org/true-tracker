@@ -29,14 +29,15 @@ pnpm install
 pnpm dev
 ```
 
-| Command                 | Description                                                          |
-| ----------------------- | -------------------------------------------------------------------- |
-| `pnpm dev`              | Starts the development server on `http://127.0.0.1:3000`.            |
-| `pnpm build`            | Builds the app for production.                                       |
-| `pnpm test`             | Runs the unit tests.                                                 |
-| `pnpm check:all`        | Runs formatting, linting, type, unused code and unit test checks.    |
-| `pnpm lexicons:build`   | Writes the `space.time-tracker.*` lexicon documents to `./lexicons`. |
-| `pnpm lexicons:publish` | Publishes the lexicons for the identity in `AUTHORITY_IDENTITY`.     |
+| Command                 | Description                                                                       |
+| ----------------------- | --------------------------------------------------------------------------------- |
+| `pnpm dev`              | Starts the development server on `http://127.0.0.1:3000`.                         |
+| `pnpm build`            | Builds the app for production.                                                    |
+| `pnpm test`             | Runs the unit tests.                                                              |
+| `pnpm check:all`        | Runs formatting, linting, type, unused code and unit test checks.                 |
+| `pnpm contrast:build`   | Regenerates `app/assets/css/contrast.css` after changing a theme in `themes.css`. |
+| `pnpm lexicons:build`   | Writes the `space.time-tracker.*` lexicon documents to `./lexicons`.              |
+| `pnpm lexicons:publish` | Publishes the lexicons for the identity in `AUTHORITY_IDENTITY`.                  |
 
 ### ATproto
 
