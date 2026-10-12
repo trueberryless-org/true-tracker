@@ -1,5 +1,26 @@
 import tailwindcss from '@tailwindcss/vite'
 
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "connect-src 'self' https:",
+  "font-src 'self' data:",
+  "form-action 'self' https:",
+  "frame-ancestors 'none'",
+  "img-src 'self' data: blob: https:",
+  "object-src 'none'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  'upgrade-insecure-requests',
+].join('; ')
+
+const SECURITY_HEADERS = {
+  'permissions-policy': 'camera=(), geolocation=(), microphone=(), payment=()',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+}
+
 const DESCRIPTION = 'Track the time you spend on your projects, locally or on your own ATproto repository.'
 
 export default defineNuxtConfig({
@@ -18,6 +39,15 @@ export default defineNuxtConfig({
     { path: '~/components/ui', pathPrefix: false },
     { path: '~/components', pathPrefix: true },
   ],
+
+  routeRules: {
+    '/**': {
+      headers:
+        process.env.NODE_ENV === 'production'
+          ? { ...SECURITY_HEADERS, 'content-security-policy': CONTENT_SECURITY_POLICY }
+          : SECURITY_HEADERS,
+    },
+  },
 
   vite: {
     plugins: [tailwindcss()],
@@ -42,6 +72,8 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'Time Tracker' },
         { property: 'og:title', content: 'Time Tracker' },
         { property: 'og:description', content: DESCRIPTION },
+        { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#020817', media: '(prefers-color-scheme: dark)' },
       ],
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     },
