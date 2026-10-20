@@ -21,6 +21,10 @@ const SECURITY_HEADERS = {
   'x-frame-options': 'DENY',
 }
 
+const SITE_URL = 'https://time-tracker.space'
+const OG_IMAGE_URL = `${SITE_URL}/og-image.png`
+const OG_IMAGE_ALT = 'True Tracker: Track your time spent per project.'
+
 const DESCRIPTION = 'Track the time you spend on your projects, locally or on your own ATproto repository.'
 
 export default defineNuxtConfig({
@@ -72,6 +76,12 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'Time Tracker' },
         { property: 'og:title', content: 'Time Tracker' },
         { property: 'og:description', content: DESCRIPTION },
+        { property: 'og:image', content: OG_IMAGE_URL },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:alt', content: OG_IMAGE_ALT },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:image', content: OG_IMAGE_URL },
         { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#020817', media: '(prefers-color-scheme: dark)' },
       ],
