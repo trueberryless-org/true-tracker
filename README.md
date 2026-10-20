@@ -1,6 +1,6 @@
 ## Time Tracker
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d0f3fc08-770b-47a2-a25d-49286fbfb12d/deploy-status)](https://app.netlify.com/projects/true-tracker/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7cb3870c-1c51-4db7-b447-d22fd33c4173/deploy-status)](https://app.netlify.com/projects/atproto-time-tracker/deploys)
 
 [Time Tracker](https://time-tracker.space) allows you to track your time spent on different projects. To further organize your projects there are also this thing called "tasks" which are basically subfolders of projects with extra features.
 
