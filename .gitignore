@@ -140,3 +140,10 @@ dist
 # Playwright
 playwright-report/
 test-results/
+
+# ATproto lexicons
+lexicons
+
+# Nuxt
+.data
+.nitro

@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "vue"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "ignorePatterns": [".nuxt/**", ".output/**", "dist/**", "node_modules/**", "public/**"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-underscore-dangle": "off",
+    "unicorn/no-array-sort": "off",
+    "unicorn/consistent-function-scoping": "off",
+    "eslint/no-await-in-loop": "off",
+    "oxc/no-map-spread": "off"
+  }
+}
