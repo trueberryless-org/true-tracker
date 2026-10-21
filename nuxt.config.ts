@@ -23,7 +23,7 @@ const SECURITY_HEADERS = {
 
 const SITE_URL = 'https://time-tracker.space'
 const OG_IMAGE_URL = `${SITE_URL}/og-image.png`
-const OG_IMAGE_ALT = 'True Tracker: Track your time spent per project.'
+const OG_IMAGE_ALT = 'Time Tracker: Track your time, locally or on ATproto.'
 
 const DESCRIPTION = 'Track the time you spend on your projects, locally or on your own ATproto repository.'
 
