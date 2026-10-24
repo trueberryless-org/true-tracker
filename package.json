@@ -31,14 +31,14 @@
     "contrast:build": "node scripts/build-contrast.mjs app/assets/css/themes.css app/assets/css/contrast.css"
   },
   "dependencies": {
-    "@atproto/oauth-client-browser": "^0.5.7",
+    "@atproto/oauth-client-browser": "^0.5.9",
     "@fontsource-variable/inter": "^5.3.0",
     "@internationalized/date": "^3.12.4",
-    "@lucide/vue": "^1.48.0",
+    "@lucide/vue": "^1.51.0",
     "@nuxtjs/color-mode": "^4.0.1",
     "@vueuse/core": "^15.0.0",
     "@vueuse/nuxt": "^15.0.0",
-    "airspace": "^0.1.6",
+    "airspace": "^0.1.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
@@ -52,18 +52,18 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "^4.3.2",
+    "@nuxt/test-utils": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.4",
     "happy-dom": "^20.14.5",
-    "knip": "^6.38.0",
+    "knip": "^6.39.0",
     "oxfmt": "^0.68.0",
-    "oxlint": "^1.83.0",
+    "oxlint": "^1.86.0",
     "tailwindcss": "^4.3.3",
     "tw-animate-css": "^1.4.0",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.2",
-    "vue-tsc": "^3.3.11"
+    "vitest": "^5.0.3",
+    "vue-tsc": "^3.3.12"
   },
   "engines": {
     "node": ">=24.11.0"
